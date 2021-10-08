@@ -38,7 +38,7 @@ $(document).ready(function() {
     });
 
 	/* Responsive Event */
-	var navbarMenu = $('.fixed.top.menu .center.menu').clone();
+	var navbarMenu = $('.deneme').clone();
 	$('.vertical.menu.collapse').html(navbarMenu);
 
 	$('#trigger').click(function(e) {
