@@ -1,13 +1,11 @@
-$(".openbtn").on("click", function() {
+$(".openbtn").on("click", function () {
     $(".ui.sidebar").toggleClass("very thin icon");
     $(".asd").toggleClass("marginlefting");
     $(".asd").toggleClass("margincontent");
     $(".sidebar z").toggleClass("displaynone");
     $(".ui.accordion").toggleClass("displaynone");
     $(".ui.dropdown.item").toggleClass("displayblock");
-
     $(".logo").find('img').toggle();
-
 })
 $(".ui.dropdown").dropdown({
     allowCategorySelection: true,
@@ -17,7 +15,5 @@ $(".ui.dropdown").dropdown({
 });
 
 $('.ui.accordion').accordion({
-    selector: {
-
-    }
+    selector: {}
 });
