@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<th:block th:fragment="header">
+    <div id="top"></div>
+    <!-- Progress bar area -->
+    <div class="progress bar"></div>
+    <a href="#top" class="ui circular icon button" id="toTop" data-slide="slide">
+        <i class="angle up icon"></i>
+    </a>
+
+    <!-- Navbar fixed top area -->
+    <div class="ui fixed top menu">
+        <div class="left menu">
+           <span class="item">
+               Şeker Bank
+           </span>
+        </div>
+        <div class="center menu deneme">
+            <a th:href="@{/home}" class="active item">Anasayfa</a>
+            <a th:href="@{/galery}" class="item">Galeri</a>
+            <a th:href="@{/home}" class="item logo" style="background-color: white"><img
+                    th:src="@{/images/home/logo/sekerbank.jpeg}"></a>
+            <a href="" class="icon item logo" id="trigger"><i class="sidebar icon"></i></a>
+            <a th:href="@{/contact}" class="item">İletişim</a>
+            <a th:href="@{/about}" class="item">Hakkımızda</a>
+        </div>
+        <div class="right menu deneme">
+            <a th:href="@{/about}" class="item">Giriş Yap</a>
+        </div>
+    </div>
+
+    <!-- Collapse Navbar Menu -->
+    <div class="ui fluid vertical menu collapse"></div>
+
+</th:block>
+</body>
+</html>
