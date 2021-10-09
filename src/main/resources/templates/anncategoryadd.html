@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Announcement</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+            <div class="three column row">
+                <div class="one wide column">
+                </div>
+                <div class="fourteen wide column" style="border:1px solid darkgreen; padding:30px">
+                    <form class="ui form ">
+                        <h4 class="ui dividing header">Duyuru/Haber - Kategori Ekle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kategori</label>
+                                <div class="field">
+                                    <select name="prTopCategory" class="ui fluid search selection dropdown" style="width: auto;height: auto">
+                                        <option value="0">Seçim Yapınız</option>
+                                        <option value="1">Havuz Bakımı</option>
+                                        <option value="2">Kasa Kontrol</option>
+                                        <option value="3">Oda Temizleme</option>
+                                        <option value="4">Maaşlar Hakkında</option>
+                                        <option value="5">Temizlik</option>
+                                        <option value="6">Asansör Bakımı</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label >Kategori Adı</label>
+                                <input type="text" name="annCategoryName" maxlength="60" placeholder="Kategori Adı Giriniz">
+                            </div>
+                        </div>
+
+                        <div class="ui buttons" style="float: right">
+                            <button class="ui primary button">Ekle</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="one wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
