@@ -22,7 +22,7 @@
                 </div>
             </h2>
             <form action="https://s.codepen.io/voltron2112/debug/PqrEPM?" method="get" class="ui large form">
-                <div class="ui stacked secondary  segment">
+                <div class="ui stacked secondary  segment" style="height: 225px">
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="user icon"></i>
@@ -36,6 +36,12 @@
                         </div>
                     </div>
                     <div class="ui fluid large teal submit button">Giriş Yap</div>
+
+                    <div class="ui checkbox" style="float: left;margin-top: 10px; margin-left: 5px;">
+                        <input type="checkbox" tabindex="0" class="hidden">
+                        <label>Beni Hatırla</label>
+
+                    </div>
                 </div>
 
                 <div class="ui error message"></div>
@@ -44,8 +50,8 @@
 
             <div class="ui message ">
                 <div style="margin-bottom: 18px;">
-                    <a href="#" style="float: left;">Kayıt Ol</a>
-                    <a href="#" style="float: right;">Şiftemi Unuttum</a>
+                    <a th:href="@{/register}" style="float: left;">Kayıt Ol</a>
+                    <a th:href="@{/forgotpassword}" style="float: right;">Şiftemi Unuttum</a>
                 </div>
             </div>
         </div>
