@@ -13,10 +13,11 @@
 
 <th:block layout:fragment="content">
     <!-- Login From -->
-    <div class="ui middle aligned center aligned grid">
+    <div class="ui middle aligned center aligned grid"
+         th:style="'background-image:url(' + @{/images/login/background.jpg} + ');'">
         <div class="column login-column">
             <h2 class="ui image header">
-                <div class="content">
+                <div class="content" style="color: white">
                     Giriş Yap
                 </div>
             </h2>
@@ -34,15 +35,18 @@
                             <input type="password" name="password" placeholder="Password">
                         </div>
                     </div>
-                    <div class="ui fluid large teal submit button">Login</div>
+                    <div class="ui fluid large teal submit button">Giriş Yap</div>
                 </div>
 
                 <div class="ui error message"></div>
 
             </form>
 
-            <div class="ui message">
-                New to us? <a href="#">Register</a>
+            <div class="ui message ">
+                <div style="margin-bottom: 18px;">
+                    <a href="#" style="float: left;">Kayıt Ol</a>
+                    <a href="#" style="float: right;">Şiftemi Unuttum</a>
+                </div>
             </div>
         </div>
     </div>
