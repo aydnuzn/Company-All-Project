@@ -10,22 +10,22 @@ public class HomeController {
 
     @GetMapping("")
     public String home() {
-        return "index";
+        return "home";
     }
 
-    @GetMapping("/index")
-    public String index() {
-        return "index";
+    @GetMapping("/home")
+    public String home2() {
+        return "home";
     }
 
-    @GetMapping("/portofolio")
-    public String portofolio() {
-        return "portofolio";
+    @GetMapping("/gallery")
+    public String gallery() {
+        return "gallery";
     }
 
-    @GetMapping("/blog")
-    public String blog() {
-        return "blog";
+    @GetMapping("/contact")
+    public String contact() {
+        return "contact";
     }
 
     @GetMapping("/about")
