@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <!-- ADV ADD -->
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+
+
+            <div class="three column row">
+                <div class="four wide column">
+                </div>
+                <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form class="ui form ">
+
+
+
+
+
+
+                        <h4 class="ui dividing header" >Reklam Ekle</h4>
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <label>Reklam Adı</label>
+                                <input type="text" name="a_name" maxlength="16" placeholder="Reklam Adı">
+                            </div>
+                            <div class="eight wide field">
+                                <label >Gösterim Sayısı</label>
+                                <input type="text" name="a_shown_num" maxlength="16" placeholder="Gösterim Sayısı">
+                            </div>
+
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label >Başlangıç Tarihi</label>
+                                <input type="date" name="start_date">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label >Bitiş Tarihi</label>
+                                <input type="date" name="end_date">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label>Reklam Görseli</label>
+                                <input type="file" name="file">
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <label>Reklam Genişlik</label>
+                                <input type="text" name="width" maxlength="16" placeholder="Genişlik">
+                            </div>
+                            <div class="eight wide field">
+                                <label >Reklam Yükseklik</label>
+                                <input type="text" name="height"  placeholder="Yükseklik">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label >Reklam Link</label>
+                                <input type="text" name="link"placeholder="Link">
+                            </div>
+                        </div>
+
+
+
+                        <div class="ui button green" tabindex="0">Reklam Ekle</div>
+                    </form>
+                </div>
+                <div class="four wide column">
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+</th:block>
+
+</body>
+</html>
+
+
+
+
