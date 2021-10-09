@@ -1,0 +1,22 @@
+
+body > .grid {
+    height: 100%;
+}
+.image {
+    margin-top: -100px;
+}
+.login-column {
+    max-width: 450px;
+}
+
+.ui.menu .item {
+    height: 53.6px !important;
+}
+
+.logo{
+    padding: 10px !important;
+}
+
+.logo>img{
+    width: 38px !important;
+}
