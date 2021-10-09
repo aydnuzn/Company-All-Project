@@ -18,4 +18,5 @@ public class AdvertisementController {
     public String advertisementAdd(){
         return "advertisementadd";
     }
+
 }

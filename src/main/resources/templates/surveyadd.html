@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="incadminpanel/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Survey Add</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+  <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+  <!-- ADV ADD -->
+  <div class="asd" style="margin: 30px 30px 0px 290px">
+    <div class="ui page grid">
+
+
+
+      <div class="three column row">
+        <div class="four wide column">
+        </div>
+        <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
+          <form class="ui form ">
+
+
+
+
+
+
+            <h4 class="ui dividing header" >Anket Ekleme</h4>
+            <div class="fields">
+              <div class="sixteen wide field">
+                <label>Anket Başlığı</label>
+                <input type="text" name="a_name" maxlength="16" placeholder="Anket Başlığı Giriniz">
+              </div>
+
+
+            </div>
+
+
+
+            <div class="ui button green" tabindex="0">Ekle</div>
+          </form>
+        </div>
+        <div class="four wide column">
+        </div>
+      </div>
+
+
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+</th:block>
+
+</body>
+</html>
+
+
+
+
