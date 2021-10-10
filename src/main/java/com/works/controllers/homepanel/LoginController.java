@@ -5,16 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/login")
 public class LoginController {
 
-    @GetMapping("/login")
-    public String login(){
-        return "login";
-    }
+    final String rvalue = "homepanel/login/";
 
-    @GetMapping("/forgotpassword")
-    public String forgotpassword(){
-        return "forgotpassword";
+    @GetMapping("")
+    public String login(){
+        return rvalue+"login";
     }
 
 }

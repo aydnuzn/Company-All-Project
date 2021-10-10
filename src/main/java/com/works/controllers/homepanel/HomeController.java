@@ -7,30 +7,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
+    final String rvalue = "homepanel/";
 
     @GetMapping("")
     public String home() {
-        return "home";
+        return rvalue+"home/home";
     }
 
     @GetMapping("/home")
     public String home2() {
-        return "home";
+        return rvalue+"home/home";
     }
 
     @GetMapping("/gallery")
     public String gallery() {
-        return "gallery";
+        return rvalue+"gallery/gallery";
     }
 
     @GetMapping("/contact")
     public String contact() {
-        return "contact";
+        return rvalue+"contact/contact";
     }
 
     @GetMapping("/about")
     public String about() {
-        return "about";
+        return rvalue+"about/about";
     }
 
 

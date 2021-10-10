@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/register")
 public class RegisterController {
 
+    final String rvalue = "homepanel/register/";
+
     @GetMapping("")
     public String register(){
-        return "register";
+        return rvalue+"register";
     }
 }
