@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Announcement</title>
+
+    <script type="text/javascript">
+        CKEDITOR.replace('annDescription');
+    </script>
+
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+
+            <div class="three column row">
+                <div class="two wide column">
+                </div>
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form class="ui form ">
+                        <h4 class="ui dividing header">Duyuru/Haber Ekle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Duyuru Başlığı</label>
+                                <input type="text" name="ann_title" maxlength="16" placeholder="Duyuru Başlığı">
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kısa Açıklama</label>
+                                <input type="text" name="ann_brief_description" maxlength="60"
+                                       placeholder="Kısa Açıklama">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Uzun Açıklama</label>
+                            <div class="field">
+                                <textarea name="ann_description" class="ckeditor form-control"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Aktif/Pasif</label>
+                                <div class="field">
+                                    <select class="ui fluid search selection dropdown" name="ann_type"
+                                            style="width: auto;height: auto">
+                                        <option value="1">Aktif</option>
+                                        <option value="2">Pasif</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kategori</label>
+                                <div class="field">
+                                    <select name="ann_category" class="ui fluid search selection dropdown"
+                                            style="width: auto;height: auto">
+                                        <option value="1">Havuz Bakımı</option>
+                                        <option value="2">Kasa Kontrol</option>
+                                        <option value="3">Oda Temizleme</option>
+                                        <option value="4">Maaşlar Hakkında</option>
+                                        <option value="5">Temizlik</option>
+                                        <option value="6">Asansör Bakımı</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui button primary" tabindex="0">Ekle</div>
+                        <div class="ui button negative" tabindex="0">İptal</div>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+</body>
+</html>

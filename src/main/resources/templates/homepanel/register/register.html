@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="homepanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/login.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <!-- Register From -->
+
+    <div class="ui page grid" th:style="'background-image:url(' + @{/images/login/background.jpg} + ');'">
+
+        <div class="three column row">
+            <div class="four wide column">
+            </div>
+            <div class="eight wide column">
+                <form class="ui form" enctype="multipart/form-data">
+                    <h4 class="ui dividing header" style="color: white">Şirket Bilgileri</h4>
+                    <div class="field">
+                        <label style="color: white">Adı</label>
+                        <div class="field">
+
+                            <input type="text" name="company_name" placeholder="Şirket Adı">
+                        </div>
+
+                    </div>
+                    <div class="field">
+                        <label style="color: white">Adres</label>
+                        <div class="field">
+                            <textarea name="company_address" placeholder="Adres" rows="3"></textarea>
+
+                        </div>
+                    </div>
+
+                    <div class="fields">
+                        <div class="eight wide field">
+                            <label style="color: white">Sektör</label>
+                            <div class="field">
+                                <select class="ui fluid search selection dropdown" name="company_sector"
+                                        style="width: auto;height: auto">
+                                    <option value="0">Sektör Seçiniz</option>
+                                    <option value="1">Bilişim Teknolojileri</option>
+                                    <option value="2">Otomotiv</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="eight wide field">
+                            <label style="color: white">Telefon</label>
+                            <input type="text" name="company_tel" maxlength="11" placeholder="company_tel">
+                        </div>
+
+
+                    </div>
+
+                    <h4 class="ui dividing header" style="color: white">Şirket Admin Bilgileri</h4>
+                    <div class="fields">
+                        <div class="eight wide field">
+                            <label style="color: white"> Adı</label>
+                            <input type="text" name="admin_name" placeholder="Admin Adı">
+                        </div>
+                        <div class="eight wide field">
+                            <label style="color: white">Soyadı</label>
+                            <input type="text" name="admin_surname" placeholder="Admin Soyadı">
+                        </div>
+
+                    </div>
+                    <div class="fields">
+                        <div class="eight wide field">
+                            <label style="color: white">E-Mail</label>
+                            <input type="email" name="admin_email" placeholder="Admin E-Mail">
+                        </div>
+                        <div class="eight wide field">
+                            <label style="color: white">Telefon</label>
+                            <input type="tel" name="admin_tel" placeholder="Admin Telefon">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="eight wide field">
+                            <label style="color: white"> Şifre</label>
+                            <input type="password" name="admin_password1" minlength="4" maxlength="16"
+                                   placeholder="Admin Şifre">
+                        </div>
+                        <div class="eight wide field">
+                            <label style="color: white">Şifre Tekrar</label>
+                            <input type="password" name="admin_password2" minlength="4" maxlength="16"
+                                   placeholder="Şifre Tekrar">
+                        </div>
+
+                    </div>
+                    <button type="submit" class="ui button green" tabindex="0">Kayıt Ol</button>
+                </form>
+            </div>
+            <div class="four wide column">
+            </div>
+        </div>
+
+
+    </div>
+
+
+</th:block>
+
+
+<th:block layout:fragment="customJs">
+    <!-- <script th:src="@{/js/login.js}"></script> -->
+</th:block>
+
+</body>
+</html>

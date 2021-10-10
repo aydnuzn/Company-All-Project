@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+            <div class="three column row">
+                <div class="one wide column">
+                </div>
+                <div class="fourteen wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form class="ui form ">
+                        <h4 class="ui dividing header">Ürün Kategori Ekle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Üst Kategori</label>
+                                <div class="field">
+                                    <select name="prTopCategory" class="ui fluid search selection dropdown"
+                                            style="width: auto;height: auto">
+                                        <option value="0">Seçim Yapınız</option>
+                                        <option value="1">Elektronik</option>
+                                        <option value="2">Giyim</option>
+                                        <option value="3">Bahçe Ürünleri</option>
+                                        <option value="4">Oyuncak</option>
+                                        <option value="5">Otomotiv</option>
+                                        <option value="6">Ev Gereçleri</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Alt Kategori</label>
+                                <div class="field">
+                                    <select name="prSubCategory" class="ui fluid search selection dropdown"
+                                            style="width: auto;height: auto">
+                                        <option value="0">Seçim Yapınız</option>
+                                        <option value="1">Telefon</option>
+                                        <option value="2">Süpürge</option>
+                                        <option value="3">Kulaklık</option>
+                                        <option value="4">Laptop</option>
+                                        <option value="5">Akıllı Saat</option>
+                                        <option value="6">TV</option>
+                                        <option value="7">Beyaz Eşya</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kategori Adı</label>
+                                <input type="text" name="prCategoryName" maxlength="20"
+                                       placeholder="Kategori Adı Giriniz">
+                            </div>
+                        </div>
+
+                        <button class="ui primary button">Kaydet</button>
+                        <div class="ui buttons" style="float: right">
+                            <button style="margin-left: 5px" class="ui primary button">Düzenle</button>
+                            <button style="margin-left: 5px" class="ui negative button">Sil</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="one wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

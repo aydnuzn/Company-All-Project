@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+  <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+  <!-- DASHBOARD -->
+  <div class="asd" style="margin: 30px 30px 0px 290px">
+  <div class="ui page grid">
+    <div class="row">
+
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">Ürün Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Toplam Ürünler:</h4>
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">Beğeni Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Toplam Beğeni:</h4>
+            <h4 class="ui sub header">Pozitif Beğeni:</h4>
+            <h4 class="ui sub header">Negatif Beğeni:</h4>
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">İçerik Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Toplam İçerik:</h4>
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">Haber Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Aktif Haber:</h4>
+            <h4 class="ui sub header">Pasif Haber:</h4>
+
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">Sipariş Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Toplam Siparişler:</h4>
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">Müşteri Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Toplam Müşteriler:</h4>
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">Anket Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Toplam Anketler:</h4>
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+      <div class="four wide column">
+        <div class="ui card">
+          <div class="content">
+            <div class="header">Duyuru Yönetimi</div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header">Toplam Duyurular:</h4>
+
+
+          </div>
+          <div class="extra content">
+            <button class="ui button">Git</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+
+
+
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+</th:block>
+
+</body>
+</html>

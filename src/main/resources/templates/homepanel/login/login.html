@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="homepanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/login.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <!-- Login From -->
+    <div class="ui middle aligned center aligned grid"
+         th:style="'background-image:url(' + @{/images/login/background.jpg} + ');'">
+        <div class="column login-column">
+            <h2 class="ui image header">
+                <div class="content" style="color: white">
+                    Giriş Yap
+                </div>
+            </h2>
+            <form action="https://s.codepen.io/voltron2112/debug/PqrEPM?" method="get" class="ui large form">
+                <div class="ui stacked secondary  segment" style="height: 225px">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="email" placeholder="E-mail address">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="ui fluid large teal submit button">Giriş Yap</div>
+
+                    <div class="ui checkbox" style="float: left;margin-top: 10px; margin-left: 5px;">
+                        <input type="checkbox" tabindex="0" class="hidden">
+                        <label>Beni Hatırla</label>
+
+                    </div>
+                </div>
+
+                <div class="ui error message"></div>
+
+            </form>
+
+            <div class="ui message ">
+                <div style="margin-bottom: 18px;">
+                    <a th:href="@{/register}" style="float: left;">Kayıt Ol</a>
+                    <a th:href="@{/forgotpassword}" style="float: right;">Şiftemi Unuttum</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+
+<th:block layout:fragment="customJs">
+    <script th:src="@{/js/login.js}"></script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+
+            <div class="three column row">
+                <div class="two wide column">
+                </div>
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form class="ui form ">
+                        <h4 class="ui dividing header">Ürün Ekle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Üst Kategori</label>
+                                <div class="field">
+                                    <select name="pr_top_categories[]" multiple="" class="ui fluid dropdown">
+                                        <option value="0">Seçim Yapınız</option>
+                                        <option value="1">Elektronik</option>
+                                        <option value="2">Giyim</option>
+                                        <option value="3">Bahçe Ürünleri</option>
+                                        <option value="4">Oyuncak</option>
+                                        <option value="5">Otomotiv</option>
+                                        <option value="6">Ev Gereçleri</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Alt Kategori</label>
+                                <div class="field">
+                                    <select name="pr_sub_categories[]" multiple="" class="ui fluid dropdown">
+                                        <option value="0">Seçim Yapınız</option>
+                                        <option value="1">Telefon</option>
+                                        <option value="2">Süpürge</option>
+                                        <option value="3">Kulaklık</option>
+                                        <option value="4">Laptop</option>
+                                        <option value="5">Akıllı Saat</option>
+                                        <option value="6">TV</option>
+                                        <option value="7">Beyaz Eşya</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Ürün Adı</label>
+                                <input type="text" name="pr_name" maxlength="16" placeholder="Ürün Adı">
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kısa Açıklama</label>
+                                <input type="text" name="pr_brief_description" maxlength="60"
+                                       placeholder="Kısa Açıklama">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Ürün Açıklaması</label>
+                            <div class="field">
+                                <textarea name="pr_description" placeholder="Ürün Açıklamasını Giriniz"
+                                          rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <label>Ürün Fiyatı</label>
+                                <input type="number" name="pr_price" maxlength="11" value="0">
+                            </div>
+
+                            <div class="eight wide field">
+                                <label>Ürün Tipi</label>
+                                <div class="field">
+                                    <select class="ui fluid search selection dropdown" name="pr_type"
+                                            style="width: auto;height: auto">
+                                        <option value="0">Ürün Tipini Seçiniz</option>
+                                        <option value="1">Satılık</option>
+                                        <option value="2">Kiralık</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label>Ürün Görseli</label>
+                                <input type="file" name="pr_image_file" accept="image/*" multiple="multiple">
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <div class="sixteen wide field">
+                                    <label>Kampanya var mı?</label>
+                                    <div class="field">
+                                        <select class="ui fluid search selection dropdown" name="pr_campaign"
+                                                style="width: auto;height: auto">
+                                            <option value="0">Seçiniz</option>
+                                            <option value="1">Evet</option>
+                                            <option value="2">Hayır</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="eight wide field">
+                                <label>Kampanya Adı</label>
+                                <input type="text" name="pr_campaign_name" maxlength="60" placeholder="Kampanya Adı">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Kampanya Detayı</label>
+                            <div class="field">
+                                <textarea name="pr_campaign_description" placeholder="Kampanya Detayını Giriniz"
+                                          rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Adresi</label>
+                            <div class="field">
+                                <textarea name="pr_address" placeholder="Adresi Giriniz" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <label>Enlem</label>
+                                <input type="number" name="pr_latitude" maxlength="11" value="0">
+                            </div>
+
+                            <div class="eight wide field">
+                                <label>Boylam</label>
+                                <input type="number" name="pr_longitude" maxlength="11" value="0">
+                            </div>
+                        </div>
+
+                        <div class="ui button green" tabindex="0">Ürün Ekle</div>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</th:block>
+
+
+<th:block layout:fragment="customJs">
+</th:block>
+</body>
+</html>
