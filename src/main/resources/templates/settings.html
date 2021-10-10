@@ -17,12 +17,13 @@
     <!-- ADV LIST -->
     <div class="asd" style="margin: 30px 30px 0px 290px" id="map"></div>
 
-    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAO77n1G-xHLmg2lMWxzP1honc_lBYfyDU&callback=initMap"></script>
+
 
 </th:block>
 <th:block layout:fragment="customJs">
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAO77n1G-xHLmg2lMWxzP1honc_lBYfyDU&callback=initMap"></script>
     <script th:src="@{/js/settings.js}"></script>
 </th:block>
 </body>
