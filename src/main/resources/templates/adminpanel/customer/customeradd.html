@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+            <div class="three column row">
+                <div class="two wide column">
+                </div>
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form class="ui form ">
+                        <h4 class="ui dividing header">Müşteri Ekle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Müşteri Adı</label>
+                                <input type="text" name="cu_name" maxlength="60" placeholder="Müşteri Adı">
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Müşteri Soyadı</label>
+                                <input type="text" name="cu_surname" maxlength="60" placeholder="Müşteri Soyadı">
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Müşteri Mail</label>
+                                <input type="email" name="cu_mail" maxlength="60" placeholder="Müşteri Mail">
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <label>Müşteri Telefon</label>
+                                <input type="tel" name="cu_tel" maxlength="11">
+                            </div>
+
+                            <div class="eight wide field">
+                                <label>Müşteri Durumu</label>
+                                <div class="field">
+                                    <select name="cu_status" class="ui fluid search selection dropdown"
+                                            style="width: auto;height: auto">
+                                        <option value="1">Aktif</option>
+                                        <option value="2">Pasif</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="ui button green" tabindex="0">Müşteri Ekle</button>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</th:block>
+
+
+<th:block layout:fragment="customJs">
+</th:block>
+</body>
+</html>
