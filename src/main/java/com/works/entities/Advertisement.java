@@ -11,7 +11,7 @@ import java.util.Date;
 public class Advertisement extends BaseEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer adv_id;
+    private Integer id;
     private String adv_title;
     private Integer adv_shown_number;
     @Temporal(TemporalType.DATE)
