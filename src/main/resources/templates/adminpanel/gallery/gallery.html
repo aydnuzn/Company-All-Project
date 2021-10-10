@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+	<meta charset="UTF-8">
+	<title>Customer</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+	<link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+	<!-- Content area -->
+	<div class="ui container content">
+		<div class="ui stackable doubling grid">
+			<!-- Middle Content -->
+			<div class="sixteen wide column" align="center">
+				<div class="ui horizontal divider"><h2>Galeri</h2></div>
+				<br>
+				<div class="ui four column stackable doubling grid" id="sortable-list">
+					<div class="column">
+						<img class="ui rounded image" src="" th:src="@{/dist/index/assets/img/400x400.png}" th:alt="resim">
+						<div class="ui header">Portofolio #1</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+</th:block>
+
+</body>
+</html>

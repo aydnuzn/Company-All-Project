@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Announcement</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+            <div class="three column row">
+                <div class="one wide column">
+                </div>
+                <div class="fourteen wide column" style="border:1px solid darkgreen; padding:30px">
+                    <form class="ui form">
+                        <h4 class="ui dividing header">Duyuru/Haber - Kategori Ekle</h4>
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label>Kategori Başlığı</label>
+                                <input type="text" name="ann_category_title" maxlength="60"
+                                       placeholder="Kategori Başlığı Giriniz">
+                            </div>
+                        </div>
+
+                        <div class="ui buttons" style="float: right">
+                            <button type="submit" class="ui primary button">Ekle</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="one wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
