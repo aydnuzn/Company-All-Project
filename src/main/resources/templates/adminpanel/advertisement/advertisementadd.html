@@ -15,14 +15,13 @@
     <!-- ADV ADD -->
     <div class="asd" style="margin: 30px 30px 0px 290px">
         <div class="ui page grid">
-
-
             <div class="three column row">
                 <div class="four wide column">
                 </div>
                 <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
-                    <form class="ui form" enctype="multipart/form-data">
-
+                    <form action="/admin/advertisement/add" method="post" th:object="${advertisement}"
+                          class="ui form"
+                          enctype="multipart/form-data">
                         <h4 class="ui dividing header">Reklam Ekle</h4>
                         <div class="fields">
                             <div class="eight wide field">
@@ -33,7 +32,14 @@
                                 <label>Gösterim Sayısı</label>
                                 <input type="text" name="adv_shown_number" maxlength="16" placeholder="Gösterim Sayısı">
                             </div>
-
+                        </div>
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('adv_title') }"
+                                     th:errors="*{adv_title}">
+                                </div>
+                            </div>
                         </div>
                         <div class="field">
                             <div class="sixteen wide field">
@@ -50,18 +56,41 @@
                         <div class="field">
                             <div class="sixteen wide field">
                                 <label>Reklam Görseli</label>
-                                <input type="file" name="adv_image_file" accept="image/*" multiple="multiple">
+                                <input id="file" type="file" name="adv_image_file" accept="image/*">
                             </div>
                         </div>
+
+                        <th:block th:if="${isError == 1}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata
+                                </div>
+                                <ul class="list">
+                                    <li>Resim boyutları değiştirilmiş.</li>
+                                    <li>Lütfen HTML'e müdahale etmeyin.</li>
+                                </ul>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${isError == 2}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata
+                                </div>
+                                <strong>Resim eklenmedi.</strong>
+                            </div>
+                        </th:block>
 
                         <div class="fields">
                             <div class="eight wide field">
                                 <label>Reklam Genişlik</label>
-                                <input type="text" name="adv_width" maxlength="16" placeholder="Genişlik">
+                                <input id="adv_width" type="text" name="adv_width" maxlength="16" placeholder="Genişlik"
+                                       readonly>
                             </div>
                             <div class="eight wide field">
                                 <label>Reklam Yükseklik</label>
-                                <input type="text" name="adv_height" placeholder="Yükseklik">
+                                <input id="adv_height" type="text" name="adv_height" placeholder="Yükseklik" readonly>
                             </div>
                         </div>
 
@@ -87,6 +116,7 @@
 </th:block>
 
 <th:block layout:fragment="customJs">
+    <script th:src="@{/js/advertisementadd.js}"></script>
 </th:block>
 
 </body>
