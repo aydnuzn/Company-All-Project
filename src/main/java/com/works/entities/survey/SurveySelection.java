@@ -1,13 +1,14 @@
 package com.works.entities.survey;
 
 import com.works.entities.listener.BaseEntity;
+import com.works.entities.listener.BaseEntityNotCompany;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-public class SurveySelection extends BaseEntity<String> {
+public class SurveySelection extends BaseEntityNotCompany<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
