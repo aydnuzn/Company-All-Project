@@ -19,7 +19,7 @@
 
 
             <div class="seven wide column">
-                <form>
+                <form action="/contact/add" method="post" th:object="${contact}">
                     <div>
                         <label><b>Adres:</b></label>
                     </div>
@@ -43,39 +43,74 @@
                     </div>
                     </br>
                     </br>
-                    </br>
-                    <div>
+                    <div class="field">
                         <label><b>İsim - Soyisim:</b></label>
                     </div>
-                    <div class="ui input ">
+                    <div class="ui input field" style="display: grid">
                         <input type="text" name="contact_name" maxlength="50" placeholder="İsim Soyisim">
                     </div>
+
+                    <div class="field">
+                        <div class="ui red message" style="display: block"
+                             th:if="${ #fields.hasErrors('contact_name') }"
+                             th:errors="*{contact_name}">
+                        </div>
+                    </div>
+
                     </br>
                     <div>
                         <label><b>E-mail:</b></label>
                     </div>
-                    <div class="ui input ">
-                        <input type="email" name="contact_mail" maxlength="50" placeholder="E-mail">
+                    <div class="field">
+                        <div class="ui input" style="display: grid">
+                            <input type="email" name="contact_mail" maxlength="50" placeholder="E-mail">
+                        </div>
                     </div>
+
+
+                    <div class="field">
+                        <div class="ui red message" style="display: block"
+                             th:if="${ #fields.hasErrors('contact_mail') }"
+                             th:errors="*{contact_mail}">
+                        </div>
+                    </div>
+
+                    <th:block th:if="${isError == 1}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>E-mail format hatası.</strong>
+                        </div>
+                    </th:block>
                     </br>
                     <div>
                         <label><b>Mesajınız:</b></label>
                     </div>
-                    <div class="ui input">
-                        <input type="text" name="contact_message" maxlength="500">
+                    <div class="ui input" style="display: grid">
+                        <textarea name="contact_message" maxlength="1000" rows="5"
+                                  style="resize: none;overflow: scroll"></textarea>
                     </div>
+
+                    <div class="field">
+                        <div class="ui red message" style="display: block"
+                             th:if="${ #fields.hasErrors('contact_message') }"
+                             th:errors="*{contact_message}">
+                        </div>
+                    </div>
+
                     <div>
                         <button type="submit" class="ui inverted green button">Gönder</button>
                     </div>
 
                 </form>
             </div>
-
-
             <div class="one wide column">
             </div>
             <div class="eight wide column">
-                <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1FIyeKGQQfFC4vsUVGGaWtFuWVjSl12bQ" width="640" height="480"></iframe>
+                <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1FIyeKGQQfFC4vsUVGGaWtFuWVjSl12bQ" width="640"
+                        height="480"></iframe>
             </div>
         </div>
 
@@ -83,6 +118,7 @@
 </th:block>
 
 <th:block layout:fragment="customJs">
+    <script th:src="@{/js/contact.js}"></script>
 </th:block>
 
 </body>
