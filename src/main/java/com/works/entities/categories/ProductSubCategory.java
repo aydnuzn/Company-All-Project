@@ -17,11 +17,13 @@ public class ProductSubCategory extends BaseEntity<String> {
 
     private String pr_sub_title;
 
+    private String pr_top_id;
+
     @JsonManagedReference
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "product_sub_category_products",
-            joinColumns = @JoinColumn(name = "product_sub_category_null"),
-            inverseJoinColumns = @JoinColumn(name = "products_null"))
+            joinColumns = @JoinColumn(name = "product_sub_category_id"),
+            inverseJoinColumns = @JoinColumn(name = "products_id"))
     private List<Product> products;
 
 }

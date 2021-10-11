@@ -20,8 +20,8 @@ public class ProductTopCategory extends BaseEntity<String> {
     @JsonManagedReference
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "product_top_category_products",
-            joinColumns = @JoinColumn(name = "product_top_category_null"),
-            inverseJoinColumns = @JoinColumn(name = "products_null"))
+            joinColumns = @JoinColumn(name = "product_top_category_id"),
+            inverseJoinColumns = @JoinColumn(name = "products_id"))
     private List<Product> products;
 
 }

@@ -1,6 +1,7 @@
 package com.works.entities.categories;
 
 import com.works.entities.Announcement;
+import com.works.entities.listener.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +9,8 @@ import java.util.List;
 
 @Entity
 @Data
-public class AnnouncementCategory {
+public class AnnouncementCategory extends BaseEntity<String> {
+    //Duyuru
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
