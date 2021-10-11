@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Like extends BaseEntity<String> {
+public class LikeManagement extends BaseEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
