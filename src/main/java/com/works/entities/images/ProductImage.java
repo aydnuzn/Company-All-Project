@@ -1,12 +1,13 @@
-package com.works.entities;
+package com.works.entities.images;
 
+import com.works.entities.Product;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-public class Image {
+public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
