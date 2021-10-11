@@ -3,13 +3,14 @@ package com.works.entities;
 import com.works.entities.Customer;
 import com.works.entities.Product;
 import com.works.entities.listener.BaseEntity;
+import com.works.entities.listener.BaseEntityNotCompany;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-public class LikeManagement extends BaseEntity<String> {
+public class LikeManagement extends BaseEntityNotCompany<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +25,5 @@ public class LikeManagement extends BaseEntity<String> {
     private Product product;
 
     private Integer score;
-
-
-
 
 }
