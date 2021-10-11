@@ -31,7 +31,6 @@ public class BaseEntity<T> {
     @Column(name = "Last_modified_date")
     private Date last_modified_date;
 
-    //@Transient
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "company_id")
     Company company;
