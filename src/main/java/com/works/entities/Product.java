@@ -4,13 +4,12 @@ package com.works.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.works.entities.categories.ProductSubCategory;
 import com.works.entities.categories.ProductTopCategory;
+import com.works.entities.images.ProductImage;
 import com.works.entities.listener.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
-
-//Arrayleri taşıyamazsa interlayer kurulacak.
 
 @Data
 @Entity
@@ -42,6 +41,6 @@ public class Product extends BaseEntity<String> {
     private String pr_longitude;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.DETACH)
-    private List<Image> images;
+    private List<ProductImage> images;
 
 }
