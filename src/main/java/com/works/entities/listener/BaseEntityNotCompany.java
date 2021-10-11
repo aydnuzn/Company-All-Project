@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntityCompany<T> {
+public class BaseEntityNotCompany<T> {
     @CreatedBy
     @Column(name = "created_by")
     private T created_by;
