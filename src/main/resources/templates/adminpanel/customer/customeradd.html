@@ -19,7 +19,7 @@
                 <div class="two wide column">
                 </div>
                 <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
-                    <form class="ui form" action="/admin/customer/add" method="post" th:object="${customer}">
+                    <form class="ui form" action="/admin/customer/add" method="post" th:object="${customerInterlayer}">
                         <h4 class="ui dividing header">Müşteri Ekle</h4>
 
                         <div class="fields">
@@ -53,29 +53,29 @@
                         </div>
 
                         <div class="fields">
-                            <div class="sixteen wide field">
+                            <div class="eight wide field">
                                 <label>Müşteri Mail</label>
-                                <input type="email" name="cu_mail" maxlength="60" placeholder="Müşteri Mail">
+                                <input type="email" name="cu_email" maxlength="60" placeholder="Müşteri Mail">
+                            </div>
+                            <div class="eight wide field">
+                                <label style="color: white"> Şifre</label>
+                                <input type="password" name="cu_password" minlength="4" maxlength="16"
+                                       placeholder="Müşteri Şifre">
                             </div>
                         </div>
-                        <div class="field">
+                        <div class="fields">
 
-                            <div class="ui sixteen wide field red message" style="display: block"
-                                 th:if="${ #fields.hasErrors('cu_mail') }"
-                                 th:errors="*{cu_mail}">
+                            <div class="ui eight wide field red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('cu_email') }"
+                                 th:errors="*{cu_email}">
+                            </div>
+                            <div class="ui eight wide field red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('cu_password') }"
+                                 th:errors="*{cu_password}">
                             </div>
 
                         </div>
                         <th:block th:if="${isError == 1}">
-                            <div class="ui red message" style="display: block">
-                                <i class="close icon"></i>
-                                <div class="header">
-                                    Hata (E-posta)
-                                </div>
-                                <strong>E-mail formatı hatalı.</strong>
-                            </div>
-                        </th:block>
-                        <th:block th:if="${isError == 2}">
                             <div class="ui red message" style="display: block">
                                 <i class="close icon"></i>
                                 <div class="header">
@@ -108,16 +108,8 @@
                                  th:errors="*{cu_tel}">
                             </div>
 
-                            <th:block th:if="${isError == 3}">
-                                <div class="ui eight wide field red message" style="display: block">
-                                    <i class="close icon"></i>
-                                    <div class="header">
-                                        Hata (Telefon)
-                                    </div>
-                                    <strong>Telefon formatı hatalı.</strong>
-                                </div>
-                            </th:block>
-                            <th:block th:if="${isError == 4}">
+
+                            <th:block th:if="${isError == 2}">
                                 <div class="ui eight wide field red message" style="display: block">
                                     <i class="close icon"></i>
                                     <div class="header">
