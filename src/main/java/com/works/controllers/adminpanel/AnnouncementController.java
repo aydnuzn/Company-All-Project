@@ -51,8 +51,7 @@ public class AnnouncementController {
     public String announcementAdd(@Valid @ModelAttribute("announcementInterlayer") AnnouncementInterlayer announcementInterlayer, BindingResult bindingResult, Model model) {
         if(!bindingResult.hasErrors()){
             Announcement announcement = new Announcement();
-            int annCategory = Integer.parseInt(announcementInterlayer.getAnn_category());
-            Optional<AnnouncementCategory> optAnnouncementCategory = annCategoryRepository.findById(annCategory);
+            Optional<AnnouncementCategory> optAnnouncementCategory = annCategoryRepository.findById(announcementInterlayer.getAnn_category());
             if(optAnnouncementCategory.isPresent()){
                 announcement.setAnnouncementCategory(optAnnouncementCategory.get());
                 announcement.setAnn_title(announcementInterlayer.getAnn_title());

@@ -15,6 +15,7 @@ public class AnnouncementCategory extends BaseEntity<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private String ann_category_title;
 
     @OneToMany(mappedBy = "announcementCategory", cascade = CascadeType.DETACH)

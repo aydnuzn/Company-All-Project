@@ -114,13 +114,14 @@
                                 </div>
                             </div>
                         </div>
-                        <th:block th:if="${isError == 0}">
-                            <div class="ui red message" style="display: block">
-                                <i class="close icon"></i>
-                                <div class="header">Hata!</div>
-                                <strong> Lütfen mevcur bir kategori seçiniz.</strong>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_category') }"
+                                     th:errors="*{ann_category}">
+                                </div>
                             </div>
-                        </th:block>
+                        </div>
 
                         <button type="submit" class="ui button primary" tabindex="0">Ekle</button>
                         <button class="ui button negative" tabindex="0">İptal</button>
