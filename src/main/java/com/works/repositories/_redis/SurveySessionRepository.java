@@ -1,0 +1,9 @@
+package com.works.repositories._redis;
+
+import com.works.models._redis.SurveySession;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.repository.CrudRepository;
+@EnableRedisRepositories
+public interface SurveySessionRepository extends CrudRepository<SurveySession, String> {
+
+}
