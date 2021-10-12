@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Content List</title>
     <script type="text/javascript">
-        CKEDITOR.replace('ann_description');
+        CKEDITOR.replace('content_detailed_description');
     </script>
 </head>
 <body>
@@ -23,22 +23,49 @@
                 <div class="two wide column">
                 </div>
                 <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
-                    <form class="ui form ">
+                    <form class="ui form " action="/admin/content/add" method="post" th:object="${content}">
                         <h4 class="ui dividing header">İçerik Ekle</h4>
 
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>İçerik Başlığı</label>
-                                <input type="text" name="ann_title" maxlength="16" placeholder="Duyuru Başlığı">
+                                <input type="text" name="content_title" maxlength="16" placeholder="İçerik Başlığı">
                             </div>
                         </div>
+                        <th:block th:if="${isError == 1}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata (Benzersizlik - Başlık)
+                                </div>
+                                <strong>Bu başlıkta bir içerik zaten mevcut.</strong>
+                            </div>
+                        </th:block>
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('content_title') }"
+                                     th:errors="*{content_title}">
+                                </div>
+                            </div>
+                        </div>
+
 
 
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Kısa Açıklama</label>
-                                <input type="text" name="ann_brief_description" maxlength="60"
+                                <input type="text" name="content_brief_description" maxlength="60"
                                        placeholder="Kısa Açıklama">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('content_brief_description') }"
+                                     th:errors="*{content_brief_description}">
+                                </div>
                             </div>
                         </div>
 
@@ -46,7 +73,15 @@
                         <div class="field">
                             <label>Detaylı Açıklama</label>
                             <div class="field">
-                                <textarea name="ann_description" class="ckeditor form-control"></textarea>
+                                <textarea name="content_detailed_description" class="ckeditor form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('content_detailed_description') }"
+                                     th:errors="*{content_detailed_description}">
+                                </div>
                             </div>
                         </div>
 
@@ -55,7 +90,7 @@
                             <div class="sixteen wide field">
                                 <label>Durum</label>
                                 <div class="field">
-                                    <select class="ui fluid search selection dropdown" name="ann_type"
+                                    <select class="ui fluid search selection dropdown" name="content_status"
                                             style="width: auto;height: auto">
                                         <option value="1">Aktif</option>
                                         <option value="2">Pasif</option>
@@ -63,6 +98,8 @@
                                 </div>
                             </div>
                         </div>
+
+
 
 
 
