@@ -19,7 +19,7 @@
                 <div class="one wide column">
                 </div>
                 <div class="fourteen wide column" style="border:1px solid darkgreen; padding:30px">
-                    <form class="ui form">
+                    <form action="/admin/announcement/category/add" method="post" th:object="${announcementCategory}" class="ui form">
                         <h4 class="ui dividing header">Duyuru/Haber - Kategori Ekle</h4>
 
                         <div class="field">
@@ -29,6 +29,25 @@
                                        placeholder="Kategori Başlığı Giriniz">
                             </div>
                         </div>
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_category_title') }"
+                                     th:errors="*{ann_category_title}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <th:block th:if="${isError}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata!
+                                </div>
+                                <strong> Bu isimde bir kategori vardır. <br> Başka bir isim giriniz</strong>
+                            </div>
+                        </th:block>
 
                         <div class="ui buttons" style="float: right">
                             <button type="submit" class="ui primary button">Ekle</button>

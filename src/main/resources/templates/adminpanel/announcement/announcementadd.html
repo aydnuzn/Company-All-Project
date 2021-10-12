@@ -7,7 +7,7 @@
     <title>Announcement</title>
 
     <script type="text/javascript">
-        CKEDITOR.replace('annDescription');
+        CKEDITOR.replace('ann_description');
     </script>
 
 </head>
@@ -26,13 +26,21 @@
                 <div class="two wide column">
                 </div>
                 <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
-                    <form class="ui form ">
+                    <form action="/admin/announcement/add" method="post" th:object="${announcementInterlayer}" class="ui form ">
                         <h4 class="ui dividing header">Duyuru/Haber Ekle</h4>
 
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Duyuru Başlığı</label>
                                 <input type="text" name="ann_title" maxlength="16" placeholder="Duyuru Başlığı">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_title') }"
+                                     th:errors="*{ann_title}">
+                                </div>
                             </div>
                         </div>
 
@@ -43,6 +51,14 @@
                                        placeholder="Kısa Açıklama">
                             </div>
                         </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_brief_description') }"
+                                     th:errors="*{ann_brief_description}">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="field">
                             <label>Uzun Açıklama</label>
@@ -50,7 +66,14 @@
                                 <textarea name="ann_description" class="ckeditor form-control"></textarea>
                             </div>
                         </div>
-
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_description') }"
+                                     th:errors="*{ann_description}">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="fields">
                             <div class="sixteen wide field">
@@ -64,26 +87,43 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_type') }"
+                                     th:errors="*{ann_type}">
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Kategori</label>
                                 <div class="field">
-                                    <select name="ann_category" class="ui fluid search selection dropdown"
-                                            style="width: auto;height: auto">
-                                        <option value="1">Havuz Bakımı</option>
-                                        <option value="2">Kasa Kontrol</option>
-                                        <option value="3">Oda Temizleme</option>
-                                        <option value="4">Maaşlar Hakkında</option>
-                                        <option value="5">Temizlik</option>
-                                        <option value="6">Asansör Bakımı</option>
+                                    <select name="ann_category" class="ui fluid search selection dropdown" style="width: auto;height: auto">
+                                        <th:block th:if="${ls != null}">
+                                            <th:block th:each="item : ${ls}">
+                                                <option th:value="${item.id}" th:text="${item.ann_category_title}"></option>
+                                            </th:block>
+                                        </th:block>
+                                        <th:block th:unless="${ls != null}">
+                                            <option value="0">Kategori Eklenmedi</option>
+                                        </th:block>
                                     </select>
                                 </div>
                             </div>
                         </div>
+                        <th:block th:if="${isError == 0}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">Hata!</div>
+                                <strong> Lütfen mevcur bir kategori seçiniz.</strong>
+                            </div>
+                        </th:block>
 
-                        <div class="ui button primary" tabindex="0">Ekle</div>
-                        <div class="ui button negative" tabindex="0">İptal</div>
+                        <button type="submit" class="ui button primary" tabindex="0">Ekle</button>
+                        <button class="ui button negative" tabindex="0">İptal</button>
                     </form>
                 </div>
                 <div class="two wide column">
