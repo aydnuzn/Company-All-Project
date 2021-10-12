@@ -22,7 +22,7 @@
         <div class="four wide column">
         </div>
         <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
-          <form class="ui form ">
+          <form class="ui form " action="/admin/survey/add" method="post" th:object="${survey}">
 
 
 
@@ -33,15 +33,30 @@
             <div class="fields">
               <div class="sixteen wide field">
                 <label>Anket Başlığı</label>
-                <input type="text" name="a_name" maxlength="16" placeholder="Anket Başlığı Giriniz">
+                <input type="text" name="survey_title" maxlength="16" placeholder="Anket Başlığı Giriniz">
               </div>
-
-
+            </div>
+            <th:block th:if="${isError == 1}">
+              <div class="ui red message" style="display: block">
+                <i class="close icon"></i>
+                <div class="header">
+                  Hata (Benzersizlik - Anket Başlığı)
+                </div>
+                <strong>Böyle bir anket zaten mevcut.</strong>
+              </div>
+            </th:block>
+            <div class="fields">
+              <div class="eight wide field">
+                <div class="ui red message" style="display: block"
+                     th:if="${ #fields.hasErrors('survey_title') }"
+                     th:errors="*{survey_title}">
+                </div>
+              </div>
             </div>
 
 
 
-            <div class="ui button green" tabindex="0">Ekle</div>
+            <button type="submit" class="ui button green" tabindex="0">Ekle</button>
           </form>
         </div>
         <div class="four wide column">
