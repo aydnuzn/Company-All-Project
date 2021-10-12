@@ -1,9 +1,7 @@
 package com.works.entities;
 
-import com.works.entities.Customer;
-import com.works.entities.Product;
-import com.works.entities.listener.BaseEntity;
 import com.works.entities.listener.BaseEntityNotCompany;
+import com.works.entities.security.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,7 +16,7 @@ public class LikeManagement extends BaseEntityNotCompany<String> {
 
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private User customer;
 
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "product_id")

@@ -4,6 +4,7 @@ import com.works.entities.constant.address.City;
 import com.works.entities.constant.address.District;
 import com.works.entities.listener.BaseEntity;
 import com.works.entities.listener.BaseEntityNotCompany;
+import com.works.entities.security.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,5 +28,5 @@ public class Address extends BaseEntityNotCompany<String> {
 
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private User customer;
 }
