@@ -14,27 +14,72 @@
 <th:block layout:fragment="content">
     <!-- Register From -->
 
-    <div class="ui page grid" th:style="'background-image:url(' + @{/images/login/background.jpg} + ');'">
+    <div class="ui page grid" th:style="'background-image:url(' + @{/images/login/background.jpg} + '); height:auto'">
 
         <div class="three column row">
             <div class="four wide column">
             </div>
             <div class="eight wide column">
-                <form class="ui form" enctype="multipart/form-data">
+                <form class="ui form" action="/register/add" method="post" th:object="${registerInterlayer}">
                     <h4 class="ui dividing header" style="color: white">Şirket Bilgileri</h4>
                     <div class="field">
                         <label style="color: white">Adı</label>
                         <div class="field">
-
                             <input type="text" name="company_name" placeholder="Şirket Adı">
                         </div>
-
+                    </div>
+                    <div class="field">
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('company_name') }"
+                             th:errors="*{company_name}">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="eight wide field">
+                            <label style="color: white">İl</label>
+                            <div class="field">
+                                <select class="ui search selection dropdown" name="company_city" id="company_city"
+                                        style="width: auto;height: auto">
+                                    <th:block th:if="${cityList != null}">
+                                        <th:block th:each="item : ${cityList}">
+                                            <option th:value="${item.id}" th:text="${item.city_name}"></option>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${cityList != null}">
+                                        <option value="0">İl bulunamadı.</option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="eight wide field">
+                            <label style="color: white">İlçe</label>
+                            <div class="field">
+                                <select class="ui search selection dropdown" name="company_district"
+                                        id="company_district" style="width: auto;height: auto">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('company_city') }"
+                             th:errors="*{company_city}">
+                        </div>
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('company_district') }"
+                             th:errors="*{company_district}">
+                        </div>
                     </div>
                     <div class="field">
                         <label style="color: white">Adres</label>
                         <div class="field">
                             <textarea name="company_address" placeholder="Adres" rows="3"></textarea>
-
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('company_address') }"
+                             th:errors="*{company_address}">
                         </div>
                     </div>
 
@@ -42,14 +87,14 @@
                         <div class="eight wide field">
                             <label style="color: white">Sektör</label>
                             <div class="field">
-                                <select class="ui search selection dropdown" name="company_sector">
+                                <select class="ui search selection dropdown" name="company_sector"
+                                        style="width: auto;height: auto">
                                     <option value="0">Sektör Seçiniz</option>
                                     <option value="1">Bilişim Teknolojileri</option>
                                     <option value="2">Otomotiv</option>
                                     <option value="3">Diğer</option>
                                 </select>
                             </div>
-
                         </div>
 
                         <div class="eight wide field">
@@ -57,7 +102,17 @@
                             <input type="text" name="company_tel" maxlength="11" placeholder="company_tel">
                         </div>
 
+                    </div>
 
+                    <div class="fields">
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('company_sector') }"
+                             th:errors="*{company_sector}">
+                        </div>
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('company_tel') }"
+                             th:errors="*{company_tel}">
+                        </div>
                     </div>
 
                     <h4 class="ui dividing header" style="color: white">Şirket Admin Bilgileri</h4>
@@ -70,7 +125,16 @@
                             <label style="color: white">Soyadı</label>
                             <input type="text" name="admin_surname" placeholder="Admin Soyadı">
                         </div>
-
+                    </div>
+                    <div class="fields">
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('admin_name') }"
+                             th:errors="*{admin_name}">
+                        </div>
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('admin_surname') }"
+                             th:errors="*{admin_surname}">
+                        </div>
                     </div>
                     <div class="fields">
                         <div class="eight wide field">
@@ -80,6 +144,16 @@
                         <div class="eight wide field">
                             <label style="color: white">Telefon</label>
                             <input type="tel" name="admin_tel" placeholder="Admin Telefon">
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('admin_email') }"
+                             th:errors="*{admin_email}">
+                        </div>
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('admin_tel') }"
+                             th:errors="*{admin_tel}">
                         </div>
                     </div>
                     <div class="fields">
@@ -93,7 +167,16 @@
                             <input type="password" name="admin_password2" minlength="4" maxlength="16"
                                    placeholder="Şifre Tekrar">
                         </div>
-
+                    </div>
+                    <div class="fields">
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('admin_password1') }"
+                             th:errors="*{admin_password1}">
+                        </div>
+                        <div class="ui sixteen wide field red message" style="display: block"
+                             th:if="${ #fields.hasErrors('admin_password2') }"
+                             th:errors="*{admin_password2}">
+                        </div>
                     </div>
                     <button type="submit" class="ui button green" tabindex="0">Kayıt Ol</button>
                 </form>
@@ -110,7 +193,7 @@
 
 
 <th:block layout:fragment="customJs">
-    <!-- <script th:src="@{/js/login.js}"></script> -->
+    <script th:src="@{/js/register.js}"></script>
 </th:block>
 
 </body>
