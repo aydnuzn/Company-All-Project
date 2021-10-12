@@ -19,7 +19,7 @@
                 <div class="two wide column">
                 </div>
                 <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
-                    <form class="ui form ">
+                    <form class="ui form" action="/admin/customer/add" method="post" th:object="${customer}">
                         <h4 class="ui dividing header">Müşteri Ekle</h4>
 
                         <div class="fields">
@@ -28,12 +28,28 @@
                                 <input type="text" name="cu_name" maxlength="60" placeholder="Müşteri Adı">
                             </div>
                         </div>
+                        <div class="field">
+
+                            <div class="ui sixteen wide field red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('cu_name') }"
+                                 th:errors="*{cu_name}">
+                            </div>
+
+                        </div>
 
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Müşteri Soyadı</label>
                                 <input type="text" name="cu_surname" maxlength="60" placeholder="Müşteri Soyadı">
                             </div>
+                        </div>
+                        <div class="field">
+
+                            <div class="ui sixteen wide field red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('cu_surname') }"
+                                 th:errors="*{cu_surname}">
+                            </div>
+
                         </div>
 
                         <div class="fields">
@@ -42,13 +58,38 @@
                                 <input type="email" name="cu_mail" maxlength="60" placeholder="Müşteri Mail">
                             </div>
                         </div>
+                        <div class="field">
+
+                            <div class="ui sixteen wide field red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('cu_mail') }"
+                                 th:errors="*{cu_mail}">
+                            </div>
+
+                        </div>
+                        <th:block th:if="${isError == 1}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata (E-posta)
+                                </div>
+                                <strong>E-mail formatı hatalı.</strong>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${isError == 2}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata (Benzersizlik - E-mail)
+                                </div>
+                                <strong>E-mail mevcut.</strong>
+                            </div>
+                        </th:block>
 
                         <div class="fields">
                             <div class="eight wide field">
                                 <label>Müşteri Telefon</label>
                                 <input type="tel" name="cu_tel" maxlength="11">
                             </div>
-
                             <div class="eight wide field">
                                 <label>Müşteri Durumu</label>
                                 <div class="field">
@@ -60,6 +101,39 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="field">
+
+                            <div class="ui eight wide field red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('cu_tel') }"
+                                 th:errors="*{cu_tel}">
+                            </div>
+
+                            <th:block th:if="${isError == 3}">
+                                <div class="ui eight wide field red message" style="display: block">
+                                    <i class="close icon"></i>
+                                    <div class="header">
+                                        Hata (Telefon)
+                                    </div>
+                                    <strong>Telefon formatı hatalı.</strong>
+                                </div>
+                            </th:block>
+                            <th:block th:if="${isError == 4}">
+                                <div class="ui eight wide field red message" style="display: block">
+                                    <i class="close icon"></i>
+                                    <div class="header">
+                                        Hata (Benzersizlik - Telefon)
+                                    </div>
+                                    <strong>Telefon mevcut.</strong>
+                                </div>
+                            </th:block>
+
+
+                            <div class="ui eight wide field red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('cu_status') }"
+                                 th:errors="*{cu_status}">
+                            </div>
+
+                        </div>
 
                         <button type="submit" class="ui button green" tabindex="0">Müşteri Ekle</button>
                     </form>
@@ -67,15 +141,9 @@
                 <div class="two wide column">
                 </div>
             </div>
-
-
         </div>
     </div>
-
-
 </th:block>
-
-
 <th:block layout:fragment="customJs">
 </th:block>
 </body>
