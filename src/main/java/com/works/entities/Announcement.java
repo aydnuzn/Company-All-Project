@@ -19,7 +19,11 @@ public class Announcement extends BaseEntityNotCompany<String> {
     private Integer id;
 
     private String ann_title;
+
+    @Column(length = 100)
     private String ann_brief_description;
+
+    @Column(length = 1000)
     private String ann_description;
     private Integer ann_type;
 
