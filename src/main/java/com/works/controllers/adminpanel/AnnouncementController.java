@@ -2,9 +2,13 @@ package com.works.controllers.adminpanel;
 
 import com.works.entities.Announcement;
 import com.works.entities.categories.AnnouncementCategory;
+import com.works.models._redis.AnnCategorySession;
+import com.works.models._redis.AnnouncementSession;
 import com.works.properties.AnnouncementInterlayer;
 import com.works.repositories._jpa.AnnCategoryRepository;
 import com.works.repositories._jpa.AnnouncementRepository;
+import com.works.repositories._redis.AnnCategorySessionRepository;
+import com.works.repositories._redis.AnnouncementSessionRepository;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -27,9 +31,14 @@ public class AnnouncementController {
     final AnnCategoryRepository annCategoryRepository;
     final AnnouncementRepository announcementRepository;
 
-    public AnnouncementController(AnnCategoryRepository annCategoryRepository, AnnouncementRepository announcementRepository) {
+    final AnnCategorySessionRepository announcementCategorySessionRepository;
+    final AnnouncementSessionRepository announcementSessionRepository;
+
+    public AnnouncementController(AnnCategoryRepository annCategoryRepository, AnnouncementRepository announcementRepository, AnnCategorySessionRepository announcementCategorySessionRepository, AnnouncementSessionRepository announcementSessionRepository) {
         this.annCategoryRepository = annCategoryRepository;
         this.announcementRepository = announcementRepository;
+        this.announcementCategorySessionRepository = announcementCategorySessionRepository;
+        this.announcementSessionRepository = announcementSessionRepository;
     }
 
     @GetMapping("")
@@ -58,8 +67,16 @@ public class AnnouncementController {
                 announcement.setAnn_brief_description(announcementInterlayer.getAnn_brief_description());
                 announcement.setAnn_description(announcementInterlayer.getAnn_description());
                 announcement.setAnn_type(announcementInterlayer.getAnn_type());
-                announcementRepository.save(announcement);
-                System.out.println("Added Announcement");
+                announcement = announcementRepository.save(announcement);
+                /*----Add Redis Database---- */
+                AnnouncementSession announcementSession = new AnnouncementSession();
+                announcementSession.setId(announcement.getId().toString());
+                announcementSession.setAnn_title(announcement.getAnn_title());
+                announcementSession.setAnn_brief_description(announcement.getAnn_brief_description());
+                announcementSession.setAnn_description(announcement.getAnn_description());
+                announcementSession.setAnn_type(announcement.getAnn_type().toString());
+                announcementSessionRepository.save(announcementSession);
+                /*------redis-added-------------*/
                 return "redirect:/admin/announcement";
             }else{
                 System.err.println("Lütfen mevcut bir kategori seçiniz");
@@ -84,7 +101,14 @@ public class AnnouncementController {
         if(!bindingResult.hasErrors()){
             try{
                 announcementCategory.setAnnouncements(null);
-                annCategoryRepository.save(announcementCategory);
+                announcementCategory = annCategoryRepository.save(announcementCategory);
+                /*----Add Redis Database---- */
+                AnnCategorySession announcementCategorySession = new AnnCategorySession();
+                announcementCategorySession.setId(announcementCategory.getId().toString());
+                announcementCategorySession.setAnn_category_title(announcementCategory.getAnn_category_title());
+                announcementCategorySessionRepository.save(announcementCategorySession);
+                /*------redis-added-------------*/
+
             }catch(DataIntegrityViolationException ex){
                 System.err.println("Aynı isimde kategori mevcut");
                 model.addAttribute("isError", true);
