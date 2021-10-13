@@ -40,6 +40,13 @@ public class CustomerController {
         return "adminpanel/customer/customeradd";
     }
 
+    @GetMapping("/list")
+    public String customerList(Model model) {
+        model.addAttribute("customerInterlayer", new CustomerInterlayer());
+        model.addAttribute("isError", 0);
+        return "adminpanel/customer/customerlist";
+    }
+
     @PostMapping("/add")
     public String customerAdd(@Valid @ModelAttribute("customerInterlayer") CustomerInterlayer customerInterlayer, BindingResult bindingResult, Model model) {
         if (!bindingResult.hasErrors()) {

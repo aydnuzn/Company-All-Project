@@ -20,46 +20,51 @@
 
         <div class="ui accordion">
 
-            <a class="title item" href="dashboard.html"> <i class="user secret icon" style="float: left;"></i> Admin
+            <a class="title item" th:href="@{/admin}"> <i class="user secret icon" style="float: left;"></i> Admin
                 Paneli</a>
 
 
 
             <a class="title item"> <i class="chart bar outline icon" style="float: left;"></i> Reklam Yönetimi <i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" href="commercial.html">Reklam Ekle
+                <a class="item" th:href="@{/admin/advertisement/}">Reklam Ekle
                 </a>
-                <a class="item" href="reklamliste.html">Reklam Listeleme
+                <a class="item" th:href="@{/admin/advertisement//list}">Reklam Listeleme
                 </a>
             </div>
 
             <a class="title item"><i class="chart pie icon" style="float: left;"></i>İçerik Yönetimi <i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" href="commercial.html">İçerik Ekle
+                <a class="item" th:href="@{/admin/content}">İçerik Ekle
                 </a>
-                <a class="item" href="reklamliste.html">İçerik Listeleme
+                <a class="item" th:href="@{/admin/content/list}">İçerik Listeleme
                 </a>
             </div>
 
             <a class="title item"><i class="users icon" style="float: left;"></i>Müşteri Yönetimi <i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" href="commercial.html">Müşteri Ekle
+                <a class="item" th:href="@{/admin/customer}">Müşteri Ekle
                 </a>
-                <a class="item" href="reklamliste.html">Müşteri Listeleme
+                <a class="item" th:href="@{/admin/customer/list}">Müşteri Listeleme
+                </a>
+            </div>
+
+
+            <a class="title item"> <i class="bullhorn icon" style="float: left;"></i> Duyurular<i class="dropdown icon"></i></a>
+            <div class="content">
+                <a class="item" th:href="@{/admin/announcement}">Duyuru Ekle
+                </a>
+                <a class="item" th:href="@{/admin/announcement/list}">Duyuru Listeleme
                 </a>
             </div>
 
 
 
-
-            <a class="title item" href="dashboard.html"> <i class="bullhorn icon" style="float: left;"></i> Duyurular
-                </a>
-
             <a class="title item"><i class="shopping bag icon" style="float: left;"></i>Ürünler<i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" href="commercial.html">Ürün Ekle
+                <a class="item" th:href="@{/admin/product}">Ürün Ekle
                 </a>
-                <a class="item" href="reklamliste.html">Ürün Listeleme
+                <a class="item" th:href="@{/admin/product/list}">Ürün Listeleme
                 </a>
             </div>
 
@@ -83,9 +88,9 @@
 
             <a class="title item"><i class="file icon" style="float: left;"></i>Anket Yönetimi<i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" href="commercial.html">Anket Ekle
+                <a class="item" th:href="@{/admin/survey}">Anket Ekle
                 </a>
-                <a class="item" href="reklamliste.html">Anket Listeleme
+                <a class="item" th:href="@{/admin/survey/list}">Anket Listeleme
                 </a>
             </div>
 
