@@ -18,12 +18,10 @@ public class AnnouncementInterlayer {
     @NotNull
     @NotEmpty
     @Length(min = 3, max = 100, message = "Duyuru kısa açıklama an az 3, en fazla 100 karakter olabilir")
-    @Column(length = 100)
     private String ann_brief_description;
 
     @NotNull
     @NotEmpty
-    @Column(length = 1000)
     private String ann_description;
 
     @NotNull
