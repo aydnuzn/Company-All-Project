@@ -57,6 +57,7 @@ public class SurveyRestController {
         return hm;
     }
 
+    //Anket Silme
     @DeleteMapping("/delete/{stIndex}")
     public Map<REnum, Object> surveyDelete(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
