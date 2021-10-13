@@ -3,123 +3,80 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="adminpanel/incadminpanel/layout">
 <head>
-  <meta charset="UTF-8">
-  <title>Survey Detail</title>
+    <meta charset="UTF-8">
+    <title>Survey Detail</title>
 </head>
 <body>
 <th:block layout:fragment="customCss">
-  <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
 </th:block>
-
 <th:block layout:fragment="content">
-  <!-- ADV ADD -->
-  <div class="asd" style="margin: 30px 30px 0px 290px">
-    <div class="ui page grid">
-
-
-
-      <div class="three column row">
-        <div class="four wide column">
-        </div>
-        <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
-          <form class="ui form ">
-
-
-
-
-
-
-            <h4 class="ui dividing header" >Anket Detay</h4>
-
-              <div class="sixteen wide field">
-                <label style="text-align: center">A</label>
+    <!-- ADV ADD -->
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+            <div class="three column row">
+                <div class="four wide column">
                 </div>
-
-            <div class="row">
-              <table class="ui celled padded table">
-                <thead>
-                <tr><th class="single line">Seçenek</th>
-                  <th>ALdığı Oy Sayısı</th>
-                  <th>İşlem</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                  <td>
-                    <h2 class="ui center aligned header">A</h2>
-                  </td>
-
-                  <td>
-                    <h2 class="ui center aligned header">100</h2>
-                  </td>
-
-                  <td>
-
-                    <div class="ui button red" tabindex="0">Sil</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h2 class="ui center aligned header">A</h2>
-                  </td>
-                  <td>
-                    <h2 class="ui center aligned header">200</h2>
-                  </td>
-                  <td>
-
-
-
-                    <div class="ui button red" tabindex="0">Sil</div>
-                  </td>
-                </tr>
-                </tbody>
-
-              </table>
+                <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form class="ui form ">
+                        <h4 class="ui dividing header">Anket Detay</h4>
+                        <div class="sixteen wide field">
+                            <label style="text-align: center">A</label>
+                        </div>
+                        <div class="row">
+                            <table class="ui celled padded table">
+                                <thead>
+                                <tr>
+                                    <th class="single line">Seçenek</th>
+                                    <th>ALdığı Oy Sayısı</th>
+                                    <th>İşlem</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <h2 class="ui center aligned header">A</h2>
+                                    </td>
+                                    <td>
+                                        <h2 class="ui center aligned header">100</h2>
+                                    </td>
+                                    <td>
+                                        <div class="ui button red" tabindex="0">Sil</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h2 class="ui center aligned header">A</h2>
+                                    </td>
+                                    <td>
+                                        <h2 class="ui center aligned header">200</h2>
+                                    </td>
+                                    <td>
+                                        <div class="ui button red" tabindex="0">Sil</div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row" style="text-align: center;margin-top:10px">
+                            <div class="two wide column">
+                            </div>
+                            <div class="twelve wide column">
+                                <div class="ui button blue" tabindex="0">Anket Düzenle</div>
+                                <div class="ui button blue" tabindex="0">Seçenek Ekle</div>
+                            </div>
+                            <div class="two wide column">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="four wide column">
+                </div>
             </div>
-
-
-
-              <div class="row" style="text-align: center;margin-top:10px">
-                <div class="two wide column">
-
-                </div>
-                <div class="twelve wide column">
-                  <div class="ui button blue" tabindex="0">Anket Düzenle</div>
-                  <div class="ui button blue" tabindex="0">Seçenek Ekle</div>
-                </div>
-                <div class="two wide column">
-
-                </div>
-              </div>
-
-
-
-
-          </form>
         </div>
-        <div class="four wide column">
-        </div>
-      </div>
-
-
-
-
-
-
     </div>
-  </div>
-
-
-
-
-
 </th:block>
-
 <th:block layout:fragment="customJs">
 </th:block>
-
 </body>
 </html>
-
-
-
-

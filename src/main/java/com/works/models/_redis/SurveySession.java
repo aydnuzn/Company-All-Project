@@ -11,6 +11,4 @@ public class SurveySession {
     @Id
     private String id;
     private String survey_title;
-
-
 }

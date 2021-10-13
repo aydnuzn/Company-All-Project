@@ -23,9 +23,5 @@ public class Survey extends BaseEntity<String> {
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.DETACH)
     private List<SurveySelection> surveySelections;
-
-
-
-
-
+    
 }
