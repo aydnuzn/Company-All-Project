@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+            <div class="three column row">
+                <div class="one wide column">
+                </div>
+                <div class="fourteen wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form action="/admin/product/category/add"  method="post" th:object="${productCategoryInterlayer}" class="ui form ">
+                        <h4 class="ui dividing header">Ürün Kategori Ekle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Üst Kategori</label>
+                                <div class="field">
+                                    <select name="pr_category" class="ui fluid search selection dropdown" style="width: auto;height: auto">
+                                        <th:block th:if="${ls != null}">
+                                            <option value="0">Seçim Yapınız</option>
+                                            <th:block th:each="item : ${ls}">
+                                                <th:block th:if="${item.parent_id == null}">
+                                                    <option style="color: red" th:value="${item.id}" th:text="${item.pr_title}"></option>
+                                                </th:block>
+                                                <th:block th:each="item2 : ${ls}">
+                                                    <th:block th:if="${item.id == item2.parent_id}">
+                                                <option th:value="${item2.id}" th:text="'&nbsp;&nbsp;&nbsp;&nbsp;'+ ${item2.pr_title}"></option>
+                                                    </th:block>
+                                                </th:block>
+                                            </th:block>
+                                        </th:block>
+                                        <th:block th:unless="${ls != null}">
+                                            <option value="-1">Kategori Eklenmedi</option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kategori Adı</label>
+                                <input type="text" name="pr_title" maxlength="40"
+                                       placeholder="Kategori Adı Giriniz">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('pr_title') }"
+                                     th:errors="*{pr_title}">
+                                </div>
+                            </div>
+                        </div>
+                        <th:block th:if="${isError}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata!
+                                </div>
+                                <strong> Bu isimde bir kategori vardır. <br> Başka bir isim giriniz</strong>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${isError2}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata!
+                                </div>
+                                <strong> Alt kategoriye ekleme yapilamaz</strong>
+                            </div>
+                        </th:block>
+
+                        <button type="submit" class="ui primary button">Kaydet</button>
+                        <div class="ui buttons" style="float: right">
+                            <button style="margin-left: 5px" class="ui primary button">Düzenle</button>
+                            <button style="margin-left: 5px" class="ui negative button">Sil</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="one wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
