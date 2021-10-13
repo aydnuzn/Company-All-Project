@@ -21,7 +21,7 @@
                     <form class="ui form ">
                         <h4 class="ui dividing header">Anket Detay</h4>
                         <div class="sixteen wide field">
-                            <label style="text-align: center">A</label>
+                            <label style="text-align: center" th:text="${survey_title}"></label>
                         </div>
                         <div class="row">
                             <table class="ui celled padded table">
@@ -33,28 +33,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <h2 class="ui center aligned header">A</h2>
-                                    </td>
-                                    <td>
-                                        <h2 class="ui center aligned header">100</h2>
-                                    </td>
-                                    <td>
-                                        <div class="ui button red" tabindex="0">Sil</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h2 class="ui center aligned header">A</h2>
-                                    </td>
-                                    <td>
-                                        <h2 class="ui center aligned header">200</h2>
-                                    </td>
-                                    <td>
-                                        <div class="ui button red" tabindex="0">Sil</div>
-                                    </td>
-                                </tr>
+                                <th:block th:if="${survey_selections != null}">
+
+                                    <th:block th:each="item : ${survey_selections}">
+                                        <tr>
+                                            <td>
+                                                <h2 class="ui center aligned header"
+                                                    th:text="${item.getSurvey_selection_title()}"></h2>
+                                            </td>
+                                            <td>
+                                                <h2 class="ui center aligned header"
+                                                    th:text="${item.getSurvey_selection_score()}"></h2>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{'/admin/survey/selection/delete/'+${item.getId()}+'/'+${index}}"
+                                                   class="ui button red" tabindex="0">
+                                                    Sil
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+
+                                </th:block>
                                 </tbody>
                             </table>
                         </div>
@@ -62,8 +62,10 @@
                             <div class="two wide column">
                             </div>
                             <div class="twelve wide column">
-                                <div class="ui button blue" tabindex="0">Anket Düzenle</div>
-                                <div class="ui button blue" tabindex="0">Seçenek Ekle</div>
+                                <a th:href="@{'/admin/survey/'+${index}}" class="ui button blue"
+                                   tabindex="0">Anket Düzenle</a>
+                                <a th:href="@{'/admin/survey/selection/'+${index}}" class="ui button blue" tabindex="0">Seçenek
+                                    Ekle</a>
                             </div>
                             <div class="two wide column">
                             </div>

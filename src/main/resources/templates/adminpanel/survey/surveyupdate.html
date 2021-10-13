@@ -19,9 +19,8 @@
                 <div class="four wide column">
                 </div>
                 <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
-                    <form class="ui form " action="/admin/survey/update" th:method="put"
+                    <form class="ui form " th:action="@{'/admin/survey/update/'+${stIndex}}" method="post"
                           th:object="${survey}">
-                        <input name="id" th:value="${survey.getId()}"/>
                         <h4 class="ui dividing header">Anket Ekleme</h4>
                         <div class="fields">
                             <div class="sixteen wide field">

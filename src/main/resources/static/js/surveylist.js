@@ -73,9 +73,9 @@ function getRows(data) {
           
             <td >
                 <div class="ui buttons" style="float: right">
-                    <a href="http://localhost:8091/admin/survey/detail/` + itm.id + `" class="ui button">Detay</a>
+                    <a href="http://localhost:8091/admin/survey/detail/` + itm.id + `" class="ui inverted green button">Detay</a>
                     <div class="ya da"></div>
-                    <button onclick="deleteSurvey(` + itm.id + `)"   class="ui negative button"></button>
+                    <button onclick="deleteSurvey(` + itm.id + `)" class="ui negative inverted button">Sil</button>
                 </div>                      
             </td>
           </tr>`;
