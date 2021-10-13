@@ -1,7 +1,11 @@
 package com.works.controllers.adminpanel;
 
 import com.works.entities.Advertisement;
+import com.works.models._elastic.AdvertisementElasticsearch;
+import com.works.models._redis.AdvertisementSession;
+import com.works.repositories._elastic.AdvertisementElasticRepository;
 import com.works.repositories._jpa.AdvertisementRepository;
+import com.works.repositories._redis.AdvertisementSessionRepository;
 import com.works.utils.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,9 +31,13 @@ public class AdvertisementController {
 
     final String rvalue = "adminpanel/advertisement/";
     final AdvertisementRepository advertisementRepository;
+    final AdvertisementSessionRepository advertisementSessionRepository;
+    final AdvertisementElasticRepository advertisementElasticRepository;
 
-    public AdvertisementController(AdvertisementRepository advertisementRepository) {
+    public AdvertisementController(AdvertisementRepository advertisementRepository, AdvertisementSessionRepository advertisementSessionRepository, AdvertisementElasticRepository advertisementElasticRepository) {
         this.advertisementRepository = advertisementRepository;
+        this.advertisementSessionRepository = advertisementSessionRepository;
+        this.advertisementElasticRepository = advertisementElasticRepository;
     }
 
     @GetMapping("")
@@ -80,7 +88,32 @@ public class AdvertisementController {
                 System.err.println(e);
             }
             if (height.equals(advertisement.getAdv_height()) && width.equals(advertisement.getAdv_width())) {
-                advertisementRepository.save(advertisement);
+                String advId = String.valueOf(advertisementRepository.save(advertisement).getId());
+                AdvertisementSession advertisementSession = new AdvertisementSession();
+                advertisementSession.setAdv_title(advertisement.getAdv_title());
+                advertisementSession.setAdv_shown_number(String.valueOf(advertisement.getAdv_shown_number()));
+                advertisementSession.setAdv_date_begin(String.valueOf(advertisement.getAdv_date_begin()));
+                advertisementSession.setAdv_date_end(String.valueOf(advertisement.getAdv_date_end()));
+                advertisementSession.setAdv_image(advertisement.getAdv_image());
+                advertisementSession.setAdv_width(advertisement.getAdv_width());
+                advertisementSession.setAdv_height(advertisement.getAdv_height());
+                advertisementSession.setAdv_link(advertisement.getAdv_link());
+                advertisementSession.setId(advId);
+                advertisementSessionRepository.save(advertisementSession);
+
+                AdvertisementElasticsearch advertisementElasticsearch = new AdvertisementElasticsearch();
+                advertisementElasticsearch.setAdv_title(advertisement.getAdv_title());
+                advertisementElasticsearch.setAdv_shown_number(String.valueOf(advertisement.getAdv_shown_number()));
+                advertisementElasticsearch.setAdv_date_begin(String.valueOf(advertisement.getAdv_date_begin()));
+                advertisementElasticsearch.setAdv_date_end(String.valueOf(advertisement.getAdv_date_end()));
+                advertisementElasticsearch.setAdv_image(advertisement.getAdv_image());
+                advertisementElasticsearch.setAdv_width(advertisement.getAdv_width());
+                advertisementElasticsearch.setAdv_height(advertisement.getAdv_height());
+                advertisementElasticsearch.setAdv_link(advertisement.getAdv_link());
+                advertisementElasticsearch.setId(advId);
+                advertisementElasticRepository.save(advertisementElasticsearch);
+
+
             } else {
                 model.addAttribute("isError", 1);
                 return rvalue + "advertisementadd";
