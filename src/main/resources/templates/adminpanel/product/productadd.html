@@ -21,14 +21,18 @@
                 <div class="two wide column">
                 </div>
                 <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
-                    <form class="ui form ">
+
+                    <form action="/admin/product/add"  method="post" th:object="${productInterlayer}"
+                          enctype="multipart/form-data" class="ui form ">
+
                         <h4 class="ui dividing header">Ürün Ekle</h4>
 
+                        <!--
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Üst Kategori</label>
                                 <div class="field">
-                                    <select name="pr_top_categories[]" multiple="" class="ui fluid dropdown">
+                                    <select id="top_categori" name="pr_top_categories[]" multiple="" class="ui fluid dropdown">
                                         <option value="">Seçim Yapınız</option>
                                         <option value="1">Elektronik</option>
                                         <option value="2">Giyim</option>
@@ -40,7 +44,39 @@
                                 </div>
                             </div>
                         </div>
+                        -->
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kategoriler</label>
+                                <div id="text" style="height: 100px; border:solid 1px grey;overflow-y:scroll;">
+                                    <th:block th:if="${ls != null}">
+                                        <th:block th:each="item : ${ls}">
+                                            <th:block th:if="${item.parent_id == null}">
+                                                <input name="pr_categories" th:value="${item.id}" th:text="${item.pr_title}" type="checkbox"/><br/>
+                                            </th:block>
+                                            <th:block th:each="item2 : ${ls}">
+                                                <th:block th:if="${item.id == item2.parent_id}">
+                                                    <input name="pr_categories" style="margin-left: 20px" th:value="${item2.id}" th:text="${item2.pr_title}" type="checkbox"/><br/>
+                                                </th:block>
+                                            </th:block>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${ls != null}">
+                                        <option value="-1">Kategori Eklenmedi</option>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('pr_categories') }"
+                                     th:errors="*{pr_categories}">
+                                </div>
+                            </div>
+                        </div>
 
+<!--
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Alt Kategori</label>
@@ -58,11 +94,19 @@
                                 </div>
                             </div>
                         </div>
-
+-->
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Ürün Adı</label>
                                 <input type="text" name="pr_name" maxlength="16" placeholder="Ürün Adı">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('pr_name') }"
+                                     th:errors="*{pr_name}">
+                                </div>
                             </div>
                         </div>
 
@@ -73,6 +117,14 @@
                                        placeholder="Kısa Açıklama">
                             </div>
                         </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('pr_brief_description') }"
+                                     th:errors="*{pr_brief_description}">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="field">
                             <label>Ürün Açıklaması</label>
@@ -81,25 +133,57 @@
                                           rows="3"></textarea>
                             </div>
                         </div>
-
-                        <div class="fields">
-                            <div class="eight wide field">
-                                <label>Ürün Fiyatı</label>
-                                <input type="number" name="pr_price" maxlength="11" value="0">
-                            </div>
-
-                            <div class="eight wide field">
-                                <label>Ürün Tipi</label>
-                                <div class="field">
-                                    <select class="ui fluid search selection dropdown" name="pr_type"
-                                            style="width: auto;height: auto">
-                                        <option value="0">Ürün Tipini Seçiniz</option>
-                                        <option value="1">Satılık</option>
-                                        <option value="2">Kiralık</option>
-                                    </select>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('pr_description') }"
+                                     th:errors="*{pr_description}">
                                 </div>
                             </div>
                         </div>
+
+
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <div class="sixteen wide field">
+                                    <label>Ürün Fiyatı</label>
+                                    <div class="field">
+                                        <input type="number" name="pr_price" maxlength="11" value="0">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="sixteen wide field">
+                                        <div class="ui red message" style="display: block"
+                                             th:if="${ #fields.hasErrors('pr_price') }"
+                                             th:errors="*{pr_price}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="eight wide field">
+                                <div class="sixteen wide field">
+                                    <label>Ürün Tipi</label>
+                                    <div class="field">
+                                        <select class="ui fluid search selection dropdown" name="pr_type"
+                                                style="width: auto;height: auto">
+                                            <option value="0">Ürün Tipini Seçiniz</option>
+                                            <option value="1">Satılık</option>
+                                            <option value="2">Kiralık</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="sixteen wide field">
+                                        <div class="ui red message" style="display: block"
+                                             th:if="${ #fields.hasErrors('pr_type') }"
+                                             th:errors="*{pr_type}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="field">
                             <div class="sixteen wide field">
@@ -121,11 +205,21 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="field">
+                                    <div class="sixteen wide field">
+                                        <div class="ui red message" style="display: block"
+                                             th:if="${ #fields.hasErrors('pr_campaign') }"
+                                             th:errors="*{pr_campaign}">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="eight wide field">
                                 <label>Kampanya Adı</label>
                                 <input type="text" name="pr_campaign_name" maxlength="60" placeholder="Kampanya Adı">
                             </div>
+
                         </div>
 
                         <div class="field">
@@ -142,20 +236,60 @@
                                 <textarea name="pr_address" placeholder="Adresi Giriniz" rows="3"></textarea>
                             </div>
                         </div>
-
-                        <div class="fields">
-                            <div class="eight wide field">
-                                <label>Enlem</label>
-                                <input type="number" name="pr_latitude" maxlength="11" value="0">
-                            </div>
-
-                            <div class="eight wide field">
-                                <label>Boylam</label>
-                                <input type="number" name="pr_longitude" maxlength="11" value="0">
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('pr_address') }"
+                                     th:errors="*{pr_address}">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="ui button green" tabindex="0">Ürün Ekle</div>
+
+
+
+
+                        <div class="fields">
+                            <div class="eight wide field">
+                                <div class="sixteen wide field">
+                                    <label>Enlem</label>
+                                    <div class="field">
+                                        <input type="number" name="pr_latitude" maxlength="11" value="0">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="field">
+                                        <div class="sixteen wide field">
+                                            <div class="ui red message" style="display: block"
+                                                 th:if="${ #fields.hasErrors('pr_latitude') }"
+                                                 th:errors="*{pr_latitude}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="eight wide field">
+                                <div class="sixteen wide field">
+                                    <label>Boylam</label>
+                                    <div class="field">
+                                        <input type="number" name="pr_longitude" maxlength="11" value="0">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="field">
+                                        <div class="sixteen wide field">
+                                            <div class="ui red message" style="display: block"
+                                                 th:if="${ #fields.hasErrors('pr_longitude') }"
+                                                 th:errors="*{pr_longitude}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="ui button green" tabindex="0">Ürün Ekle</button>
                     </form>
                 </div>
                 <div class="two wide column">
@@ -171,6 +305,7 @@
 
 
 <th:block layout:fragment="customJs">
+    <script th:src="@{/js/productadd.js}"></script>
 </th:block>
 </body>
 </html>
