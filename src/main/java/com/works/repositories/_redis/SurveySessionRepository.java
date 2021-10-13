@@ -1,6 +1,5 @@
 package com.works.repositories._redis;
 
-import com.works.entities.survey.Survey;
 import com.works.models._redis.SurveySession;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -14,4 +13,5 @@ public interface SurveySessionRepository extends CrudRepository<SurveySession, S
 
     @Query("select s from sessionsurvey s order by s.id")
     List<SurveySession> findByOrderByIdAsc(Pageable pageable);
+
 }
