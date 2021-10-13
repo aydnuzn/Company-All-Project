@@ -15,7 +15,6 @@ public class Survey extends BaseEntity<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @NotEmpty
     @NotNull
     @Column(unique = true)
