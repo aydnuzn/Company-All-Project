@@ -2,9 +2,13 @@ package com.works.controllers.adminpanel;
 
 import com.works.entities.Announcement;
 import com.works.entities.categories.AnnouncementCategory;
+import com.works.models._elastic.AnnCategoryElastic;
+import com.works.models._elastic.AnnouncementElastic;
 import com.works.models._redis.AnnCategorySession;
 import com.works.models._redis.AnnouncementSession;
 import com.works.properties.AnnouncementInterlayer;
+import com.works.repositories._elastic.AnnCategoryElasticRepository;
+import com.works.repositories._elastic.AnnouncementElasticRepository;
 import com.works.repositories._jpa.AnnCategoryRepository;
 import com.works.repositories._jpa.AnnouncementRepository;
 import com.works.repositories._redis.AnnCategorySessionRepository;
@@ -34,11 +38,16 @@ public class AnnouncementController {
     final AnnCategorySessionRepository announcementCategorySessionRepository;
     final AnnouncementSessionRepository announcementSessionRepository;
 
-    public AnnouncementController(AnnCategoryRepository annCategoryRepository, AnnouncementRepository announcementRepository, AnnCategorySessionRepository announcementCategorySessionRepository, AnnouncementSessionRepository announcementSessionRepository) {
+    final AnnCategoryElasticRepository annCategoryElasticRepository;
+    final AnnouncementElasticRepository announcementElasticRepository;
+
+    public AnnouncementController(AnnCategoryRepository annCategoryRepository, AnnouncementRepository announcementRepository, AnnCategorySessionRepository announcementCategorySessionRepository, AnnouncementSessionRepository announcementSessionRepository, AnnCategoryElasticRepository annCategoryElasticRepository, AnnouncementElasticRepository announcementElasticRepository) {
         this.annCategoryRepository = annCategoryRepository;
         this.announcementRepository = announcementRepository;
         this.announcementCategorySessionRepository = announcementCategorySessionRepository;
         this.announcementSessionRepository = announcementSessionRepository;
+        this.annCategoryElasticRepository = annCategoryElasticRepository;
+        this.announcementElasticRepository = announcementElasticRepository;
     }
 
     @GetMapping("")
@@ -73,10 +82,17 @@ public class AnnouncementController {
                 announcementSession.setId(announcement.getId().toString());
                 announcementSession.setAnn_title(announcement.getAnn_title());
                 announcementSession.setAnn_brief_description(announcement.getAnn_brief_description());
-                announcementSession.setAnn_description(announcement.getAnn_description());
-                announcementSession.setAnn_type(announcement.getAnn_type().toString());
+                String annType = announcement.getAnn_type() == 1 ? "Aktif":"Pasif";
+                announcementSession.setAnn_type(annType);
                 announcementSessionRepository.save(announcementSession);
-                /*------redis-added-------------*/
+
+                /*----Add Elasticsearch Database---- */
+                AnnouncementElastic announcementElastic = new AnnouncementElastic();
+                announcementElastic.setId(announcement.getId().toString());
+                announcementElastic.setAnn_title(announcement.getAnn_title());
+                announcementElastic.setAnn_brief_description(announcement.getAnn_brief_description());
+                announcementElastic.setAnn_type(announcement.getAnn_type() == 1 ? "Aktif":"Pasif");
+                announcementElasticRepository.save(announcementElastic);
                 return "redirect:/admin/announcement";
             }else{
                 System.err.println("Lütfen mevcut bir kategori seçiniz");
@@ -107,7 +123,11 @@ public class AnnouncementController {
                 announcementCategorySession.setId(announcementCategory.getId().toString());
                 announcementCategorySession.setAnn_category_title(announcementCategory.getAnn_category_title());
                 announcementCategorySessionRepository.save(announcementCategorySession);
-                /*------redis-added-------------*/
+
+                /*----Add Elasticsearch Database---- */
+                AnnCategoryElastic annCategoryElastic = new AnnCategoryElastic();
+                annCategoryElastic.setAnn_category_title(announcementCategory.getAnn_category_title());
+                annCategoryElasticRepository.save(annCategoryElastic);
 
             }catch(DataIntegrityViolationException ex){
                 System.err.println("Aynı isimde kategori mevcut");
