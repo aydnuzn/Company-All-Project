@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -29,36 +30,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // rollere göre kullanıcı hangi sayfaya giriş yapacak ise ilgili denetimi yapar.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .headers().frameOptions().sameOrigin().and()
+
+        http.httpBasic().and().headers().frameOptions().disable().and()
                 .authorizeRequests()
                 //----------------HTML-PAGES----------------------------------------------------------------------------
-                .antMatchers("/calender/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/category/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/changepassword/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY", "BEGINNER")
-                .antMatchers("/customer/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/customergroup/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/customerinfo/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/customerlist/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/dashboard/**").hasAnyRole("SECRETARY", "ADMIN", "DOCTOR", "BEGINNER")
-                .antMatchers("/diary/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/lab/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/payment/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/product/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/purchase/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                //.antMatchers("/register/**").permitAll()//Veri tabanı sıfır olduğunda yeni admin oluşturulabilmesi için.
-                .antMatchers("/register/**").hasRole("ADMIN")
-                .antMatchers("/sale/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/statistic/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/suppliers/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
-                .antMatchers("/takvim/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
+                .antMatchers("/admin/**").hasRole("MVC")
+                .antMatchers("/rest/**").hasAnyRole("MVC","REST","CUSTOMER")
+                //------------------------------------------------------------------------------------------------------
+                .antMatchers("/home").permitAll()
+                .antMatchers("/gallery").permitAll()
+                .antMatchers("/contact/**").permitAll()
+                .antMatchers("/about").permitAll()
+                .antMatchers("/forgotpassword/**").permitAll()
+                .antMatchers("/register/**").permitAll()
+                .antMatchers("/getXDistricts/**").permitAll()
                 //----------------MASTER-PAGE---------------------------------------------------------------------------
-                .antMatchers("/header/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY", "BEGINNER")
-                .antMatchers("/layout/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY", "BEGINNER")
-                .antMatchers("/sidebar/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY", "BEGINNER")
-                //----------------REST-CONTROLLER-----------------------------------------------------------------------------
-                .antMatchers("/profile/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY", "BEGINNER")
-                .antMatchers("/restcalender/**").hasAnyRole("ADMIN", "DOCTOR", "SECRETARY")
+                .antMatchers("/adminpanel/incadminpanel/header/**").hasRole("MVC")
+                .antMatchers("/adminpanel/incadminpanel/layout/**").hasRole("MVC")
+                .antMatchers("/adminpanel/incadminpanel/sidebar/**").hasRole("MVC")
+                //------------------------------------------------------------------------------------------------------
+                .antMatchers("/homepanel/inchome/header/**").permitAll()
+                .antMatchers("/homepanel/inchome/layout/**").permitAll()
+                .antMatchers("/homepanel/inchome/sidebar/**").permitAll()
                 //------------------FRONT-END---------------------------------------------------------------------------
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/dist/**").permitAll()
@@ -66,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/js/**").permitAll()
                 .antMatchers("/uploads/**").permitAll()
-                //----------------404-ERROR-----------------------------------------------------------------------------
+                //-----------------ERROR PAGES--------------------------------------------------------------------------
                 .antMatchers("/403/**").permitAll()
                 .antMatchers("/404/**").permitAll()
                 .antMatchers("/405/**").permitAll()
@@ -75,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")
-                .defaultSuccessUrl("/dashboard", true)
+                .defaultSuccessUrl("/admin/dashboard", true)
                 .permitAll()
                 .and()
                 .logout()
@@ -85,5 +78,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(userService)
                 .permitAll();
         http.csrf().disable();
+    }
+    //Overloading Method
+    //For Swagger
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
     }
 }
