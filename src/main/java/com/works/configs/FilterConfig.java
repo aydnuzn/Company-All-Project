@@ -32,7 +32,7 @@ public class FilterConfig implements Filter {
 
         req.setCharacterEncoding("utf-8");
         res.setCharacterEncoding("utf-8");
-
+		getCompany();
         filterChain.doFilter(req, res);
     }
 
@@ -47,7 +47,7 @@ public class FilterConfig implements Filter {
     // Proje ilk çalıştıgında 1 kez tetiklenir
     @PostConstruct
     private void postConstruct() {
-        getCompany();
+        
     }
 
     // Proje kapanırken tetikleniyor
