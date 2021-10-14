@@ -21,12 +21,12 @@
                     Giriş Yap
                 </div>
             </h2>
-            <form action="https://s.codepen.io/voltron2112/debug/PqrEPM?" method="get" class="ui large form">
+            <form th:action="@{/login}" method="post" class="ui large form">
                 <div class="ui stacked secondary  segment" style="height: 225px">
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="user icon"></i>
-                            <input type="text" name="email" placeholder="E-mail address">
+                            <input type="text" name="username" placeholder="E-mail address">
                         </div>
                     </div>
                     <div class="field">
