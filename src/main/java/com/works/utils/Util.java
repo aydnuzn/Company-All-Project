@@ -1,5 +1,6 @@
 package com.works.utils;
 
+import com.works.entities.Company;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -42,4 +43,14 @@ public class Util {
     public static final String date = "java.util.Date";
 
     public static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+
+
+    public static Company getCompany() {
+        Company company = new Company();
+
+
+        return company;
+
+
+    }
 }
