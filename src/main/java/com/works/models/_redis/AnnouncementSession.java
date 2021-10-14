@@ -14,7 +14,6 @@ public class AnnouncementSession {
     private String id;
     private String ann_title;
     private String ann_brief_description;
-    private String ann_description;
     private String ann_type;
 
 }
