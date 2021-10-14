@@ -29,7 +29,6 @@ public class AnnouncementInterlayer {
     private Integer ann_type;
 
     @NotNull
-    @NotEmpty
     @Min(value=1, message = "En az 1 olabilir")
     private Integer ann_category;
 }
