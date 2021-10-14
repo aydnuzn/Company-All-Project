@@ -7,6 +7,7 @@ import com.works.entities.security.Role;
 import com.works.entities.security.User;
 import com.works.properties.RegisterInterlayer;
 import com.works.repositories._jpa.*;
+import com.works.services.UserService;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -33,13 +34,15 @@ public class RegisterController {
     final CompanyRepository companyRepository;
     final UserRepository userRepository;
     final RoleRepository roleRepository;
+    final UserService userService;
 
-    public RegisterController(CityRepository cityRepository, DistrictRepository districtRepository, CompanyRepository companyRepository, UserRepository userRepository, RoleRepository roleRepository) {
+    public RegisterController(CityRepository cityRepository, DistrictRepository districtRepository, CompanyRepository companyRepository, UserRepository userRepository, RoleRepository roleRepository, UserService userService) {
         this.cityRepository = cityRepository;
         this.districtRepository = districtRepository;
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.userService = userService;
     }
 
     @GetMapping("")
@@ -83,7 +86,7 @@ public class RegisterController {
             admin.setSurname(registerInterlayer.getAdmin_surname());
             admin.setEmail(registerInterlayer.getAdmin_email());
             if (registerInterlayer.getAdmin_password1().equals(registerInterlayer.getAdmin_password2())) {
-                admin.setPassword(registerInterlayer.getAdmin_password1());//Security Eklendikten sonra şifrelenecek.
+                admin.setPassword(userService.encoder().encode(registerInterlayer.getAdmin_password1()));//Security Eklendikten sonra şifrelenecek.
             } else {
                 //Şifreler birbirinden farklı.
                 model.addAttribute("isError", 3);
@@ -104,9 +107,9 @@ public class RegisterController {
                 //Veritabanında MVC Rolü Eksik.
                 admin.setRoles(null);
             }
-            Integer company_id = 0;
+            Company company_ = new Company();
             try {
-                company_id = companyRepository.save(company).getId();
+                company_ = companyRepository.save(company);
             } catch (DataIntegrityViolationException e) {
                 if (companyRepository.findByCompany_nameEquals(company.getCompany_name()).isPresent()) {
                     //Firma adı aynısı mevcut.
@@ -121,10 +124,11 @@ public class RegisterController {
                 }
             }
             try {
+                admin.setCompany(company_);
                 userRepository.save(admin);
             } catch (DataIntegrityViolationException e) {
                 //Eklenen Şirketin silinmesi.
-                companyRepository.deleteById(company_id);
+                companyRepository.delete(company_);
                 if (userRepository.findByEmailEquals(admin.getEmail()).isPresent()) {
                     //Yönetici adı aynısı mevcut.
                     model.addAttribute("isError", 6);
