@@ -1,6 +1,8 @@
 package com.works.entities.listener;
 
 import com.works.entities.Company;
+import com.works.services.UserService;
+import com.works.utils.Util;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,5 +35,5 @@ public class BaseEntity<T> {
 
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "company_id")
-    Company company;
+    Company company = Util.theCompany;
 }

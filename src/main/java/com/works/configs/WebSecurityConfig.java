@@ -31,6 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.rememberMe().key("").tokenValiditySeconds(5000);
+
         http.httpBasic().and().headers().frameOptions().disable().and()
                 .authorizeRequests()
                 //----------------HTML-PAGES----------------------------------------------------------------------------

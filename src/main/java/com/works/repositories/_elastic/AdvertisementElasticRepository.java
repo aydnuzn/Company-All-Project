@@ -9,9 +9,10 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import java.util.List;
 
 public interface AdvertisementElasticRepository extends ElasticsearchRepository<AdvertisementElasticsearch, String> {
-    @Query(value = "{\"bool\":{\"must\":{\"match\":{\"adv_title\":\"?0\"}}}}")
+    @Query(value = "{\"bool\":{\"must\":[{\"match\":{\"companyname\":\"?0\"}},{\"match\":{\"adv_title\":\"?0\"}}]}}")
     Page<AdvertisementElasticsearch> findByAdv_title(String key, Pageable pageable);
 
-    @Query(value = "{\"bool\":{\"must\":{\"match\":{\"adv_title\":\"?0\"}}}}")
+    @Query(value = "{\"bool\":{\"must\":[{\"match\":{\"companyname\":\"?0\"}},{\"match\":{\"adv_title\":\"?0\"}}]}}")
     List<AdvertisementElasticsearch> findByAdv_title(String key);
+
 }

@@ -31,9 +31,11 @@ public class AdvertisementRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        hm.put(REnum.RESULT, advertisementElasticRepository.findByAdv_title(stSearchKey, PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        hm.put(REnum.RESULT, advertisementElasticRepository.findByAdv_title(stSearchKey +" "+ Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         int additional = 0;
-        Integer size = advertisementElasticRepository.findByAdv_title(stSearchKey).size();
+        Integer size = advertisementElasticRepository.findByAdv_title(stSearchKey +" "+ Util.theCompany.getCompany_name()).size();
+        // dogrulama icin
+        System.out.println("*********"+size + "-->" + stSearchKey +" "+ Util.theCompany.getCompany_name());
         if (size % Util.pageSize != 0) {
             additional = 1;
         }

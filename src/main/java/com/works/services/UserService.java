@@ -1,11 +1,13 @@
 package com.works.services;
 
+import com.works.entities.Company;
 import com.works.entities.security.Role;
 import com.works.entities.security.User;
 import com.works.repositories._jpa.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -62,8 +64,6 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
         return authorities;
     }
 
-
-
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
@@ -71,8 +71,9 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         System.out.println("onLogoutSuccess Call ");
+        // Cookie silinecek
+
         httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/homepanel/login/login");
     }
-
 
 }

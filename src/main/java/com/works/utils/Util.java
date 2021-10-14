@@ -1,15 +1,17 @@
 package com.works.utils;
 
 import com.works.entities.Company;
+import com.works.repositories._jpa.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Util {
+
+    public static Company theCompany;
 
     public static boolean isEmail(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
@@ -44,13 +46,4 @@ public class Util {
 
     public static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
 
-
-    public static Company getCompany() {
-        Company company = new Company();
-
-
-        return company;
-
-
-    }
 }
