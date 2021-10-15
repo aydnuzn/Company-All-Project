@@ -8,7 +8,7 @@ function addDistrictSelect(data) {
         }
     }
     $('#company_district').html(html);
-    $("#company_district").select('refresh');
+    //$("#company_district").select('refresh'); //Hata veriyor.
 };
 
 function getXDistrict(index) {
@@ -30,8 +30,6 @@ function getXDistrict(index) {
         }
     });
 }
-
-addDistrictSelect("");
 
 $('#company_city').change(function () {
     getXDistrict($("#company_city option:selected").attr("value"));

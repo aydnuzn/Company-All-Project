@@ -48,6 +48,7 @@ public class RegisterController {
     @GetMapping("")
     public String register(Model model) {
         model.addAttribute("cityList", cityRepository.findAll());
+        model.addAttribute("districtList", districtRepository.findByCity_idEquals(1));
         model.addAttribute("registerInterlayer", new RegisterInterlayer());
         model.addAttribute("isError", 0);
         return "homepanel/register/register";

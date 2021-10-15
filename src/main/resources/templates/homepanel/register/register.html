@@ -56,6 +56,14 @@
                             <div class="field">
                                 <select class="ui search selection dropdown" name="company_district"
                                         id="company_district" style="width: auto;height: auto">
+                                    <th:block th:if="${districtList != null}">
+                                        <th:block th:each="item : ${districtList}">
+                                            <option th:value="${item.id}" th:text="${item.district_name}"></option>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${cityList != null}">
+                                        <option value="0">İl bulunamadı.</option>
+                                    </th:block>
                                 </select>
                             </div>
                         </div>
