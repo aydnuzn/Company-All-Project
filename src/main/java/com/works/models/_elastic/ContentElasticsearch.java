@@ -1,5 +1,6 @@
 package com.works.models._elastic;
 
+import com.works.utils.Util;
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -20,4 +21,6 @@ public class ContentElasticsearch {
     private String content_detailed_description;
     @Field(type = FieldType.Text)
     private String content_status;
+    @Field(type = FieldType.Text)
+    private String companyname = Util.theCompany.getCompany_name();
 }
