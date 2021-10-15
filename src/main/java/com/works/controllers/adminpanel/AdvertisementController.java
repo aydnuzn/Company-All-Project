@@ -1,12 +1,16 @@
 package com.works.controllers.adminpanel;
 
 import com.works.entities.Advertisement;
+import com.works.entities.survey.Survey;
 import com.works.models._elastic.AdvertisementElasticsearch;
+import com.works.models._elastic.Survey_;
 import com.works.models._redis.AdvertisementSession;
+import com.works.models._redis.SurveySession;
 import com.works.repositories._elastic.AdvertisementElasticRepository;
 import com.works.repositories._jpa.AdvertisementRepository;
 import com.works.repositories._redis.AdvertisementSessionRepository;
 import com.works.utils.Util;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -23,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -51,6 +56,78 @@ public class AdvertisementController {
     public String advertisementList() {
         return rvalue + "advertisementlist";
     }
+
+
+    @PostMapping("/update/{stIndex}")
+    public String advertisementUpdate(@Valid @ModelAttribute("advertisement") Advertisement advertisement, BindingResult bindingResult, Model model, @PathVariable String stIndex) {
+        Integer index = 0;
+        try {
+            index = Integer.parseInt(stIndex);
+        } catch (Exception e) {
+            return "error/404";
+        }
+        if (!bindingResult.hasErrors()) {
+            try {
+                advertisement.setId(index);
+                advertisementRepository.saveAndFlush(advertisement);
+                AdvertisementSession advertisementSession = new AdvertisementSession();
+                advertisementSession.setId(stIndex);
+                advertisementSession.setAdv_title(advertisement.getAdv_title());
+                advertisementSession.setAdv_link(advertisement.getAdv_link());
+                advertisementSession.setAdv_height(advertisement.getAdv_height());
+                advertisementSession.setAdv_width(advertisement.getAdv_width());
+                advertisementSession.setAdv_date_end(String.valueOf(advertisement.getAdv_date_end()));
+                advertisementSession.setAdv_date_begin(String.valueOf(advertisement.getAdv_date_begin()));
+                advertisementSession.setAdv_shown_number(String.valueOf(advertisement.getAdv_shown_number()));
+                advertisementSessionRepository.deleteById(stIndex);
+                advertisementSessionRepository.save(advertisementSession);
+                AdvertisementElasticsearch advertisementElasticsearch = new AdvertisementElasticsearch();
+                advertisementElasticsearch.setAdv_title(advertisement.getAdv_title());
+                advertisementElasticsearch.setAdv_shown_number(String.valueOf(advertisement.getAdv_shown_number()));
+                advertisementElasticsearch.setAdv_date_begin(String.valueOf(advertisement.getAdv_date_begin()));
+                advertisementElasticsearch.setAdv_date_end(String.valueOf(advertisement.getAdv_date_end()));
+                advertisementElasticsearch.setAdv_image(advertisement.getAdv_image());
+                advertisementElasticsearch.setAdv_width(advertisement.getAdv_width());
+                advertisementElasticsearch.setAdv_height(advertisement.getAdv_height());
+                advertisementElasticsearch.setAdv_link(advertisement.getAdv_link());
+                advertisementElasticsearch.setId(stIndex);
+                advertisementElasticRepository.deleteById(stIndex);
+                advertisementElasticRepository.save(advertisementElasticsearch);
+            } catch (DataIntegrityViolationException ex) {
+                System.err.println("Error: " + ex);
+                model.addAttribute("isError", 1);
+                return rvalue + "advertisementupdate";
+            }
+        } else {
+            System.out.println(Util.errors(bindingResult));
+            model.addAttribute("isError", 0);
+            return rvalue + "advertisementupdate";
+        }
+        return "redirect:/admin/advertisement/" + stIndex;
+    }
+
+
+    //update sayfasını açmak
+    @GetMapping("/{stIndex}")
+    public String advertisementUpdate(@PathVariable String stIndex, Model model) {
+        Integer index = 0;
+        try {
+            index = Integer.parseInt(stIndex);
+            Optional<Advertisement> optionalAdvertisement = advertisementRepository.findById(index);
+            if (optionalAdvertisement.isPresent()) {
+                model.addAttribute("advertisement", optionalAdvertisement.get());
+                model.addAttribute("index", index);
+                model.addAttribute("isError", 0);
+                return "adminpanel/advertisement/advertisementupdate";
+            } else {
+                return "error/404";
+            }
+
+        } catch (Exception e) {
+            return "error/404";
+        }
+    }
+
 
     @PostMapping("/add")
     public String advertisementAdd(@Valid @ModelAttribute("advertisement") Advertisement advertisement, BindingResult bindingResult, Model model, @RequestPart(value = "adv_image_file", required = false) MultipartFile adv_image_file) {
