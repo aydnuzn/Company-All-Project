@@ -31,11 +31,7 @@ public class AnnCategoryRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        if(stIndex.equals("0")){
-            hm.put(REnum.RESULT, annCategoryElasticRepository.findByAnn_category_title(stSearchKey, PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
-        }else{
-            hm.put(REnum.RESULT, annCategoryElasticRepository.findByAnn_category_title(stSearchKey, PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
-        }
+        hm.put(REnum.RESULT, annCategoryElasticRepository.findByAnn_category_title(stSearchKey, PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         int additional = 0;
         Integer size = annCategoryElasticRepository.findByAnn_category_title(stSearchKey).size();
         if (size % Util.pageSize != 0) {
@@ -52,7 +48,12 @@ public class AnnCategoryRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        hm.put(REnum.RESULT, annCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        if(stIndex.equals("0")){
+            hm.put(REnum.RESULT, annCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+        }else{
+            hm.put(REnum.RESULT, annCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        }
+
         int additional = 0;
         if (annCategorySessionRepository.count() % 10 != 0) {
             additional = 1;
