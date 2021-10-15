@@ -73,19 +73,17 @@ function getRows(data) {
             <td>` + itm.adv_shown_number + `</td>
             <td>` + itm.adv_date_begin + `</td>
             <td>` + itm.adv_date_end + `</td>
-            <!---<td><img src="/static/uploads/advertisement/`+itm.adv_image + `"></td> -->
-            
-
-            <td><img style="width: auto; height: 100px" src="/uploads/advertisement/`+itm.adv_image.trim()+`"></td>
+            <td><img style="width: auto; height: 100px" src="/uploads/advertisement/` + itm.adv_image + `"></td>
             <td>` + itm.adv_width + `</td>
             <td>` + itm.adv_height + `</td>
             <td>` + itm.adv_link + `</td>
-            <td >
+            <td>
                 <div class="ui buttons" style="float: right">
-                   
+                    <a href="http://localhost:8091/admin/advertisement/`+itm.id+`" class="ui primary button">Düzenle</a>
+                    <div class="ya da"></div>
                     <button onclick="deleteAdv(` + itm.id + `)"   class="ui negative button">Sil</button>
-                </div>                      
-            </td>
+                </div>
+           </td>
           </tr>`;
     }
     $('#advTbody').html(html);
