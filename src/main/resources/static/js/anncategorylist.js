@@ -75,11 +75,11 @@ function getRows(data) {
           
             <td >
                 <div class="ui buttons" style="float: right">
-                    <a href="http://localhost:8091/admin/announcement/category/detail/` + itm.id + `" class="ui button">Detay</a>
+                    <a href="http://localhost:8091/admin/announcement/category/` + itm.id + `" class="ui primary button">Düzenle</a>
                     <div class="ya da"></div>
                     <button onclick="deleteAnnCategory(` + itm.id + `)"   class="ui negative button">Sil</button>
                 </div>                      
-            </td>
+            </td>                                                                                
           </tr>`;
     }
     $('#annCategoryTbody').html(html);
