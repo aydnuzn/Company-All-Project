@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Advertisement Add</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+  <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+  <!-- ADV ADD -->
+  <div class="asd" style="margin: 30px 30px 0px 290px">
+    <div class="ui page grid">
+      <div class="three column row">
+        <div class="four wide column">
+        </div>
+        <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
+            <form class="ui form "  th:object="${advertisement}"  th:action="@{'/admin/advertisement/update/'+${stIndex}}" method="post" enctype="multipart/form-data">
+            <h4 class="ui dividing header">Reklam Ekle</h4>
+            <div class="fields">
+              <div class="eight wide field">
+                <label>Reklam Başlığı</label>
+                <input type="text" name="adv_title" maxlength="16" placeholder="Reklam Başlığı"
+                       th:value="${advertisement.getAdv_title()}">
+              </div>
+                <div class="fields">
+                    <div class="eight wide field">
+                        <div class="ui red message" style="display: block"
+                             th:if="${ #fields.hasErrors('adv_title') }"
+                             th:errors="*{adv_title}">
+                        </div>
+                    </div>
+                </div>
+              <div class="eight wide field">
+                <label>Gösterim Sayısı</label>
+                <input type="text" name="adv_shown_number" maxlength="16" placeholder="Gösterim Sayısı" th:value="${advertisement.getAdv_shown_number()}">
+              </div>
+            </div>
+                <div class="fields">
+                    <div class="eight wide field">
+                        <div class="ui red message" style="display: block"
+                             th:if="${ #fields.hasErrors('adv_shown_number') }"
+                             th:errors="*{adv_shown_number}">
+                        </div>
+                    </div>
+                </div>
+
+            <div class="field">
+              <div class="sixteen wide field">
+                <label>Başlangıç Tarihi</label>
+                <input type="date" name="adv_date_begin" th:value="${advertisement.getAdv_date_begin()}">
+              </div>
+            </div>
+                <div class="fields">
+                    <div class="eight wide field">
+                        <div class="ui red message" style="display: block"
+                             th:if="${ #fields.hasErrors('adv_date_begin') }"
+                             th:errors="*{adv_date_begin}">
+                        </div>
+                    </div>
+                </div>
+            <div class="field">
+              <div class="sixteen wide field">
+                <label>Bitiş Tarihi</label>
+                <input type="date" name="adv_date_end" th:value="${advertisement.getAdv_date_end()}">
+              </div>
+            </div>
+                <div class="fields">
+                    <div class="eight wide field">
+                        <div class="ui red message" style="display: block"
+                             th:if="${ #fields.hasErrors('adv_date_end') }"
+                             th:errors="*{adv_date_end}">
+                        </div>
+                    </div>
+                </div>
+            <div class="field">
+              <div class="sixteen wide field">
+                <label>Reklam Görseli</label>
+                <input id="file" type="file" name="adv_image_file" accept="image/*" th:value="${advertisement.getAdv_image()}">
+              </div>
+            </div>
+
+            <th:block th:if="${isError == 1}">
+              <div class="ui red message" style="display: block">
+                <i class="close icon"></i>
+                <div class="header">
+                  Hata
+                </div>
+                <ul class="list">
+                  <li>Resim boyutları değiştirilmiş.</li>
+                  <li>Lütfen HTML'e müdahale etmeyin.</li>
+                </ul>
+              </div>
+            </th:block>
+            <th:block th:if="${isError == 2}">
+              <div class="ui red message" style="display: block">
+                <i class="close icon"></i>
+                <div class="header">
+                  Hata
+                </div>
+                <strong>Resim eklenmedi.</strong>
+              </div>
+            </th:block>
+
+            <div class="fields">
+              <div class="eight wide field">
+                <label>Reklam Genişlik</label>
+                <input id="adv_width" type="text" name="adv_width" maxlength="16" placeholder="Genişlik"
+                       readonly th:value="${advertisement.getAdv_width()}">
+              </div>
+              <div class="eight wide field">
+                <label>Reklam Yükseklik</label>
+                <input id="adv_height" type="text" name="adv_height" placeholder="Yükseklik" readonly th:value="${advertisement.getAdv_height()}">
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="sixteen wide field">
+                <label>Reklam Link</label>
+                <input type="text" name="adv_link" placeholder="Link" th:value="${advertisement.getAdv_link()}">
+              </div>
+            </div>
+
+            <button class="ui button green" type="submit" tabindex="0">Reklam Ekle</button>
+          </form>
+        </div>
+        <div class="four wide column">
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+</th:block>
+
+</body>
+</html>
+
+
+
+
