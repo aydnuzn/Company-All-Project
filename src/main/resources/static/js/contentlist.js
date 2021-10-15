@@ -75,7 +75,8 @@ function getRows(data) {
             <td>` + convertStatus(itm.content_status) + `</td>
             <td >
                 <div class="ui buttons" style="float: right">
-                   
+                   <a href="http://localhost:8091/admin/content/`+itm.id+`" class="ui primary button">Düzenle</a>
+                    <div class="ya da"></div>
                     <button onclick="deleteContent(` + itm.id + `)"   class="ui negative button">Sil</button>
                 </div>                      
             </td>
