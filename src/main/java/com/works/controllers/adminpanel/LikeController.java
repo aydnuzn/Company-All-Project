@@ -11,8 +11,8 @@ public class LikeController {
     final String rvalue = "adminpanel/like/";
 
     @GetMapping("/list")
-    public String likeList(){
-        return rvalue+"like";
+    public String likeList() {
+        return "adminpanel/like/likelist";
     }
 
 }
