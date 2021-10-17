@@ -6,8 +6,11 @@ import com.works.entities.listener.BaseEntity;
 import com.works.entities.security.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -18,6 +21,9 @@ public class ProductCategory extends BaseEntity<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
+    @NotEmpty
+    @Length(min = 2, max = 40, message = "Kategori ismi an az 2, en fazla 40 karakter olabilir")
     @Column(unique = true, length = 40)
     private String pr_title;
 
