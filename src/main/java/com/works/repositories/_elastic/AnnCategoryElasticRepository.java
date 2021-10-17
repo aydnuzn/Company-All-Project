@@ -11,10 +11,10 @@ import java.util.List;
 
 public interface AnnCategoryElasticRepository extends ElasticsearchRepository<AnnCategoryElastic, String> {
 
-    @Query(value = "{\"bool\":{\"must\":{\"match\":{\"ann_category_title\":\"?0\"}}}}")
+    @Query(value = "{\"bool\":{\"must\":[{\"match\":{\"companyname\":\"?0\"}},{\"match\":{\"ann_category_title\":\"?0\"}}]}}")
     Page<AnnCategoryElastic> findByAnn_category_title(String key, Pageable pageable);
 
-    @Query(value = "{\"bool\":{\"must\":{\"match\":{\"ann_category_title\":\"?0\"}}}}")
+    @Query(value = "{\"bool\":{\"must\":[{\"match\":{\"companyname\":\"?0\"}},{\"match\":{\"ann_category_title\":\"?0\"}}]}}")
     List<AnnCategoryElastic> findByAnn_category_title(String key);
 
 }
