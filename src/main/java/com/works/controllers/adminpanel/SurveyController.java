@@ -2,7 +2,7 @@ package com.works.controllers.adminpanel;
 
 import com.works.entities.survey.Survey;
 import com.works.entities.survey.SurveySelection;
-import com.works.models._elastic.Survey_;
+import com.works.models._elastic.SurveyElastic;
 import com.works.models._redis.SurveySelectionSession;
 import com.works.models._redis.SurveySession;
 import com.works.repositories._elastic.SurveyElasticRepository;
@@ -12,8 +12,6 @@ import com.works.repositories._redis.SurveySelectionSessionRepository;
 import com.works.repositories._redis.SurveySessionRepository;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -134,7 +132,7 @@ public class SurveyController {
                 surveySession.setSurvey_title(survey.getSurvey_title());
                 surveySession.setId(surveyId);
                 surveySessionRepository.save(surveySession);
-                Survey_ survey_ = new Survey_();
+                SurveyElastic survey_ = new SurveyElastic();
                 survey_.setSurvey_title(survey.getSurvey_title());
                 survey_.setId(surveyId);
                 surveyElasticRepository.save(survey_);
@@ -169,7 +167,7 @@ public class SurveyController {
                 surveySession.setId(stIndex);
                 surveySessionRepository.deleteById(stIndex);
                 surveySessionRepository.save(surveySession);
-                Survey_ survey_ = new Survey_();
+                SurveyElastic survey_ = new SurveyElastic();
                 survey_.setSurvey_title(survey.getSurvey_title());
                 survey_.setId(stIndex);
                 surveyElasticRepository.deleteById(stIndex);

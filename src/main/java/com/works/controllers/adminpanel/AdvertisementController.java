@@ -1,11 +1,8 @@
 package com.works.controllers.adminpanel;
 
 import com.works.entities.Advertisement;
-import com.works.entities.survey.Survey;
 import com.works.models._elastic.AdvertisementElasticsearch;
-import com.works.models._elastic.Survey_;
 import com.works.models._redis.AdvertisementSession;
-import com.works.models._redis.SurveySession;
 import com.works.repositories._elastic.AdvertisementElasticRepository;
 import com.works.repositories._jpa.AdvertisementRepository;
 import com.works.repositories._redis.AdvertisementSessionRepository;

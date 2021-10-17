@@ -55,7 +55,6 @@ public class AnnouncementRestController {
         }else{
             hm.put(REnum.RESULT, announcementSessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
-
         int additional = 0;
         if (announcementSessionRepository.count() % 10 != 0) {
             additional = 1;
