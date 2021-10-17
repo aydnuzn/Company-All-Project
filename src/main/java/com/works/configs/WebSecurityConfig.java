@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //----------------HTML-PAGES----------------------------------------------------------------------------
                 .antMatchers("/admin/**").hasRole("MVC")
-                .antMatchers("/rest/**").hasAnyRole("MVC","REST","CUSTOMER")
+                .antMatchers("/rest/**").hasAnyRole("MVC", "REST", "CUSTOMER")
                 //------------------------------------------------------------------------------------------------------
                 .antMatchers("/home").permitAll()
                 .antMatchers("/gallery").permitAll()
@@ -78,9 +78,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .logoutSuccessHandler(userService)
-                .permitAll();
+                .permitAll()
+                .and().rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400);
+
         http.csrf().disable();
     }
+
     //Overloading Method
     //For Swagger
     @Override
