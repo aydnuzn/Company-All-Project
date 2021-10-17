@@ -55,16 +55,47 @@ public class AnnouncementController {
         return "adminpanel/announcement/announcementadd";
     }
 
-    @GetMapping("/category/list")
-    public String annCategoryList() {
-        return rvalue + "anncategorylist";
-    }
-
     @GetMapping("/category")
     public String announcementCategory(Model model){
         model.addAttribute("announcementCategory", new AnnouncementCategory());
         model.addAttribute("isError", false);
         return "adminpanel/announcement/anncategoryadd";
+    }
+
+    @GetMapping("/category/list")
+    public String annCategoryList() {
+        return rvalue + "anncategorylist";
+    }
+
+    @PostMapping("/category/add")
+    public String annCategoryAdd(@Valid @ModelAttribute("announcementCategory") AnnouncementCategory announcementCategory, BindingResult bindingResult, Model model) {
+        if(!bindingResult.hasErrors()){
+            try{
+                announcementCategory.setAnnouncements(null);
+                announcementCategory = annCategoryRepository.save(announcementCategory);
+                /*----Add Redis Database---- */
+                AnnCategorySession announcementCategorySession = new AnnCategorySession();
+                announcementCategorySession.setId(announcementCategory.getId().toString());
+                announcementCategorySession.setAnn_category_title(announcementCategory.getAnn_category_title());
+                announcementCategorySessionRepository.save(announcementCategorySession);
+
+                /*----Add Elasticsearch Database---- */
+                AnnCategoryElastic annCategoryElastic = new AnnCategoryElastic();
+                annCategoryElastic.setId(announcementCategory.getId().toString());
+                annCategoryElastic.setAnn_category_title(announcementCategory.getAnn_category_title());
+                annCategoryElasticRepository.save(annCategoryElastic);
+
+            }catch(DataIntegrityViolationException ex){
+                System.err.println("Aynı isimde kategori mevcut");
+                model.addAttribute("isError", true);
+                return rvalue + "anncategoryadd";
+            }
+            return "redirect:/admin/announcement/category";
+        }else{
+            System.err.println(Util.errors(bindingResult));
+        }
+        model.addAttribute("isError", false);
+        return rvalue + "anncategoryadd";
     }
 
     @GetMapping("/category/{stIndex}")
@@ -103,6 +134,7 @@ public class AnnouncementController {
                 try{
                     announcementCategory.setId(optionalAnnouncementCategory.get().getId());
                     announcementCategory = annCategoryRepository.saveAndFlush(announcementCategory);
+
                     /*----Add Redis Database---- */
                     AnnCategorySession announcementCategorySession = new AnnCategorySession();
                     announcementCategorySession.setId(announcementCategory.getId().toString());
@@ -133,6 +165,13 @@ public class AnnouncementController {
         }
         model.addAttribute("isError", false);
         return rvalue + "anncategoryupdate";
+    }
+
+    /**********************************/
+
+    @GetMapping("/list")
+    public String announcementList() {
+        return rvalue + "announcementlist";
     }
 
     @PostMapping("/add")
@@ -177,41 +216,88 @@ public class AnnouncementController {
         return rvalue + "announcementadd";
     }
 
-    @GetMapping("/list")
-    public String announcementList() {
-        return rvalue + "announcementlist";
+    @GetMapping("/{stIndex}")
+    public String announcementItem(@PathVariable String stIndex, Model model){
+        try{
+            Integer index = Integer.parseInt(stIndex);
+            Optional<Announcement> optionalAnnouncement = announcementRepository.findById(index);
+            AnnouncementInterlayer announcementInterlayer = new AnnouncementInterlayer(
+              optionalAnnouncement.get().getAnn_title(),
+              optionalAnnouncement.get().getAnn_brief_description(),
+              optionalAnnouncement.get().getAnn_description(),
+              optionalAnnouncement.get().getAnn_type(),
+              optionalAnnouncement.get().getAnnouncementCategory().getId()
+            );
+
+            if(optionalAnnouncement.isPresent()){
+                model.addAttribute("index", index );
+                model.addAttribute("announcementInterlayer", announcementInterlayer);
+                model.addAttribute("ls", annCategoryRepository.findAll());
+                return "adminpanel/announcement/announcementupdate";
+            }else{
+                // ulasilmak istenen duyuru mevcut değil
+                return "error/404";
+            }
+        }catch(Exception ex){
+            // url kısmında rakam girilecek yere string girilmis
+            return "error/404";
+        }
     }
 
-    @PostMapping("/category/add")
-    public String annCategoryAdd(@Valid @ModelAttribute("announcementCategory") AnnouncementCategory announcementCategory, BindingResult bindingResult, Model model) {
+    @PostMapping("/update/{stIndex}")
+    public String announcementUpdate(@Valid @ModelAttribute("announcementInterlayer") AnnouncementInterlayer announcementInterlayer, BindingResult bindingResult, @PathVariable String stIndex, Model model) {
+        // Kulanıcı formdaki id yi String yaparsa diye kontrol
+        Integer index = 0;
+        try {
+            index = Integer.parseInt(stIndex);
+        } catch (Exception ex) {
+            return "error/404";
+        }
+        Optional<Announcement> optionalAnnouncement = announcementRepository.findById(index);
         if(!bindingResult.hasErrors()){
-            try{
-                announcementCategory.setAnnouncements(null);
-                announcementCategory = annCategoryRepository.save(announcementCategory);
-                /*----Add Redis Database---- */
-                AnnCategorySession announcementCategorySession = new AnnCategorySession();
-                announcementCategorySession.setId(announcementCategory.getId().toString());
-                announcementCategorySession.setAnn_category_title(announcementCategory.getAnn_category_title());
-                announcementCategorySessionRepository.save(announcementCategorySession);
+            // Kullanıcı formdaki id yi değiştirirse, o kategori var mı diye kontrol
+            if(optionalAnnouncement.isPresent()){
+                    Announcement announcement = new Announcement();
+                    Optional<AnnouncementCategory> optAnnouncementCategory = annCategoryRepository.findById(announcementInterlayer.getAnn_category());
+                    announcement.setAnnouncementCategory(optAnnouncementCategory.get());
+                    announcement.setAnn_title(announcementInterlayer.getAnn_title());
+                    announcement.setAnn_brief_description(announcementInterlayer.getAnn_brief_description());
+                    announcement.setAnn_description(announcementInterlayer.getAnn_description());
+                    announcement.setAnn_type(announcementInterlayer.getAnn_type());
+                    announcement.setId(index);
+                    announcement = announcementRepository.saveAndFlush(announcement);
 
-                /*----Add Elasticsearch Database---- */
-                AnnCategoryElastic annCategoryElastic = new AnnCategoryElastic();
-                annCategoryElastic.setId(announcementCategory.getId().toString());
-                annCategoryElastic.setAnn_category_title(announcementCategory.getAnn_category_title());
-                annCategoryElasticRepository.save(annCategoryElastic);
+                    /*----Add Redis Database---- */
+                    AnnouncementSession announcementSession = new AnnouncementSession();
+                    announcementSession.setId(announcement.getId().toString());
+                    announcementSession.setAnn_title(announcement.getAnn_title());
+                    announcementSession.setAnn_brief_description(announcement.getAnn_brief_description());
+                    String annType = announcement.getAnn_type() == 1 ? "Aktif":"Pasif";
+                    announcementSession.setAnn_type(annType);
+                    announcementSessionRepository.deleteById(announcement.getId().toString());
+                    announcementSessionRepository.save(announcementSession);
 
-            }catch(DataIntegrityViolationException ex){
-                System.err.println("Aynı isimde kategori mevcut");
-                model.addAttribute("isError", true);
-                return rvalue + "anncategoryadd";
+                    /*----Add Elasticsearch Database---- */
+                    AnnouncementElastic announcementElastic = new AnnouncementElastic();
+                    announcementElastic.setId(announcement.getId().toString());
+                    announcementElastic.setAnn_title(announcement.getAnn_title());
+                    announcementElastic.setAnn_brief_description(announcement.getAnn_brief_description());
+                    announcementElastic.setAnn_type(announcement.getAnn_type() == 1 ? "Aktif":"Pasif");
+                    announcementElasticRepository.deleteById(announcement.getId().toString());
+                    announcementElasticRepository.save(announcementElastic);
+                    return "redirect:/admin/announcement/list";
+            }else{
+                return rvalue + "announcementupdate";
             }
-            return "redirect:/admin/announcement/category";
         }else{
             System.err.println(Util.errors(bindingResult));
+            model.addAttribute("index", index);
         }
-        model.addAttribute("isError", false);
-        return rvalue + "anncategoryadd";
+        model.addAttribute("ls", annCategoryRepository.findAll());
+        return rvalue + "announcementupdate";
     }
+
+
 
 
 
