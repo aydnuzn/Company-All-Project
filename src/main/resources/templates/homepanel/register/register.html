@@ -34,6 +34,17 @@
                              th:errors="*{company_name}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 4}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Firma adı mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
                     <div class="fields">
                         <div class="eight wide field">
                             <label style="color: white">İl</label>
@@ -61,8 +72,8 @@
                                             <option th:value="${item.id}" th:text="${item.district_name}"></option>
                                         </th:block>
                                     </th:block>
-                                    <th:block th:unless="${cityList != null}">
-                                        <option value="0">İl bulunamadı.</option>
+                                    <th:block th:unless="${districtList != null}">
+                                        <option value="0">İlçe bulunamadı.</option>
                                     </th:block>
                                 </select>
                             </div>
@@ -78,6 +89,28 @@
                              th:errors="*{company_district}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 1}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Veri tabanında il bilgileri eksik.
+                            </strong>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${isError == 2}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Veri tabanında ilçe bilgileri eksik.
+                            </strong>
+                        </div>
+                    </th:block>
                     <div class="field">
                         <label style="color: white">Adres</label>
                         <div class="field">
@@ -90,7 +123,6 @@
                              th:errors="*{company_address}">
                         </div>
                     </div>
-
                     <div class="fields">
                         <div class="eight wide field">
                             <label style="color: white">Sektör</label>
@@ -109,7 +141,6 @@
                             <label style="color: white">Telefon</label>
                             <input type="text" name="company_tel" maxlength="11" placeholder="company_tel">
                         </div>
-
                     </div>
 
                     <div class="fields">
@@ -122,6 +153,17 @@
                              th:errors="*{company_tel}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 5}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Firma telefon numarası mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
 
                     <h4 class="ui dividing header" style="color: white">Şirket Admin Bilgileri</h4>
                     <div class="fields">
@@ -164,6 +206,31 @@
                              th:errors="*{admin_tel}">
                         </div>
                     </div>
+
+                    <th:block th:if="${isError == 6}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Yönetici Mail adresi zaten mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="${isError == 7}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Yönetici telefon numrasası zaten mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
+
                     <div class="fields">
                         <div class="eight wide field">
                             <label style="color: white"> Şifre</label>
@@ -186,20 +253,25 @@
                              th:errors="*{admin_password2}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 3}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Şifreler birbirinden farklı.
+                            </strong>
+                        </div>
+                    </th:block>
                     <button type="submit" class="ui button green" tabindex="0">Kayıt Ol</button>
                 </form>
             </div>
             <div class="four wide column">
             </div>
         </div>
-
-
     </div>
-
-
 </th:block>
-
-
 <th:block layout:fragment="customJs">
     <script th:src="@{/js/register.js}"></script>
 </th:block>
