@@ -23,7 +23,7 @@
                     <div class="field">
                         <label>Adı</label>
                         <div class="field">
-                            <input type="text" th:value="${companyInfo.getCompany_name()}" name="company_name"
+                            <input th:value="${companyInfo.getCompany_name()}" type="text" name="company_name"
                                    placeholder="Şirket Adı">
                         </div>
                     </div>
@@ -33,12 +33,22 @@
                              th:errors="*{company_name}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 4}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Firma adı mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
                     <div class="fields">
                         <div class="eight wide field">
                             <label>İl</label>
                             <div class="field">
-                                <select th:value="${companyInfo.getCity().getId()}" class="ui search selection dropdown"
-                                        name="company_city" id="company_city"
+                                <select class="ui search selection dropdown" name="company_city" id="company_city"
                                         style="width: auto;height: auto">
                                     <th:block th:if="${cityList != null}">
                                         <th:block th:each="item : ${cityList}">
@@ -54,9 +64,16 @@
                         <div class="eight wide field">
                             <label>İlçe</label>
                             <div class="field">
-                                <select th:value="${companyInfo.getDistrict().getId()}"
-                                        class="ui search selection dropdown" name="company_district"
+                                <select class="ui search selection dropdown" name="company_district"
                                         id="company_district" style="width: auto;height: auto">
+                                    <th:block th:if="${districtList != null}">
+                                        <th:block th:each="item : ${districtList}">
+                                            <option th:value="${item.id}" th:text="${item.district_name}"></option>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${districtList != null}">
+                                        <option value="0">İlçe bulunamadı.</option>
+                                    </th:block>
                                 </select>
                             </div>
                         </div>
@@ -71,6 +88,28 @@
                              th:errors="*{company_district}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 1}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Veri tabanında il bilgileri eksik.
+                            </strong>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${isError == 2}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Veri tabanında ilçe bilgileri eksik.
+                            </strong>
+                        </div>
+                    </th:block>
                     <div class="field">
                         <label>Adres</label>
                         <div class="field">
@@ -84,7 +123,6 @@
                              th:errors="*{company_address}">
                         </div>
                     </div>
-
                     <div class="fields">
                         <div class="eight wide field">
                             <label>Sektör</label>
@@ -101,10 +139,9 @@
 
                         <div class="eight wide field">
                             <label>Telefon</label>
-                            <input type="text" th:value="${companyInfo.getCompany_tel()}" name="company_tel"
+                            <input th:value="${companyInfo.getCompany_tel()}" type="text" name="company_tel"
                                    maxlength="11" placeholder="company_tel">
                         </div>
-
                     </div>
 
                     <div class="fields">
@@ -117,15 +154,27 @@
                              th:errors="*{company_tel}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 5}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Firma telefon numarası mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
+
                     <h4 class="ui dividing header">Şirket Admin Bilgileri</h4>
                     <div class="fields">
                         <div class="eight wide field">
-                            <label style="color: white"> Adı</label>
+                            <label> Adı</label>
                             <input th:value="${adminInfo.getName()}" type="text" name="admin_name"
                                    placeholder="Admin Adı">
                         </div>
                         <div class="eight wide field">
-                            <label style="color: white">Soyadı</label>
+                            <label>Soyadı</label>
                             <input th:value="${adminInfo.getSurname()}" type="text" name="admin_surname"
                                    placeholder="Admin Soyadı">
                         </div>
@@ -142,12 +191,12 @@
                     </div>
                     <div class="fields">
                         <div class="eight wide field">
-                            <label style="color: white">E-Mail</label>
+                            <label>E-Mail</label>
                             <input th:value="${adminInfo.getEmail()}" type="email" name="admin_email"
                                    placeholder="Admin E-Mail">
                         </div>
                         <div class="eight wide field">
-                            <label style="color: white">Telefon</label>
+                            <label>Telefon</label>
                             <input th:value="${adminInfo.getTel()}" type="tel" name="admin_tel"
                                    placeholder="Admin Telefon">
                         </div>
@@ -162,17 +211,40 @@
                              th:errors="*{admin_tel}">
                         </div>
                     </div>
+
+                    <th:block th:if="${isError == 6}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Yönetici Mail adresi zaten mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="${isError == 7}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Yönetici telefon numrasası zaten mevcut.
+                            </strong>
+                        </div>
+                    </th:block>
+
                     <div class="fields">
                         <div class="eight wide field">
                             <label> Şifre</label>
-                            <input type="password" name="admin_password1"
-                                   minlength="4" maxlength="16"
+                            <input type="password" name="admin_password1" minlength="4" maxlength="16"
                                    placeholder="Admin Şifre">
                         </div>
                         <div class="eight wide field">
-                            <label style="color: white">Şifre Tekrar</label>
-                            <input type="password" name="admin_password2"
-                                   minlength="4" maxlength="16"
+                            <label>Şifre Tekrar</label>
+                            <input type="password" name="admin_password2" minlength="4" maxlength="16"
                                    placeholder="Şifre Tekrar">
                         </div>
                     </div>
@@ -186,40 +258,145 @@
                              th:errors="*{admin_password2}">
                         </div>
                     </div>
+                    <th:block th:if="${isError == 3}">
+                        <div class="ui red message" style="display: block">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Hata
+                            </div>
+                            <strong>
+                                Şifreler birbirinden farklı.
+                            </strong>
+                        </div>
+                    </th:block>
                     <button type="submit" class="ui button green" tabindex="0">Güncelle</button>
                 </form>
             </div>
             <div class="eight wide column">
                 <div id="map">
                 </div>
-                <div>
-                    <form th:action="@{'/admin/settings/change'}" th:object="${registerChangeInterlayer}" method="post">
+                <div class="ui field">
+                    <form class="ui form" th:action="@{'/admin/settings/changelocation'}"
+                          th:object="${locationChangeInterlayer}"
+                          method="post">
                         <h4>
-                            Yetki Değiştirme
+                            Konum Değişikliği
                         </h4>
                         <div class="field">
                             <div>
-                                <label for="change_user_roles[]">
-                                    Rol(ler) Seçimi
-                                </label>
+                                Konum değişikliği için haritadan bir yer seçmeniz yeterlidir.
                             </div>
-                            <div class="ui sixteen wide field red message" style="display: block"
-                                 th:if="${ #fields.hasErrors('change_user_roles') }"
-                                 th:errors="*{change_user_roles}"></div>
-                            <select class="ui search selection dropdown" name="change_user_roles[]"
-                                    id="change_user_roles[]" multiple
-                                    data-actions-box="true">
-                                <option data-icon="far fa-user" th:value="1" th:text="MVC"></option>
-                                <option data-icon="far fa-hospital" th:value="2" th:text="REST"></option>
-                            </select>
-                            <div>
-                                <button type="submit" class="ui button green" tabindex="0">Kaydet</button>
+                            <div class="ui fields grid">
+                                <div class="two column row">
+                                    <div class="eight wide field">
+                                        <label>Enlem</label>
+                                        <input th:value="${companyInfo.getCompany_lat()}" id="company_lat" type="text"
+                                               name="company_lat"
+                                               readonly/>
+                                    </div>
+                                    <div class="eight wide field">
+                                        <label>Boylam</label>
+                                        <input th:value="${companyInfo.getCompany_lng()}" id="company_lng" type="text"
+                                               name="company_lng"
+                                               readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui fields grid">
+                            <div class="two column row">
+                                <div class="ui eight wide field red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('company_lat') }"
+                                     th:errors="*{company_lat}"></div>
+                                <div class="ui eight wide field red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('company_lng') }"
+                                     th:errors="*{company_lng}"></div>
+                                <button type="submit" class="ui button green" tabindex="0">Güncelle</button>
                             </div>
                         </div>
                     </form>
+
+                </div>
+                <div class="ui grid fields">
+                    <div class="two column row">
+                        <div class="eight wide column">
+                            <form th:action="@{'/admin/settings/change'}" th:object="${registerChangeInterlayer}"
+                                  method="post">
+                                <h4>
+                                    Yetki Değiştirme
+                                </h4>
+                                <div class="field">
+                                    <div>
+                                        <label for="change_user_roles[]">
+                                            Rol(ler) Seçimi
+                                        </label>
+                                    </div>
+                                    <div class="ui sixteen wide field red message" style="display: block"
+                                         th:if="${ #fields.hasErrors('change_user_roles') }"
+                                         th:errors="*{change_user_roles}"></div>
+                                    <select class="ui search selection dropdown" name="change_user_roles[]"
+                                            id="change_user_roles[]" multiple
+                                            data-actions-box="true">
+                                        <option data-icon="far fa-user" th:value="1" th:text="MVC"></option>
+                                        <option data-icon="far fa-hospital" th:value="2" th:text="REST"></option>
+                                    </select>
+                                    <div>
+                                        <button type="submit" class="ui button green" tabindex="0">Kaydet</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="eight wide column">
+                            <form class="ui form " th:action="@{'/admin/settings/changelogo'}"
+                                  th:object="${logoChangeInterlayer}"
+                                  method="post" enctype="multipart/form-data">
+                                <h4>
+                                    Logo Değiştirme
+                                </h4>
+                                <div class="field">
+                                    <div>
+                                        <label for="change_logo_file">
+                                            Yeni Logo Seçimi
+                                        </label>
+                                    </div>
+                                    <div class="ui sixteen wide field red message" style="display: block"
+                                         th:if="${ #fields.hasErrors('change_logo_file') }"
+                                         th:errors="*{change_logo_file}"></div>
+                                    <input id="change_logo_file" type="file" name="change_logo_file" accept="image/*">
+                                    <th:block th:if="${isError == 8}">
+                                        <div class="ui red message" style="display: block">
+                                            <i class="close icon"></i>
+                                            <div class="header">
+                                                Hata
+                                            </div>
+                                            <strong>
+                                                Resim seçilmedi.
+                                            </strong>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${isError == 9}">
+                                        <div class="ui red message" style="display: block">
+                                            <i class="close icon"></i>
+                                            <div class="header">
+                                                Hata
+                                            </div>
+                                            <strong>
+                                                Resim kayıt aşamasında hata meydana geldi.
+                                                Lütfen tekrar deneyin.
+                                            </strong>
+                                        </div>
+                                    </th:block>
+                                    <div>
+                                        <button type="submit" class="ui button green" tabindex="0">Kaydet</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 </th:block>
