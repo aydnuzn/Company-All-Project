@@ -131,7 +131,7 @@ public class RegisterController {
                 //Eklenen Şirketin silinmesi.
                 companyRepository.delete(company_);
                 if (userRepository.findByEmailEquals(admin.getEmail()).isPresent()) {
-                    //Yönetici adı aynısı mevcut.
+                    //Yönetici maili aynısı mevcut.
                     model.addAttribute("isError", 6);
                     model.addAttribute("cityList", cityRepository.findAll());
                     return rvalue + "register";
