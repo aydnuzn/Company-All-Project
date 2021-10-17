@@ -4,6 +4,8 @@ import com.works.entities.categories.AnnouncementCategory;
 import com.works.entities.listener.BaseEntity;
 import com.works.entities.listener.BaseEntityNotCompany;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -12,7 +14,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Announcement extends BaseEntityNotCompany<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
