@@ -36,7 +36,6 @@ function getAnnouncementListSearch(searchKey, index) {
     });
 }
 
-
 //Arama Yok
 let pageableNumber = 1;
 getAnnouncementList(pageableNumber);
@@ -65,7 +64,6 @@ function getAnnouncementList(index) {
     });
 }
 
-
 function getRows(data) {
     let html = ``;
     for (let i = 0; i < data.length; i++) {
@@ -78,7 +76,7 @@ function getRows(data) {
           
             <td>
                 <div class="ui buttons" style="float: right">
-                    <a href="http://localhost:8091/admin/announcement/update/` + itm.id + `" class="ui primary button">Düzenle</a>
+                    <a href="http://localhost:8091/admin/announcement/` + itm.id + `" class="ui primary button">Düzenle</a>
                     <div class="ya da"></div>
                     <button onclick="deleteAnnouncement(` + itm.id + `)"   class="ui negative button">Sil</button>
                 </div>                      

@@ -12,6 +12,7 @@ $(document).on('keyup', 'input', function () {
 });
 
 //Arama Var
+//Elastic Arama
 function getAnnCategoryListSearch(searchKey, index) {
     $.ajax({
         url: 'http://localhost:8091/rest/admin/announcement/category/list/' + searchKey + "/" + index,
@@ -72,8 +73,7 @@ function getRows(data) {
         const itm = data[i];
         html += `<tr>
             <td>` + itm.ann_category_title + `</td>
-          
-            <td >
+            <td>
                 <div class="ui buttons" style="float: right">
                     <a href="http://localhost:8091/admin/announcement/category/` + itm.id + `" class="ui primary button">Düzenle</a>
                     <div class="ya da"></div>
