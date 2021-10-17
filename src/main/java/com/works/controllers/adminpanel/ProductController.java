@@ -1,13 +1,20 @@
 package com.works.controllers.adminpanel;
 
 import com.works.entities.Product;
+import com.works.entities.categories.AnnouncementCategory;
 import com.works.entities.categories.ProductCategory;
 import com.works.entities.images.ProductImage;
+import com.works.models._elastic.AnnCategoryElastic;
+import com.works.models._elastic.ProductCategoryElastic;
+import com.works.models._redis.AnnCategorySession;
+import com.works.models._redis.ProductCategorySession;
 import com.works.properties.ProductCategoryInterlayer;
 import com.works.properties.ProductInterlayer;
+import com.works.repositories._elastic.ProductCategoryElasticRepository;
 import com.works.repositories._jpa.ProductCategoryRepository;
 import com.works.repositories._jpa.ProductImageRepository;
 import com.works.repositories._jpa.ProductRepository;
+import com.works.repositories._redis.ProductCategorySessionRepository;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -39,10 +46,15 @@ public class ProductController {
     final ProductRepository productRepository;
     final ProductImageRepository productImageRepository;
 
-    public ProductController(ProductCategoryRepository productCategoryRepository, ProductRepository productRepository, ProductImageRepository productImageRepository) {
+    final ProductCategoryElasticRepository productCategoryElasticRepository;
+    final ProductCategorySessionRepository productCategorySessionRepository;
+
+    public ProductController(ProductCategoryRepository productCategoryRepository, ProductRepository productRepository, ProductImageRepository productImageRepository, ProductCategoryElasticRepository productCategoryElasticRepository, ProductCategorySessionRepository productCategorySessionRepository) {
         this.productCategoryRepository = productCategoryRepository;
         this.productRepository = productRepository;
         this.productImageRepository = productImageRepository;
+        this.productCategoryElasticRepository = productCategoryElasticRepository;
+        this.productCategorySessionRepository = productCategorySessionRepository;
     }
 
     @GetMapping("")
@@ -133,18 +145,39 @@ public class ProductController {
         return "adminpanel/product/prcategoryadd";
     }
 
+    @GetMapping("/category/list")
+    public String productCategoryList() {
+        return rvalue + "prcategorylist";
+    }
+
     @PostMapping("/category/add")
     public String prCategoryAdd(@Valid @ModelAttribute("productCategoryInterlayer") ProductCategoryInterlayer productCategoryInterlayer, BindingResult bindingResult, Model model) {
         if(!bindingResult.hasErrors()) {
+            ProductCategorySession productCategorySession = new ProductCategorySession();
+            ProductCategoryElastic productCategoryElastic = new ProductCategoryElastic();
             ProductCategory productCategory = new ProductCategory();
+
             int selectedCategory = productCategoryInterlayer.getPr_category();
             if (selectedCategory == -1 || selectedCategory == 0) {
                 // Secim yapilmamis - ana kategori eklenecek
                 try {
                     productCategory.setProductCategories(null);
-                    productCategory.setCompany(null);
                     productCategory.setPr_title(productCategoryInterlayer.getPr_title());
-                    productCategoryRepository.save(productCategory);
+                    productCategory = productCategoryRepository.save(productCategory);
+
+                    /*----------Add Redis Database-----------*/
+                    productCategorySession.setId(productCategory.getId().toString());
+                    productCategorySession.setPr_title(productCategory.getPr_title());
+                    productCategorySession.setParent_id(null);
+                    productCategorySessionRepository.save(productCategorySession);
+
+                    /*--------Add Elasticsearch Database--------*/
+                    productCategoryElastic.setId(productCategory.getId().toString());
+                    productCategoryElastic.setPr_title(productCategory.getPr_title());
+                    productCategoryElastic.setParent_id(null);
+                    productCategoryElasticRepository.save(productCategoryElastic);
+
+
                 } catch (DataIntegrityViolationException ex) {
                     System.err.println("Aynı isimde kategori mevcut");
                     model.addAttribute("isError", true);
@@ -165,12 +198,24 @@ public class ProductController {
                         isControl = true;
                     }
                     if(isControl){
-                        // ana kategori - isleme devam et
+                        // ana kategori - alt kategori eklenecek
                         try {
-                            productCategory.setCompany(null);
                             productCategory.setProductCategories(optProductCategory.get());
                             productCategory.setPr_title(productCategoryInterlayer.getPr_title());
-                            productCategoryRepository.save(productCategory);
+                            productCategory = productCategoryRepository.save(productCategory);
+
+                            /*----------Add Redis Database-----------*/
+                            productCategorySession.setId(productCategory.getId().toString());
+                            productCategorySession.setPr_title(productCategory.getPr_title());
+                            productCategorySession.setParent_id(productCategory.getProductCategories().getId().toString());
+                            productCategorySessionRepository.save(productCategorySession);
+
+                            /*--------Add Elasticsearch Database--------*/
+                            productCategoryElastic.setId(productCategory.getId().toString());
+                            productCategoryElastic.setPr_title(productCategory.getPr_title());
+                            productCategoryElastic.setParent_id(productCategory.getProductCategories().getId().toString());
+                            productCategoryElasticRepository.save(productCategoryElastic);
+
                         } catch (DataIntegrityViolationException ex) {
                             System.err.println("Aynı isimde kategori mevcut");
                             model.addAttribute("isError", true);
@@ -199,5 +244,79 @@ public class ProductController {
         model.addAttribute("isError2", false);
         return rvalue + "prcategoryadd";
     }
+
+    @GetMapping("/category/{stIndex}")
+    public String productCategoryItem(@PathVariable String stIndex, Model model){
+        try{
+            Integer index = Integer.parseInt(stIndex);
+            Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(index);
+            if(optionalProductCategory.isPresent()){
+                model.addAttribute("index", index );
+                model.addAttribute("productCategory", optionalProductCategory.get());
+                model.addAttribute("isError", false);
+                return "adminpanel/product/prcategoryupdate";
+            }else{
+                // ulasilmak istenen kategori mevcut değil
+                return "error/404";
+            }
+        }catch(Exception ex){
+            // url kısmında rakam girilecek yere string girilmis
+            return "error/404";
+        }
+    }
+
+    @PostMapping("/category/update/{stIndex}")
+    public String productCategoryUpdate(@Valid @ModelAttribute("productCategory") ProductCategory productCategory, BindingResult bindingResult, @PathVariable String stIndex, Model model){
+        // Kulanıcı formdaki id yi String yaparsa diye kontrol
+        Integer index = 0;
+        try {
+            index = Integer.parseInt(stIndex);
+        } catch (Exception ex) {
+            return "error/404";
+        }
+        Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(index);
+        // Kulanıcı formdaki id yi değiştirirse, o kategori var mı diye kontrol
+        if(!bindingResult.hasErrors()){
+            if(optionalProductCategory.isPresent()){
+                try{
+                    productCategory.setId(optionalProductCategory.get().getId());
+                    productCategory.setProductCategories(optionalProductCategory.get().getProductCategories());
+                    productCategory = productCategoryRepository.saveAndFlush(productCategory);
+
+                    /*----Update Redis Database---- */
+                    ProductCategorySession productCategorySession = new ProductCategorySession();
+                    productCategorySession.setId(productCategory.getId().toString());
+                    productCategorySession.setPr_title(productCategory.getPr_title());
+                    productCategorySession.setParent_id(productCategory.getProductCategories() == null ? null:productCategory.getProductCategories().getId().toString());
+                    productCategorySessionRepository.deleteById(stIndex);
+                    productCategorySessionRepository.save(productCategorySession);
+
+                    /*----Update Elasticsearch Database---- */
+                    ProductCategoryElastic productCategoryElastic = new ProductCategoryElastic();
+                    productCategoryElastic.setId(productCategory.getId().toString());
+                    productCategoryElastic.setPr_title(productCategory.getPr_title());
+                    productCategoryElastic.setParent_id(productCategory.getProductCategories() == null ? null:productCategory.getProductCategories().getId().toString());
+                    productCategoryElasticRepository.deleteById(stIndex);
+                    productCategoryElasticRepository.save(productCategoryElastic);
+                }catch(DataIntegrityViolationException ex){
+                    System.err.println("Aynı isimde kategori mevcut");
+                    model.addAttribute("index", index );
+                    model.addAttribute("isError", true);
+                    model.addAttribute("productCategory", optionalProductCategory.get());
+                    return rvalue + "prcategoryupdate";
+                }
+                return "redirect:/admin/product/category/list";
+            }else{
+                return rvalue + "prcategoryupdate";
+            }
+        }else{
+            System.err.println(Util.errors(bindingResult));
+            model.addAttribute("index", index );
+        }
+        model.addAttribute("isError", false);
+        return rvalue + "prcategoryupdate";
+    }
+
+
 
 }
