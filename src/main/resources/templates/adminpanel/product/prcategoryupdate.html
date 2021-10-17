@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Product-Category Update</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+            <div class="three column row">
+                <div class="one wide column">
+                </div>
+                <div class="fourteen wide column" style="border:1px solid darkgreen; padding:30px">
+                    <form class="ui form" th:action="@{'/admin/product/category/update/' + ${index}}" method="post" th:object="${productCategory}" >
+                        <h4 class="ui dividing header">Urun - Kategori Güncelle</h4>
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label>Kategori Başlığı</label>
+                                <input th:value="${productCategory.pr_title}" type="text" name="pr_title" maxlength="60" placeholder="Kategori Başlığı Giriniz">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('pr_title') }"
+                                     th:errors="*{pr_title}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <th:block th:if="${isError}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata!
+                                </div>
+                                <strong> Bu isimde bir kategori vardır. <br> Başka bir isim giriniz</strong>
+                            </div>
+                        </th:block>
+
+                        <div class="ui buttons" style="float: right">
+                            <button type="submit" class="ui primary button">Güncelle</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="one wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
