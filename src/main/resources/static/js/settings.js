@@ -1,4 +1,5 @@
 let liveLocation;
+var marker;
 
 function initMap() {
 
@@ -13,50 +14,46 @@ function initMap() {
 
     // Listen for click on map
     google.maps.event.addListener(map, 'click', function (event) {
-        var newContent = prompt("Note");
-        var newIconImage;
-        if (confirm("Görüntü bayrak olsun mu?")) {
-            newIconImage = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+        if (confirm("Konum tanımlama işlemi gerçekleştirilecek emin misiniz?" +
+            " (Bu işlem sadece konum tanımmlanmasını sağlar, değişiklik için 'Güncelle' demeyi unutmayın.)")) {
+            addMarker(event.latLng);
         }
-
-        // Add marker
-        var newProps = {
-            coords: event.latLng,
-            iconImage: newIconImage,
-            content: '<h1>' + newContent + '</h1>'
-        };
-        addMarker(newProps);
     });
 
-    // Loop through markers
-    for (var i = 0; i < markers.length; i++) {
-        // Add marker
-        addMarker(markers[i]);
-    }
+    $.ajax({
+        url: 'http://localhost:8091/rest/admin/settings/getLocation',
+        type: 'GET',
+        contentType: "application/json",
+        dataType: 'json',
+        success: function (data) {
+            if (data.RESULT) {
+                var dataResult = {lat: parseFloat(data.RESULT[0]), lng: parseFloat(data.RESULT[1])};
+                console.log(dataResult);
+                marker = new google.maps.Marker({
+                    position: dataResult,
+                    map: map,
+                });
+            } else {
+                console.log(data);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
 
     // Add Marker Function
+
     function addMarker(props) {
-        var marker = new google.maps.Marker({
-            position: props.coords,
-            map: map,
-        });
-
-        // Check for customicon
-        if (props.iconImage) {
-            // Set icon image
-            marker.setIcon(props.iconImage);
-        }
-
-        // Check content
-        if (props.content) {
-            var infoWindow = new google.maps.InfoWindow({
-                content: props.content
+        if (marker == null) {
+            marker = new google.maps.Marker({
+                position: props,
+                map: map,
             });
-
-            marker.addListener('click', function () {
-                infoWindow.open(map, marker);
-            });
+        } else {
+            marker.setPosition(props);
         }
+        updateLocation(props);
     }
 
     //Find Live Location
@@ -101,22 +98,34 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
-//Ajax ile veritabanından gelecek.
-// Array of markers
-var markers = [
-    {
-        coords: {lat: 42.4668, lng: -70.9495},
-        iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-        content: '<h1>Lynn MA</h1>'
-    },
-    {
-        coords: {lat: 42.8584, lng: -70.9300},
-        content: '<h1>Amesbury MA</h1>'
-    },
-    {
-        coords: {lat: 42.7762, lng: -71.0773}
-    }
-];
+function updateLocation(props) {
+    const arr = {
+        lng: props.lng(),
+        lat: props.lat()
+    };
+
+    $('#company_lng').val(arr.lng);
+    $('#company_lat').val(arr.lat);
+
+    /* $.ajax({
+         url: 'http://localhost:8091/rest/admin/settings/updateLocation',
+         type: 'PUT',
+         contentType: "application/json",
+         dataType: 'json',
+         data: arr,
+         success: function (data) {
+             if (data) {
+                 console.log("Success");
+             } else {
+                 console.log("Unsuccess");
+             }
+         },
+         error: function (err) {
+             console.log(err);
+         }
+     });*/
+
+}
 
 
 //-------------İLÇE
@@ -156,3 +165,12 @@ function getXDistrict(index) {
 $('#company_city').change(function () {
     getXDistrict($("#company_city option:selected").attr("value"));
 });
+
+
+//------------------------------------------------------------------------------------------------------------------
+
+setTimeout(() => {
+    $('.dismissButton').click();
+}, 2000);
+
+//------------------------------------------------------------------------------------------------------------------
