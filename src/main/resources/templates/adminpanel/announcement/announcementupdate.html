@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Announcement Update</title>
+
+    <script type="text/javascript">
+        CKEDITOR.replace('ann_description');
+    </script>
+
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+            <div class="three column row">
+                <div class="two wide column">
+                </div>
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form th:action="@{'/admin/announcement/update/' + ${index}}" method="post" th:object="${announcementInterlayer}" class="ui form ">
+                        <h4 class="ui dividing header">Duyuru/Haber Ekle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Duyuru Başlığı</label>
+                                <input th:value="${announcementInterlayer.ann_title}" type="text" name="ann_title" maxlength="16" placeholder="Duyuru Başlığı">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_title') }"
+                                     th:errors="*{ann_title}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kısa Açıklama</label>
+                                <input th:value="${announcementInterlayer.ann_brief_description}" type="text" name="ann_brief_description" maxlength="60"
+                                       placeholder="Kısa Açıklama">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_brief_description') }"
+                                     th:errors="*{ann_brief_description}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Uzun Açıklama</label>
+                            <div class="field">
+                                <textarea th:text="${announcementInterlayer.ann_description}" name="ann_description" class="ckeditor form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_description') }"
+                                     th:errors="*{ann_description}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Aktif/Pasif</label>
+                                <div class="field">
+                                    <select class="ui fluid search selection dropdown" name="ann_type"
+                                            style="width: auto;height: auto">
+                                        <th:block th:if="${announcementInterlayer.getAnn_type() == 1}">
+                                            <option selected value="1">Aktif</option>
+                                            <option value="2">Pasif</option>
+                                        </th:block>
+                                        <th:block th:unless="${announcementInterlayer.getAnn_type() == 1}">
+                                            <option value="1">Aktif</option>
+                                            <option selected value="2">Pasif</option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_type') }"
+                                     th:errors="*{ann_type}">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Kategori</label>
+                                <div class="field">
+                                    <select name="ann_category" class="ui fluid search selection dropdown" style="width: auto;height: auto">
+                                        <th:block th:if="${ls != null}">
+                                            <th:block th:each="item : ${ls}">
+                                                <option th:if="${announcementInterlayer.ann_category == item.id}" selected th:value="${item.id}" th:text="${item.ann_category_title}"></option>
+                                                <option th:unless="${announcementInterlayer.ann_category == item.id}" th:value="${item.id}" th:text="${item.ann_category_title}"></option>
+                                            </th:block>
+                                        </th:block>
+                                        <th:block th:unless="${ls != null}">
+                                            <option value="0">Kategori Eklenmedi</option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('ann_category') }"
+                                     th:errors="*{ann_category}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="ui button primary" tabindex="0">Düzenle</button>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+</body>
+</html>
