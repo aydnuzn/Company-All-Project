@@ -31,9 +31,9 @@ public class SurveyRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        hm.put(REnum.RESULT, surveyElasticRepository.findBySurvey_title(stSearchKey, PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        hm.put(REnum.RESULT, surveyElasticRepository.findBySurvey_title(stSearchKey + " " + Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         int additional = 0;
-        Integer size = surveyElasticRepository.findBySurvey_title(stSearchKey).size();
+        Integer size = surveyElasticRepository.findBySurvey_title(stSearchKey + " " + Util.theCompany.getCompany_name()).size();
         if (size % Util.pageSize != 0) {
             additional = 1;
         }
@@ -48,7 +48,11 @@ public class SurveyRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        hm.put(REnum.RESULT, surveySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        if (stIndex.equals("0")) {
+            hm.put(REnum.RESULT, surveySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+        } else {
+            hm.put(REnum.RESULT, surveySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        }
         int additional = 0;
         if (surveySessionRepository.count() % 10 != 0) {
             additional = 1;
