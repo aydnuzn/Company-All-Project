@@ -45,5 +45,6 @@ public class Util {
     public static final String date = "java.util.Date";
 
     public static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+    public static final String BASE_URL = "http://localhost:8091/";
 
 }
