@@ -6,5 +6,7 @@ public enum REnum {
     COUNT,
     RESULT,
     ERROR,   //Validation hataları
-    COUNTOFPAGE //Pageable yapıldıktan sonra getirilen sayfadaki sonuç sayısı
+    COUNTOFPAGE, //Pageable yapıldıktan sonra getirilen sayfadaki sonuç sayısı
+    REF, // Sifre unutma istegi gonderildiginde mai ile yollanan referans numarasi
+    MAILSEND
 }
