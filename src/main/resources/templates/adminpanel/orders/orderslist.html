@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Management</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+  <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+  <!-- ADV LIST -->
+  <div class="asd" style="margin: 30px 30px 0px 290px">
+    <div class="ui page grid">
+
+      <div class="row">
+        <div class="twelve wide column">
+
+        </div>
+
+        <div class="four wide column">
+          <div class="ui icon input">
+            <input type="text" placeholder="Arama...">
+            <i class="search icon"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <table class="ui celled padded table">
+          <thead>
+          <tr><th class="single line">Müşteri ID</th>
+            <th>Ürün ID</th>
+            <th>Ürün Adet</th>
+            <th>Müşteri Adresi</th>
+            <th>İşlem</th>
+          </tr></thead>
+          <tbody id="ordersTbody">
+          </tbody>
+          <tfoot>
+          <tr>
+            <th colspan="10">
+              <div class="ui right floated pagination menu" id="ordersPNumber">
+              </div>
+            </th>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+  <script th:src="@{/js/orders.js}"></script>
+</th:block>
+
+</body>
+</html>
+
+
+
