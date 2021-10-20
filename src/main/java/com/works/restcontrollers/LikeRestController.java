@@ -2,6 +2,7 @@ package com.works.restcontrollers;
 
 import com.works.entities.LikeManagement;
 import com.works.entities.Product;
+import com.works.models._elastic.LikeElasticsearch;
 import com.works.models._redis.LikeSession;
 import com.works.repositories._elastic.LikeElasticRepository;
 import com.works.repositories._jpa.LikeRepository;
@@ -88,6 +89,7 @@ public class LikeRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         LikeManagement likeManagement = new LikeManagement();
         LikeSession likeSession = new LikeSession();
+        LikeElasticsearch likeElasticsearch = new LikeElasticsearch();
         //Product IDsi çekme
         Integer productId = 0;
         try {
@@ -102,6 +104,8 @@ public class LikeRestController {
         if(optionalProduct.isPresent()){
             likeManagement.setProduct(optionalProduct.get());
             likeSession.setProduct(optionalProduct.get().getPr_name());
+            likeElasticsearch.setProduct(optionalProduct.get().getPr_name());
+
 
         }else{
             hm.put(REnum.STATUS, false);
@@ -123,6 +127,7 @@ public class LikeRestController {
         //SCORE
         likeManagement.setScore(score);
         likeSession.setScore(stScore);
+        likeElasticsearch.setScore(stScore);
 
 
         boolean isValid = false;
@@ -131,6 +136,7 @@ public class LikeRestController {
         //CUSTOMER
         likeManagement.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get());
         likeSession.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get().getName());
+        likeElasticsearch.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get().getName());
         for(int i = 0; i < likeManagement.getCustomer().getRoles().size(); i++){
             if(likeManagement.getCustomer().getRoles().get(i).getRo_name().equals("ROLE_CUSTOMER")){
                 isValid = true;
@@ -140,6 +146,7 @@ public class LikeRestController {
 
         likeManagement = likeRepository.save(likeManagement); //normal veritabanına save ediyor
         likeSession.setId(String.valueOf(likeManagement.getId())); //sessionin idsini set ediyoruz
+        likeElasticsearch.setId(String.valueOf(likeManagement.getId()));
         likeSession.setDate(new Date().toString());
 
         if(isValid){
