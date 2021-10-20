@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Address Update</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <!-- ADV ADD -->
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+            <div class="three column row">
+                <div class="four wide column">
+                </div>
+                <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form method="post" th:object="${addressInterlayer}"
+                          th:action="@{'/admin/address/update/'+${customerIndex}+'/'+${addressIndex}}"
+                          class="ui form"
+                          enctype="multipart/form-data">
+                        <h4 class="ui dividing header">Address Ekle</h4>
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Şehir Seçiniz</label>
+                                <div class="field">
+                                    <select name="city_id" class="ui fluid search selection dropdown"
+                                            style="width: auto;height: auto">
+                                        <th:block th:if="${cityList != null}">
+                                            <th:block th:each="item : ${cityList}">
+                                                <option style="color: red" th:value="${item.id}"
+                                                        th:text="${item.city_name}"></option>
+                                            </th:block>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('city_id') }"
+                                 th:errors="*{city_id}">
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>İlçe Seçiniz</label>
+                                <div class="field">
+                                    <select name="district_id" class="ui fluid search selection dropdown"
+                                            style="width: auto;height: auto">
+                                        <th:block th:if="${districtList != null}">
+                                            <th:block th:each="item : ${districtList}">
+                                                <option style="color: red" th:value="${item.id}"
+                                                        th:text="${item.district_name}"></option>
+                                            </th:block>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('district_id') }"
+                                 th:errors="*{district_id}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label>
+                                    Açık Adres
+                                </label>
+                                <div class="ui input">
+                                    <textarea th:text="${info.address_detail}" name="address_detail" maxlength="500"
+                                              rows="5"
+                                              style="resize: none;overflow: scroll"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui red message" style="display: block"
+                                 th:if="${ #fields.hasErrors('address_detail') }"
+                                 th:errors="*{address_detail}">
+                            </div>
+                        </div>
+                        <button class="ui button green" type="submit" tabindex="0">Güncelle</button>
+                    </form>
+                </div>
+                <div class="four wide column">
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+    <script th:src="@{/js/address.js}"></script>
+</th:block>
+
+</body>
+</html>
+
+
+
+
