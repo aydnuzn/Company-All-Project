@@ -33,6 +33,7 @@ $(document).ready(function () {
             "type": 'Get',
             "datatype": 'json',
             dataSrc: function (d) {
+                debugger;
                 d.draw = d.DRAW;
                 d.recordsTotal = d.COUNT;   //--> Sayfada bulunan toplam kayıt bilgisini veren kısım
                 d.recordsFiltered = d.COUNT;   //--> Paggination için gerekli kısım
@@ -50,12 +51,22 @@ $(document).ready(function () {
                 "data": "id", "name": "id", "autoWidth": true,
                 "render": function (data) {
                     var a = `<div class="ui buttons" style="float: right">
-                    <button onclick="changeBan(` + data + `)" class="ui secondary button">Ban</button>
+                    <button onclick="changeBan(`+data+`)" class="ui secondary button">Ban</button>
                     <div class="ya da"></div>
-                    <a href="http://localhost:8091/admin/address/` + data + `" class="ui secondary button">Adresler</a>
+                    <a href="http://localhost:8091/admin/address/`+data+`" class="ui vertical animated primary button">
+                    <div class="hidden content">Adresler</div>
+                    <div class="visible content">
+                        <i class="safari icon"></i>
+                    </div>
+                    </a>
                     <div class="ya da"></div>
-                    <button onclick="deleteCustomer(` + data + `)" class="ui negative button">Sil</button>
-                </div> `;
+                    <button onclick="deleteCustomer(`+data+`)" class="ui vertical animated negative button">
+                    <div class="hidden content">Sil</div>
+                    <div class="visible content">
+                        <i class="trash icon"></i>
+                    </div>
+                    </button>
+                </div>`;
                     return a;
                 }
             }
