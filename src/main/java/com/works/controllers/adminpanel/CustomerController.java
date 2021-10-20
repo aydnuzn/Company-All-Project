@@ -9,20 +9,17 @@ import com.works.repositories._elastic.CustomerElasticRepository;
 import com.works.repositories._jpa.RoleRepository;
 import com.works.repositories._jpa.UserRepository;
 import com.works.repositories._redis.CustomerSessionRepository;
+import com.works.services.UserService;
+import com.works.utils.REnum;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin/customer")
@@ -34,11 +31,14 @@ public class CustomerController {
     final CustomerElasticRepository customerElasticRepository;
     final CustomerSessionRepository customerSessionRepository;
 
-    public CustomerController(UserRepository userRepository, RoleRepository roleRepository, CustomerElasticRepository customerElasticRepository, CustomerSessionRepository customerSessionRepository) {
+    final UserService userService;
+
+    public CustomerController(UserRepository userRepository, RoleRepository roleRepository, CustomerElasticRepository customerElasticRepository, CustomerSessionRepository customerSessionRepository, UserService userService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.customerElasticRepository = customerElasticRepository;
         this.customerSessionRepository = customerSessionRepository;
+        this.userService = userService;
     }
 
     @GetMapping("")
@@ -62,7 +62,8 @@ public class CustomerController {
             customer.setName(customerInterlayer.getCu_name());
             customer.setSurname(customerInterlayer.getCu_surname());
             customer.setEmail(customerInterlayer.getCu_email());
-            customer.setPassword(customerInterlayer.getCu_password());//Security Eklendiğinde Şifrelenecek.
+            customer.setPassword(userService.encoder().encode(customerInterlayer.getCu_password()));
+
             customer.setTel(customerInterlayer.getCu_tel());
             customer.setCu_status(customerInterlayer.getCu_status());
             customer.setEnabled(true);
@@ -95,6 +96,7 @@ public class CustomerController {
             customerSession.setSurname(customer.getSurname());
             customerSession.setEmail(customer.getEmail());
             customerSession.setTel(customer.getTel());
+            customerSession.setCu_status(customer.getCu_status());
             customerSessionRepository.save(customerSession);
 
             CustomerElastic customerElastic = new CustomerElastic();
@@ -103,6 +105,7 @@ public class CustomerController {
             customerElastic.setSurname(customer.getSurname());
             customerElastic.setEmail(customer.getEmail());
             customerElastic.setTel(customer.getTel());
+            customerElastic.setCu_status(customer.getCu_status());
             customerElasticRepository.save(customerElastic);
 
             return "redirect:/admin/customer";
@@ -112,4 +115,5 @@ public class CustomerController {
             return rvalue + "customeradd";
         }
     }
+
 }
