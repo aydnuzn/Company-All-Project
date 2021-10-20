@@ -2,9 +2,13 @@ package com.works.controllers.adminpanel;
 
 import com.works.entities.security.Role;
 import com.works.entities.security.User;
+import com.works.models._elastic.CustomerElastic;
+import com.works.models._redis.CustomerSession;
 import com.works.properties.CustomerInterlayer;
+import com.works.repositories._elastic.CustomerElasticRepository;
 import com.works.repositories._jpa.RoleRepository;
 import com.works.repositories._jpa.UserRepository;
+import com.works.repositories._redis.CustomerSessionRepository;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -27,10 +31,14 @@ public class CustomerController {
     final String rvalue = "adminpanel/customer/";
     final UserRepository userRepository;
     final RoleRepository roleRepository;
+    final CustomerElasticRepository customerElasticRepository;
+    final CustomerSessionRepository customerSessionRepository;
 
-    public CustomerController(UserRepository userRepository, RoleRepository roleRepository) {
+    public CustomerController(UserRepository userRepository, RoleRepository roleRepository, CustomerElasticRepository customerElasticRepository, CustomerSessionRepository customerSessionRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.customerElasticRepository = customerElasticRepository;
+        this.customerSessionRepository = customerSessionRepository;
     }
 
     @GetMapping("")
@@ -70,7 +78,7 @@ public class CustomerController {
                 customer.setRoles(null);
             }
             try {
-                userRepository.save(customer);
+                customer = userRepository.save(customer);
             } catch (DataIntegrityViolationException e) {
                 if (userRepository.findByEmailEquals(customer.getEmail()).isPresent()) {
                     model.addAttribute("isError", 1);
@@ -80,6 +88,23 @@ public class CustomerController {
                     return rvalue + "customeradd";
                 }
             }
+
+            CustomerSession customerSession = new CustomerSession();
+            customerSession.setId(String.valueOf(customer.getId()));
+            customerSession.setName(customer.getName());
+            customerSession.setSurname(customer.getSurname());
+            customerSession.setEmail(customer.getEmail());
+            customerSession.setTel(customer.getTel());
+            customerSessionRepository.save(customerSession);
+
+            CustomerElastic customerElastic = new CustomerElastic();
+            customerElastic.setId(String.valueOf(customer.getId()));
+            customerElastic.setName(customer.getName());
+            customerElastic.setSurname(customer.getSurname());
+            customerElastic.setEmail(customer.getEmail());
+            customerElastic.setTel(customer.getTel());
+            customerElasticRepository.save(customerElastic);
+
             return "redirect:/admin/customer";
         } else {
             System.out.println(Util.errors(bindingResult));
