@@ -1,5 +1,6 @@
 package com.works.restcontrollers;
 
+import com.works.entities.security.User;
 import com.works.repositories._elastic.CustomerElasticRepository;
 import com.works.repositories._jpa.UserRepository;
 import com.works.repositories._redis.CustomerSessionRepository;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest/admin/customer")
@@ -28,7 +30,7 @@ public class CustomerRestController {
     //******************************* REST API *********************************
     //ELASTIC
     @GetMapping("/list/{stSearchKey}/{stIndex}")
-    public Map<REnum, Object> announcementListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
+    public Map<REnum, Object> customerListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
@@ -47,7 +49,7 @@ public class CustomerRestController {
 
     //REDIS
     @GetMapping("/list/{stIndex}")
-    public Map<REnum, Object> announcementList(@RequestBody @PathVariable String stIndex) {
+    public Map<REnum, Object> customerList(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
@@ -65,7 +67,7 @@ public class CustomerRestController {
     }
 
     @DeleteMapping("/delete/{stIndex}")
-    public Map<REnum, Object> announcementDelete(@RequestBody @PathVariable String stIndex) {
+    public Map<REnum, Object> customerDelete(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         userRepository.deleteById(Integer.valueOf(stIndex));
@@ -78,7 +80,7 @@ public class CustomerRestController {
     // *************************** Mvc-Pageable ***********************************
     //ELASTIC-DataTable
     @GetMapping("/datatable/list/{stSearchKey}")
-    public Map<REnum, Object> announcementPageListSearch(HttpServletRequest request, @PathVariable String stSearchKey) {
+    public Map<REnum, Object> customerPageListSearch(HttpServletRequest request, @PathVariable String stSearchKey) {
         Map<String, String[]> allMap = request.getParameterMap();
 
         Map<REnum, Object> hm = new LinkedHashMap<>();
@@ -97,7 +99,7 @@ public class CustomerRestController {
 
     //REDIS-DataTable
     @GetMapping("/datatable/list")
-    public Map<REnum, Object> announcementPageList(HttpServletRequest request) {
+    public Map<REnum, Object> customerPageList(HttpServletRequest request) {
         Map<String, String[]> allMap = request.getParameterMap();
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.STATUS, true);
@@ -109,6 +111,31 @@ public class CustomerRestController {
         //hm.put(REnum.RESULT, announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
         hm.put(REnum.COUNT, customerSessionRepository.count());
         hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]));
+        return hm;
+    }
+
+    @PutMapping("/changeBan/{stIndex}")
+    public Map<REnum, Object> changeBan(@PathVariable String stIndex) {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        try {
+            Optional<User> optCustomer = userRepository.findById(Integer.valueOf(stIndex));
+            if (optCustomer.isPresent()) {
+                if (optCustomer.get().getRoles().get(0).getRo_id() == 3) {
+                    if (optCustomer.get().getCu_status() == 1) {
+                        optCustomer.get().setCu_status(2);
+                    } else if (optCustomer.get().getCu_status() == 2) {
+                        optCustomer.get().setCu_status(1);
+                    }
+                    userRepository.saveAndFlush(optCustomer.get());
+                    hm.put(REnum.MESSAGE, "Başarılı");
+                    hm.put(REnum.STATUS, true);
+                    return hm;
+                }
+            }
+        } catch (Exception e) {
+        }
+        hm.put(REnum.MESSAGE, "Başarısız");
+        hm.put(REnum.STATUS, false);
         return hm;
     }
 }
