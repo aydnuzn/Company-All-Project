@@ -17,6 +17,7 @@ public class CustomerSession {
     private String surname;
     private String email;
     private String tel;
+    private Integer cu_status;
 
     @Indexed
     private String companyname = Util.theCompany == null ? "" : Util.theCompany.getCompany_name();
