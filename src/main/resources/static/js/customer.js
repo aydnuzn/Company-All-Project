@@ -19,7 +19,7 @@ $(document).on('keyup', 'input', function () {
     }
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     var tablem = $('#exampleTable').DataTable({
         //dom: 'Bfrtip',
         "retrieve": true,
@@ -40,18 +40,21 @@ $(document).ready(function() {
             }
         }),
         "columns": [
-            { "data": "id", "name": "id", "autoWidth": true },
-            { "data": "name", "name": "name", "autoWidth": true },
-            { "data": "surname", "name": "surname", "autoWidth": true },
-            { "data": "email", "name": "email", "autoWidth": true },
-            { "data": "tel", "name": "tel", "autoWidth": true },
+            {"data": "id", "name": "id", "autoWidth": true},
+            {"data": "name", "name": "name", "autoWidth": true},
+            {"data": "surname", "name": "surname", "autoWidth": true},
+            {"data": "email", "name": "email", "autoWidth": true},
+            {"data": "tel", "name": "tel", "autoWidth": true},
+            {"data": "cu_status", "name": "cu_status", "autoWidth": true},
             {
                 "data": "id", "name": "id", "autoWidth": true,
                 "render": function (data) {
                     var a = `<div class="ui buttons" style="float: right">
-                    <a href="http://localhost:8091/admin/customer/`+data+`" class="ui primary button">Düzenle</a>
+                    <button onclick="changeBan(` + data + `)" class="ui secondary button">Ban</button>
                     <div class="ya da"></div>
-                    <button onclick="deleteAnnouncement(`+data+`)" class="ui negative button">Sil</button>
+                    <a href="http://localhost:8091/admin/address/` + data + `" class="ui secondary button">Adresler</a>
+                    <div class="ya da"></div>
+                    <button onclick="deleteCustomer(` + data + `)" class="ui negative button">Sil</button>
                 </div> `;
                     return a;
                 }
@@ -65,10 +68,26 @@ $(document).ready(function() {
     });
 });
 
-function deleteAnnouncement(index) {
+function deleteCustomer(index) {
     $.ajax({
         url: 'http://localhost:8091/rest/admin/customer/delete/' + index,
         type: 'DELETE',
+        contentType: "application/json",
+        dataType: 'json',
+        success: function (data) {
+            debugger;
+            $('#exampleTable').DataTable().ajax.reload();
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
+
+function changeBan(index) {
+    $.ajax({
+        url: 'http://localhost:8091/rest/admin/customer/changeBan/' + index,
+        type: 'PUT',
         contentType: "application/json",
         dataType: 'json',
         success: function (data) {
