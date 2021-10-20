@@ -8,6 +8,7 @@ import com.works.utils.Util;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ public class AnnouncementRestController {
         this.announcementRepository = announcementRepository;
     }
 
+    //******************************* REST API *********************************
     //ELASTIC
     @GetMapping("/list/{stSearchKey}/{stIndex}")
     public Map<REnum, Object> announcementListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
@@ -74,6 +76,42 @@ public class AnnouncementRestController {
         return hm;
     }
 
+    // *************************** Mvc-Pageable ***********************************
+    //ELASTIC-DataTable
+    @GetMapping("/datatable/list/{stSearchKey}")
+    public Map<REnum, Object> announcementPageListSearch(HttpServletRequest request, @PathVariable String stSearchKey) {
+        Map<String, String[]> allMap = request.getParameterMap();
+
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.MESSAGE, "Başarılı");
+        hm.put(REnum.STATUS, true);
+
+        int validPage = Integer.parseInt(allMap.get("start")[0]) == 0 ? 0:(Integer.parseInt(allMap.get("start")[0]))/Integer.parseInt(allMap.get("length")[0]);
+        hm.put(REnum.RESULT, (announcementElasticRepository.findByAnn_title(stSearchKey +" "+ Util.theCompany.getCompany_name(), PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0])))).getContent());
+        Integer totalCount = announcementElasticRepository.findByAnn_title(stSearchKey +" "+ Util.theCompany.getCompany_name()).size();
+        System.out.println("TOTAL -->" + totalCount);
+        hm.put(REnum.ERROR, null);
+        hm.put(REnum.COUNT, totalCount);
+        hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]) );
+        return hm;
+    }
+
+    //REDIS-DataTable
+    @GetMapping("/datatable/list")
+    public Map<REnum, Object> announcementPageList(HttpServletRequest request) {
+        Map<String, String[]> allMap = request.getParameterMap();
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.STATUS, true);
+        hm.put(REnum.MESSAGE, "Başarılı");
+        int validPage = Integer.parseInt(allMap.get("start")[0]) == 0 ? 0:(Integer.parseInt(allMap.get("start")[0]))/Integer.parseInt(allMap.get("length")[0]);
+
+        hm.put(REnum.RESULT, announcementSessionRepository.findByOrderByIdAsc(PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
+        //int filterCount = announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))).size();
+        //hm.put(REnum.RESULT, announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
+        hm.put(REnum.COUNT, announcementSessionRepository.count() );
+        hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]) );
+        return hm;
+    }
 
 
 }
