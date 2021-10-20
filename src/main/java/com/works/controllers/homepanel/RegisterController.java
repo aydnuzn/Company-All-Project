@@ -87,7 +87,7 @@ public class RegisterController {
             admin.setSurname(registerInterlayer.getAdmin_surname());
             admin.setEmail(registerInterlayer.getAdmin_email());
             if (registerInterlayer.getAdmin_password1().equals(registerInterlayer.getAdmin_password2())) {
-                admin.setPassword(userService.encoder().encode(registerInterlayer.getAdmin_password1()));//Security Eklendikten sonra şifrelenecek.
+                admin.setPassword(userService.encoder().encode(registerInterlayer.getAdmin_password1()));
             } else {
                 //Şifreler birbirinden farklı.
                 model.addAttribute("isError", 3);
