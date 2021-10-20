@@ -8,5 +8,7 @@ public enum REnum {
     ERROR,   //Validation hataları
     COUNTOFPAGE, //Pageable yapıldıktan sonra getirilen sayfadaki sonuç sayısı
     REF, // Sifre unutma istegi gonderildiginde mai ile yollanan referans numarasi
-    MAILSEND
+    MAILSEND,
+    DRAW, // pagenable içindeki draw
+    RECORDS_FILTERED // SAYFADAKİ VERİ SAYISI
 }
