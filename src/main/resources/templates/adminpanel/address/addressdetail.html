@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey Detail</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+<th:block layout:fragment="content">
+    <!-- ADV ADD -->
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+            <div class="three column row">
+                <div class="two wide column">
+                </div>
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form class="ui form ">
+                        <h4 class="ui dividing header">Adres Detay</h4>
+                        <div class="sixteen wide field">
+                            <label style="text-align: center"
+                                   th:text="${customerName.name} + ' ' + ${customerName.surname}"></label>
+                        </div>
+                        <div class="row">
+                            <table class="ui celled padded table">
+                                <thead>
+                                <tr>
+                                    <th>Şehir Adı</th>
+                                    <th>İlçe Adı</th>
+                                    <th>Açık Adres</th>
+                                    <th>İşlem</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:if="${addressList != null}">
+
+                                    <th:block th:each="item : ${addressList}">
+                                        <tr>
+                                            <td>
+                                                <span class="ui center aligned header"
+                                                      th:text="${item.getCity_name()}"></span>
+                                            </td>
+                                            <td>
+                                                <span class="ui center aligned header"
+                                                      th:text="${item.getDistrict_name()}"></span>
+                                            </td>
+                                            <td>
+                                                <span class="ui center aligned header"
+                                                      th:text="${item.getAddress_detail()}"></span>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{'/admin/address/delete/'+${customerIndex}+'/'+${item.getId()}}"
+                                                   class="ui button red" tabindex="0">
+                                                    Sil
+                                                </a>
+                                                <a th:href="@{'/admin/address/update/'+${customerIndex}+'/'+${item.getId()}}"
+                                                   class="ui button red" tabindex="0">
+                                                    Düzenle
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row" style="text-align: center;margin-top:10px">
+                            <div class="two wide column">
+                            </div>
+                            <div class="twelve wide column">
+                                <a th:href="@{'/admin/address/add/'+${customerIndex}}" class="ui button blue"
+                                   tabindex="0">Adres Ekle</a>
+                            </div>
+                            <div class="two wide column">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="customJs">
+</th:block>
+</body>
+</html>
