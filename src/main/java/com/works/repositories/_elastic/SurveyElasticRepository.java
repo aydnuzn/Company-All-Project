@@ -1,5 +1,6 @@
 package com.works.repositories._elastic;
 
+import com.works.models._elastic.CustomerElastic;
 import com.works.models._elastic.SurveyElastic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
