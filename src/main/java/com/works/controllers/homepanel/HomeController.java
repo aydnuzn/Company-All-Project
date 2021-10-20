@@ -50,6 +50,7 @@ public class HomeController {
     public String contactAdd(@Valid @ModelAttribute("contact") Contact contact, BindingResult bindingResult, Model model) {
         if (!bindingResult.hasErrors()) {
             if (Util.isEmail(contact.getContact_mail())) {
+                //Validasyon ile de kontrol eklenebilir ileride.
                 contact.setDate(new Date());
                 contactRepository.save(contact);
             } else {
@@ -69,6 +70,5 @@ public class HomeController {
     public String about() {
         return rvalue + "about/about";
     }
-
 
 }
