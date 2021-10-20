@@ -27,6 +27,9 @@ public class CustomerElastic {
     private String tel;
 
     @Field(type = FieldType.Text)
+    private Integer cu_status;
+
+    @Field(type = FieldType.Text)
     private String companyname = Util.theCompany.getCompany_name();
 
 }
