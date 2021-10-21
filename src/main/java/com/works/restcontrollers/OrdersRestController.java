@@ -4,6 +4,8 @@ import com.works.entities.Orders;
 import com.works.entities.Product;
 import com.works.entities.security.User;
 import com.works.models._redis.OrderSession;
+import com.works.properties.OrdersInterlayer;
+import com.works.repositories._jpa.AddressRepository;
 import com.works.repositories._jpa.OrderRepository;
 import com.works.repositories._jpa.ProductRepository;
 import com.works.repositories._jpa.UserRepository;
@@ -11,6 +13,7 @@ import com.works.repositories._redis.OrderSessionRepository;
 import com.works.utils.REnum;
 import com.works.utils.Util;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,25 +29,27 @@ public class OrdersRestController {
     final OrderSessionRepository orderSessionRepository;
     final ProductRepository productRepository;
     final UserRepository userRepository;
+    final AddressRepository addressRepository;
 
-    public OrdersRestController(OrderRepository orderRepository, OrderSessionRepository orderSessionRepository, ProductRepository productRepository, UserRepository userRepository) {
+    public OrdersRestController(OrderRepository orderRepository, OrderSessionRepository orderSessionRepository, ProductRepository productRepository, UserRepository userRepository, AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.orderSessionRepository = orderSessionRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.addressRepository = addressRepository;
     }
 
     @PostMapping("/add")
-    public Map<REnum, Object> orderAdd(@Valid Orders orders){
-
+    public Map<REnum, Object> orderAdd(@Valid @RequestBody OrdersInterlayer ordersInterlayer, Orders orders, BindingResult bindingResult){
         Map<REnum, Object> hm = new LinkedHashMap<>();
         OrderSession orderSession = new OrderSession();
+        System.out.println(" ORderrrrrrr: " + ordersInterlayer) ;
+        if(!bindingResult.hasErrors()){
 
-
-            //Product IDsi çekme
+            //PRODUCT
             Integer productId = 0;
             try {
-                productId = Integer.valueOf(orders.getProduct().getId());
+                productId = Integer.valueOf(ordersInterlayer.getProduct_id());
             } catch (Exception e) {
                 hm.put(REnum.STATUS, false);
                 hm.put(REnum.MESSAGE, "Ürün numarası doğal sayı olmalıdır!");
@@ -52,18 +57,17 @@ public class OrdersRestController {
                 return hm;
             }
             Optional<Product> optionalProduct = productRepository.findById(productId);
-            if (optionalProduct.isPresent()) {
-                orders.setProduct(optionalProduct.get());
-                orderSession.setProduct_id(String.valueOf(optionalProduct.get().getId()));
-            } else {
+            if (!optionalProduct.isPresent()) {
                 hm.put(REnum.STATUS, false);
                 hm.put(REnum.MESSAGE, "Bu numaraya sahip bir ürün veritabanında bulunamadı!");
                 return hm;
             }
-            //Customer IDsi çekme
+            orders.setProduct(optionalProduct.get());
+            orderSession.setProduct_id(String.valueOf(orders.getProduct().getId()));
+            //CUSTOMER
             Integer customerId = 0;
             try {
-                productId = Integer.valueOf(orders.getUser().getId());
+                customerId = Integer.valueOf(ordersInterlayer.getUser_id());
             } catch (Exception e) {
                 hm.put(REnum.STATUS, false);
                 hm.put(REnum.MESSAGE, "Müşteri numarası doğal sayı olmalıdır!");
@@ -71,17 +75,18 @@ public class OrdersRestController {
                 return hm;
             }
             Optional<User> optionalUser = userRepository.findById(customerId);
-            if (optionalUser.isPresent()) {
-                orders.setUser(optionalUser.get());
-                orderSession.setUser_id(String.valueOf(optionalUser.get().getId()));
-            } else {
+            if (!optionalUser.isPresent()) {
                 hm.put(REnum.STATUS, false);
                 hm.put(REnum.MESSAGE, "Bu numaraya sahip bir müşteri veritabanında bulunamadı!");
                 return hm;
             }
+            orders.setUser(optionalUser.get());
+            orderSession.setUser_id(String.valueOf(orders.getUser().getId()));
+
+
             Integer orders_amount = 0;
             try {
-                orders_amount = Integer.valueOf(orders_amount);
+                orders_amount = Integer.valueOf(ordersInterlayer.getOrder_amount());
             } catch (NumberFormatException e) {
                 hm.put(REnum.STATUS, false);
                 hm.put(REnum.MESSAGE, "Ürün adeti doğal sayılar ile yapılmalıdır!");
@@ -89,43 +94,41 @@ public class OrdersRestController {
                 return hm;
             }
 
-            //SCORE
+
+
+            //ADET
+            ordersInterlayer.setOrder_amount(String.valueOf(orders_amount));
             orderSession.setOrder_amount(String.valueOf(orders_amount));
-
-            orderSession.setCustomer_address(String.valueOf(userRepository.findById(customerId).get().getAddresses()));
-
-
-            boolean isValid = false;
+            orders.setOrder_amount(orders_amount);
 
 
+            //ADRES
 
-           orderSession.setId(String.valueOf(orders.getId()));
+            orderSession.setCustomer_address(ordersInterlayer.getCustomer_address());
+            orders.setAddress(addressRepository.findById(Integer.valueOf(ordersInterlayer.getCustomer_address())).get());
+            //orderSession.setCustomer_address(String.valueOf(.findById(customerId).get().getAddresses().get(Integer.parseInt(ordersInterlayer.getCustomer_address()))));
+            //orders.setAddress(userRepository.findById(customerId).get().getAddresses().get(Integer.parseInt(ordersInterlayer.getCustomer_address())));
 
+            orders.setOrder_status(false);
+            orderSession.setOrder_status(String.valueOf(false));
 
-            if (isValid) {
-                hm.put(REnum.STATUS, true);
-                hm.put(REnum.MESSAGE, "Başarılı");
-                hm.put(REnum.RESULT, orderSessionRepository.save(orderSession));
-                return hm;
-            } else {
-                hm.put(REnum.STATUS, false);
-                hm.put(REnum.MESSAGE, "Sipariş verebilmek  için Müşteri olmanız gerekir!");
-                return hm;
-            }
+            orders = orderRepository.save(orders); //normal databasee kaydetme
 
+            //ID
+            orderSession.setId(String.valueOf(orders.getId()));
+
+            hm.put(REnum.STATUS, true);
+            hm.put(REnum.MESSAGE, "Başarılı");
+            hm.put(REnum.RESULT, orderSessionRepository.save(orderSession)); //redis kaydetme
+           return hm;
+
+        } else {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Sipariş verebilmek  için Müşteri olmanız gerekir!");
+            return hm;
         }
 
-
-
-
-
-
-
-
-
-
-
-
+    }
 
     //REDIS - ORDERS LIST
     @GetMapping("/list/{stIndex}")
