@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface SurveySelectionRepository extends JpaRepository<SurveySelection,Integer> {
+    List<SurveySelection> findBySurvey_IdEquals(Integer id);
 
 }
