@@ -5,6 +5,7 @@ import com.works.entities.security.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -14,6 +15,7 @@ public class Orders extends BaseEntity<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id")
     private User user;
@@ -22,8 +24,14 @@ public class Orders extends BaseEntity<String> {
     @JoinColumn(name = "product_id")
     private Product product;
 
+
     private Integer order_amount;
-    private String customer_address;
+
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     private Boolean order_status;
+
 
 }
