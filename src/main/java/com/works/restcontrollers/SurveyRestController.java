@@ -1,7 +1,14 @@
 package com.works.restcontrollers;
 
+import com.works.entities.security.User;
+import com.works.entities.survey.Survey;
+import com.works.entities.survey.SurveySelection;
+import com.works.entities.survey.SurveyVote;
 import com.works.repositories._elastic.SurveyElasticRepository;
 import com.works.repositories._jpa.SurveyRepository;
+import com.works.repositories._jpa.SurveySelectionRepository;
+import com.works.repositories._jpa.SurveyVoteRepository;
+import com.works.repositories._jpa.UserRepository;
 import com.works.repositories._redis.SurveySessionRepository;
 import com.works.utils.REnum;
 import com.works.utils.Util;
@@ -11,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest/admin/survey")
@@ -20,10 +28,17 @@ public class SurveyRestController {
     final SurveySessionRepository surveySessionRepository;
     final SurveyElasticRepository surveyElasticRepository;
 
-    public SurveyRestController(SurveySessionRepository surveySessionRepository, SurveyRepository surveyRepository, SurveyElasticRepository surveyElasticRepository) {
+    final UserRepository userRepository;
+    final SurveySelectionRepository surveySelectionRepository;
+    final SurveyVoteRepository surveyVoteRepository;
+
+    public SurveyRestController(SurveySessionRepository surveySessionRepository, SurveyRepository surveyRepository, SurveyElasticRepository surveyElasticRepository, UserRepository userRepository, SurveySelectionRepository surveySelectionRepository, SurveyVoteRepository surveyVoteRepository) {
         this.surveySessionRepository = surveySessionRepository;
         this.surveyRepository = surveyRepository;
         this.surveyElasticRepository = surveyElasticRepository;
+        this.userRepository = userRepository;
+        this.surveySelectionRepository = surveySelectionRepository;
+        this.surveyVoteRepository = surveyVoteRepository;
     }
 
     //******************************* REST API *********************************
@@ -110,6 +125,49 @@ public class SurveyRestController {
         //hm.put(REnum.RESULT, announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
         hm.put(REnum.COUNT, surveySessionRepository.count());
         hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]));
+        return hm;
+    }
+
+
+    //Oy verme
+    @GetMapping("/vote/{stCustomer}/{stSurvey}/{stSelection}")
+    public Map<REnum, Object> vote(@PathVariable String stCustomer, @PathVariable String stSurvey, @PathVariable String stSelection) {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        Integer customerId;
+        Integer surveyId;
+        Integer selectionId;
+        try {
+            customerId = Integer.parseInt(stCustomer);
+            surveyId = Integer.parseInt(stSurvey);
+            selectionId = Integer.parseInt(stSelection);
+        } catch (Exception e) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Değişkenler tam sayı olmalıdır.");
+            return hm;
+        }
+
+        Optional<User> optionalUser = userRepository.findById(customerId);
+        Optional<Survey> optionalSurvey = surveyRepository.findById(surveyId);
+        Optional<SurveySelection> optionalSurveySelection = surveySelectionRepository.findById(selectionId);
+
+        if (!optionalUser.isPresent() || optionalUser.get().getRoles().get(0).getRo_id() != 3 || !optionalSurvey.isPresent() || optionalUser.get().getCompany().getId() != optionalSurvey.get().getCompany().getId() || !optionalSurveySelection.isPresent()) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Hatalı Bilgi Girildi.");
+            return hm;
+        }
+
+        SurveyVote surveyVote = new SurveyVote();
+        surveyVote.setSurveySelection(optionalSurveySelection.get());
+        surveyVote.setCustomer(optionalUser.get());
+        surveyVoteRepository.save(surveyVote);
+
+        optionalSurveySelection.get().setSurvey_selection_score(optionalSurveySelection.get().getSurvey_selection_score() + 1);
+        surveySelectionRepository.saveAndFlush(optionalSurveySelection.get());
+
+        hm.put(REnum.STATUS, true);
+        hm.put(REnum.MESSAGE, "İşlem Başarılı");
+        hm.put(REnum.RESULT, surveyVote);
+
         return hm;
     }
 }
