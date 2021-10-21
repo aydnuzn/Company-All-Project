@@ -26,7 +26,7 @@ import java.util.Optional;
 public class LikeRestController {
 
     final LikeRepository likeRepository;
-    final LikeElasticRepository likeElasticRepository ;
+    final LikeElasticRepository likeElasticRepository;
     final LikeSessionRepository likeSessionRepository;
     final ProductRepository productRepository;
     final UserRepository userRepository;
@@ -85,7 +85,7 @@ public class LikeRestController {
     }
 
     @GetMapping("/productLike/{stProduct}/{stScore}")
-    public Map<REnum, Object> productLike(@PathVariable String stProduct, @PathVariable String stScore){
+    public Map<REnum, Object> productLike(@PathVariable String stProduct, @PathVariable String stScore) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         LikeManagement likeManagement = new LikeManagement();
         LikeSession likeSession = new LikeSession();
@@ -101,13 +101,13 @@ public class LikeRestController {
             return hm;
         }
         Optional<Product> optionalProduct = productRepository.findById(productId);
-        if(optionalProduct.isPresent()){
+        if (optionalProduct.isPresent()) {
             likeManagement.setProduct(optionalProduct.get());
             likeSession.setProduct(optionalProduct.get().getPr_name());
             likeElasticsearch.setProduct(optionalProduct.get().getPr_name());
 
 
-        }else{
+        } else {
             hm.put(REnum.STATUS, false);
             hm.put(REnum.MESSAGE, "Bu numaraya sahip bir ürün veritabanında bulunamadı!");
             return hm;
@@ -137,8 +137,8 @@ public class LikeRestController {
         likeManagement.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get());
         likeSession.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get().getName());
         likeElasticsearch.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get().getName());
-        for(int i = 0; i < likeManagement.getCustomer().getRoles().size(); i++){
-            if(likeManagement.getCustomer().getRoles().get(i).getRo_name().equals("ROLE_CUSTOMER")){
+        for (int i = 0; i < likeManagement.getCustomer().getRoles().size(); i++) {
+            if (likeManagement.getCustomer().getRoles().get(i).getRo_name().equals("ROLE_CUSTOMER")) {
                 isValid = true;
             }
 
@@ -149,18 +149,16 @@ public class LikeRestController {
         likeElasticsearch.setId(String.valueOf(likeManagement.getId()));
         likeSession.setDate(new Date().toString());
 
-        if(isValid){
+        if (isValid) {
             hm.put(REnum.STATUS, true);
             hm.put(REnum.MESSAGE, "Başarılı");
             hm.put(REnum.RESULT, likeSessionRepository.save(likeSession));
             return hm;
-        }else{
-            hm.put(REnum.STATUS,false);
+        } else {
+            hm.put(REnum.STATUS, false);
             hm.put(REnum.MESSAGE, "Oy kullanabilmek için Müşteri olmanız gerekir!");
             return hm;
         }
-
-
 
 
     }
