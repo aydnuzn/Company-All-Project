@@ -1,7 +1,9 @@
 package com.works.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.works.entities.constant.address.City;
 import com.works.entities.constant.address.District;
+import com.works.entities.listener.BaseEntity;
 import com.works.entities.listener.BaseEntityNotCompany;
 import com.works.entities.security.User;
 import lombok.Data;
@@ -15,7 +17,6 @@ public class Address extends BaseEntityNotCompany<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 500)
     private String address_detail;
 
     @OneToOne(cascade = CascadeType.DETACH)
@@ -26,6 +27,7 @@ public class Address extends BaseEntityNotCompany<String> {
     @JoinColumn(name = "district_id")
     District district;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "customer_id")
     private User customer;
