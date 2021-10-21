@@ -1,27 +1,27 @@
 package com.works.controllers.homepanel;
 
 import com.works.entities.Company;
+import com.works.entities.MailVerificationUser;
 import com.works.entities.constant.address.City;
 import com.works.entities.constant.address.District;
 import com.works.entities.security.Role;
 import com.works.entities.security.User;
 import com.works.properties.RegisterInterlayer;
 import com.works.repositories._jpa.*;
+import com.works.services.MailService;
 import com.works.services.UserService;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Controller
@@ -35,14 +35,18 @@ public class RegisterController {
     final UserRepository userRepository;
     final RoleRepository roleRepository;
     final UserService userService;
+    final MailService mailService;
+    final MailVerificationUserRepository mailVerificationUserRepository;
 
-    public RegisterController(CityRepository cityRepository, DistrictRepository districtRepository, CompanyRepository companyRepository, UserRepository userRepository, RoleRepository roleRepository, UserService userService) {
+    public RegisterController(CityRepository cityRepository, DistrictRepository districtRepository, CompanyRepository companyRepository, UserRepository userRepository, RoleRepository roleRepository, UserService userService, MailService mailService, MailVerificationUserRepository mailVerificationUserRepository) {
         this.cityRepository = cityRepository;
         this.districtRepository = districtRepository;
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userService = userService;
+        this.mailService = mailService;
+        this.mailVerificationUserRepository = mailVerificationUserRepository;
     }
 
     @GetMapping("")
@@ -96,7 +100,7 @@ public class RegisterController {
             }
             admin.setTel(registerInterlayer.getAdmin_tel());
             admin.setCu_status(1);
-            admin.setEnabled(true);
+            admin.setEnabled(false);
             admin.setTokenExpired(true);
             admin.setAddresses(null);
             Optional<Role> optRole = roleRepository.findById(1);
@@ -126,7 +130,7 @@ public class RegisterController {
             }
             try {
                 admin.setCompany(company_);
-                userRepository.save(admin);
+                admin = userRepository.save(admin);
             } catch (DataIntegrityViolationException e) {
                 //Eklenen Şirketin silinmesi.
                 companyRepository.delete(company_);
@@ -142,6 +146,17 @@ public class RegisterController {
                     return rvalue + "register";
                 }
             }
+            //KAYIT YAPILDI LAKİN ENABLE DURUMA ALINMADI
+
+            MailVerificationUser mailVerificationUser = new MailVerificationUser();
+            String key = UUID.randomUUID().toString();
+            mailVerificationUser.setUuid(key);
+            mailVerificationUser.setUser(admin);
+            mailVerificationUserRepository.save(mailVerificationUser);
+            String path = Util.BASE_URL + "register/mailverification/" + key;
+            mailService.sendMail(admin.getEmail(), "E-posta Doğrulama", path);
+
+            //----------------------------------------------------------
             model.addAttribute("isError", 0);
             return "redirect:/register";
         } else {
@@ -150,6 +165,17 @@ public class RegisterController {
             model.addAttribute("cityList", cityRepository.findAll());
             return rvalue + "register";
         }
+    }
+
+    @GetMapping("/mailverification/{stKey}")
+    public String mailVerification(@PathVariable String stKey) {
+        Optional<MailVerificationUser> optionalMailVerificationUser = mailVerificationUserRepository.findById(stKey);
+        if (!optionalMailVerificationUser.isPresent()) {
+            return "http://localhost:8091/logout";
+        }
+        User user = optionalMailVerificationUser.get().getUser();
+        userRepository.saveAndFlush(user);
+        return "/login";
     }
 
 }
