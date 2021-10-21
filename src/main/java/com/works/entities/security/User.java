@@ -35,7 +35,6 @@ public class User extends BaseEntity<String> {
     private boolean enabled;
     private boolean tokenExpired;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "customer", cascade = CascadeType.DETACH)
     private List<Address> addresses;
 
