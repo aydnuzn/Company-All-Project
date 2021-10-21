@@ -95,6 +95,7 @@ public class ForgotPasswordController {
             mail = optForgot.get().getUs_mail();
             model.addAttribute("isError", false);
             model.addAttribute("isError2", false);
+            model.addAttribute("isError3", false);
             return rvalue + "forgotpasswordchange";
         }
         return "error/404";
@@ -102,27 +103,36 @@ public class ForgotPasswordController {
 
     @PostMapping("/changepass")
     public String forgotPasswordChanged(@RequestParam(defaultValue = "") String newpass, @RequestParam(defaultValue = "") String newpassagain, Model model){
-        System.out.println("deneme");
         if(newpass.equals(newpassagain)){
             if(newpass.length() >= 6){
                 Optional<ForgotPasswordUser> optForgot = forgotPasswordUserRepository.findById(ref);
-                Optional<User> optUser = userRepository.findByEmailEquals(mail);
-                optUser.get().setPassword(userService.encoder().encode(newpass));
-                userRepository.saveAndFlush(optUser.get());
+                if(optForgot.isPresent() && optForgot.get().getStatus() == true){
+                    Optional<User> optUser = userRepository.findByEmailEquals(mail);
+                    optUser.get().setPassword(userService.encoder().encode(newpass));
+                    userRepository.saveAndFlush(optUser.get());
 
-                optForgot.get().setStatus(false);
-                forgotPasswordUserRepository.saveAndFlush(optForgot.get());
-                System.out.println("Şifre değiştirildi");
+                    optForgot.get().setStatus(false);
+                    forgotPasswordUserRepository.saveAndFlush(optForgot.get());
+                    System.out.println("Şifre değiştirildi");
+                }else{
+                    System.err.println("Şifre değiştirilmiş. Tekrardan mail yollayarak işleminize devam edebilirsiniz");
+                    model.addAttribute("isError", false);
+                    model.addAttribute("isError2", false);
+                    model.addAttribute("isError3", true);
+                    return rvalue + "forgotpasswordchange";
+                }
             }else{
                 System.out.println("Şifre 6 haneden küçük olamaz");
                 model.addAttribute("isError", true);
                 model.addAttribute("isError2", false);
+                model.addAttribute("isError3", false);
                 return rvalue + "forgotpasswordchange";
             }
         }else{
             System.out.println("Sifreler birbirinden farklı");
             model.addAttribute("isError", false);
             model.addAttribute("isError2", true);
+            model.addAttribute("isError3", false);
             return rvalue + "forgotpasswordchange";
         }
         return "redirect:/login";
