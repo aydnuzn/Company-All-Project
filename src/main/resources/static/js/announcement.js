@@ -48,7 +48,7 @@ $(document).ready(function() {
             {
                 "data": "id", "name": "id", "autoWidth": true,
                 "render": function (data) {
-                    var a = `<div class="ui buttons" style="float: right">
+                    var a = `<div class="ui buttons" style="float: left">
                     <a href="http://localhost:8091/admin/announcement/`+data+`" class="ui vertical animated primary button">
                     <div class="hidden content">Düzenle</div>
                     <div class="visible content">

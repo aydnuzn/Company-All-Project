@@ -50,7 +50,7 @@ $(document).ready(function () {
             {
                 "data": "id", "name": "id", "autoWidth": true,
                 "render": function (data) {
-                    var a = `<div class="ui buttons" style="float: right">
+                    var a = `<div class="ui buttons" style="float: left">
                     <button onclick="changeBan(`+data+`)" class="ui secondary button">Ban</button>
                     <div class="ya da"></div>
                     <a href="http://localhost:8091/admin/address/`+data+`" class="ui vertical animated primary button">
