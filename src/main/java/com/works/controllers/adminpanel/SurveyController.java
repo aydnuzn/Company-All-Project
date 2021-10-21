@@ -85,15 +85,15 @@ public class SurveyController {
         try {
             index = Integer.parseInt(stIndex);
             Optional<SurveySession> optSurveySession = surveySessionRepository.findById(stIndex);//Survey
-            List<SurveySelectionSession> surveySelectionSessionList = new ArrayList<>();//SelectionList
+            List<SurveySelection> surveySelectionList = new ArrayList<>();//SelectionList
             try {
-                surveySelectionSessionList = surveySelectionSessionRepository.findBySurveyid(stIndex);
+                surveySelectionList = surveySelectionRepository.findBySurvey_IdEquals(Integer.valueOf(stIndex));
             } catch (Exception e) {
                 System.err.println(e);
             }
             if (optSurveySession.isPresent()) {
                 model.addAttribute("survey_title", optSurveySession.get().getSurvey_title());
-                model.addAttribute("survey_selections", surveySelectionSessionList);
+                model.addAttribute("survey_selections", surveySelectionList);
                 model.addAttribute("index", index);
                 return "adminpanel/survey/surveydetail";
             } else {
