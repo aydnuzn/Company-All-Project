@@ -36,8 +36,8 @@ public class ForgotPasswordController {
     }
 
     @GetMapping("")
-    public String forgotpassword(){
-        return rvalue+"forgotpassword";
+    public String forgotpassword() {
+        return rvalue + "forgotpassword";
     }
 
     @GetMapping("/{us_mail}")
@@ -48,9 +48,9 @@ public class ForgotPasswordController {
         if (optUser.isPresent()) {
             Optional<ForgotPasswordUser> optForgotPasswordUser = forgotPasswordUserRepository.findByForgotMail(optUser.get().getEmail());
             ForgotPasswordUser forgotPasswordUser = null;
-            if(!optForgotPasswordUser.isPresent()){
+            if (!optForgotPasswordUser.isPresent()) {
                 forgotPasswordUser = new ForgotPasswordUser();
-            }else{
+            } else {
                 forgotPasswordUser = optForgotPasswordUser.get();
                 forgotPasswordUserRepository.deleteById(forgotPasswordUser.getForgot_id());
             }
@@ -60,7 +60,7 @@ public class ForgotPasswordController {
             forgotPasswordUser.setForgot_id(uuid);
 
             String path = Util.BASE_URL + "forgotpassword/change/" + forgotPasswordUser.getForgot_id();
-            if(mailService.sendMail(forgotPasswordUser.getUs_mail(),"Password Change", path)){
+            if (mailService.sendMail(forgotPasswordUser.getUs_mail(), "Password Change", path)) {
                 // Mail başarıyla iletildi
                 hm.put(REnum.STATUS, true);
                 hm.put(REnum.MESSAGE, "İşlem başarılı.");
@@ -68,7 +68,7 @@ public class ForgotPasswordController {
                 hm.put(REnum.REF, uuid);
                 hm.put("Email", us_mail);
                 forgotPasswordUserRepository.save(forgotPasswordUser);
-            }else{
+            } else {
                 // Mail sistemde var ama mesaj yollanmadı.
                 hm.put(REnum.STATUS, false);
                 hm.put(REnum.MESSAGE, "Sistemsel Hata! Mail gönderilemedi.");
@@ -84,13 +84,13 @@ public class ForgotPasswordController {
         return hm;
     }
 
-    String ref ="";
+    String ref = "";
     String mail = "";
 
     @GetMapping("/change/{stIndex}")
-    public String forgotPasswordChangeShow(@PathVariable String stIndex, Model model){
+    public String forgotPasswordChangeShow(@PathVariable String stIndex, Model model) {
         Optional<ForgotPasswordUser> optForgot = forgotPasswordUserRepository.findById(stIndex);
-        if(optForgot.isPresent() && optForgot.get().getStatus()==true){
+        if (optForgot.isPresent() && optForgot.get().getStatus() == true) {
             ref = stIndex;
             mail = optForgot.get().getUs_mail();
             model.addAttribute("isError", false);
@@ -102,11 +102,11 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/changepass")
-    public String forgotPasswordChanged(@RequestParam(defaultValue = "") String newpass, @RequestParam(defaultValue = "") String newpassagain, Model model){
-        if(newpass.equals(newpassagain)){
-            if(newpass.length() >= 6){
+    public String forgotPasswordChanged(@RequestParam(defaultValue = "") String newpass, @RequestParam(defaultValue = "") String newpassagain, Model model) {
+        if (newpass.equals(newpassagain)) {
+            if (newpass.length() >= 6) {
                 Optional<ForgotPasswordUser> optForgot = forgotPasswordUserRepository.findById(ref);
-                if(optForgot.isPresent() && optForgot.get().getStatus() == true){
+                if (optForgot.isPresent() && optForgot.get().getStatus() == true) {
                     Optional<User> optUser = userRepository.findByEmailEquals(mail);
                     optUser.get().setPassword(userService.encoder().encode(newpass));
                     userRepository.saveAndFlush(optUser.get());
@@ -114,21 +114,21 @@ public class ForgotPasswordController {
                     optForgot.get().setStatus(false);
                     forgotPasswordUserRepository.saveAndFlush(optForgot.get());
                     System.out.println("Şifre değiştirildi");
-                }else{
+                } else {
                     System.err.println("Şifre değiştirilmiş. Tekrardan mail yollayarak işleminize devam edebilirsiniz");
                     model.addAttribute("isError", false);
                     model.addAttribute("isError2", false);
                     model.addAttribute("isError3", true);
                     return rvalue + "forgotpasswordchange";
                 }
-            }else{
+            } else {
                 System.out.println("Şifre 6 haneden küçük olamaz");
                 model.addAttribute("isError", true);
                 model.addAttribute("isError2", false);
                 model.addAttribute("isError3", false);
                 return rvalue + "forgotpasswordchange";
             }
-        }else{
+        } else {
             System.out.println("Sifreler birbirinden farklı");
             model.addAttribute("isError", false);
             model.addAttribute("isError2", true);
@@ -139,10 +139,4 @@ public class ForgotPasswordController {
     }
 
 
-
-
-
-
 }
-
-
