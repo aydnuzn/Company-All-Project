@@ -13,7 +13,7 @@ function addDistrictSelect(data) {
 
 function getXDistrict(index) {
     $.ajax({
-        url: 'http://localhost:8091/getXDistricts/' + index,
+        url: 'http://localhost:8091/rest/getXDistricts/' + index,
         type: 'GET',
         contentType: "application/json",
         dataType: 'json',
