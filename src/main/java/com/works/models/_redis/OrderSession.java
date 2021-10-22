@@ -16,7 +16,9 @@ public class OrderSession {
     private String product_id;
     private String order_amount;
     private String customer_address;
-    private String order_status;
+
+    @Indexed
+    private String orderstatus;
 
     @Indexed
     private String companyname = Util.theCompany.getCompany_name();
