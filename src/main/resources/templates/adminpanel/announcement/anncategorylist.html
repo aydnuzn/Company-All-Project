@@ -4,40 +4,34 @@
       layout:decorate="adminpanel/incadminpanel/layout">
 <head>
     <meta charset="UTF-8">
-    <title>Anouncement-Category List</title>
+    <title>AnnCategory</title>
 </head>
 <body>
 <th:block layout:fragment="customCss">
-    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+    <style>
+        .paginate_button:hover{
+            background-color: black !important;
+        }
+    </style>
 </th:block>
+
 
 <th:block layout:fragment="content">
 
     <div class="asd" style="margin: 30px 30px 0px 290px">
-        <div class="ui page grid">
-            <div class="row">
-                <div class="ui icon input">
-                    <input id="annCategorySearch" type="text" placeholder="Arama...">
-                    <i class="search icon"></i>
-                </div>
-
-
-                <table class="ui celled padded table">
+        <div class="ui page" style="margin-bottom: 40px;">
+            <div class="row" style="padding-bottom: 50px;">
+                <table id="exampleTable" class="ui celled table sixteen wide " style="width:100%;">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Arama...">
+                        <i class="search icon"></i>
+                    </div>
                     <thead>
-                        <tr>
-                            <th class="single line">Duyuru Kategori</th>
-                            <th>İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody id="annCategoryTbody">
-                    </tbody>
-                    <tfoot>
                     <tr>
-                        <th colspan="10">
-                            <div class="ui right floated pagination menu" id="annCategoryPNumber"></div>
-                        </th>
+                        <th>Duyuru Kategori</th>
+                        <th>İşlemler</th>
                     </tr>
-                    </tfoot>
+                    </thead>
                 </table>
             </div>
         </div>
@@ -49,10 +43,5 @@
 <th:block layout:fragment="customJs">
     <script th:src="@{/js/anncategorylist.js}"></script>
 </th:block>
-
 </body>
 </html>
-
-
-
-
