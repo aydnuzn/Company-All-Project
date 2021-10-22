@@ -139,3 +139,46 @@ function getPageableNumber(i) {
         return "getLikeListSeach('" + searchKeyTrim + "'" + "," + i + ")";
     }
 }
+
+function getAllLikeList(index) {
+    console.log("Deneme Content All Likes11111")
+    $.ajax({
+        url: 'http://localhost:8091/rest/admin/like/allLikeList/' + index,
+        type: 'GET',
+        contentType: "application/json",
+        dataType: 'json',
+        success: function (data) {
+            if (data) {
+                console.log(data);
+                pageableNumber = index;
+                oldData = data.RESULT;
+                getRows2(data.RESULT);
+                getPageNumbers(data.COUNTOFPAGE);
+            } else {
+                console.log(data);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
+
+getAllLikeList(pageableNumber);
+
+
+function getRows2(data) {
+    let html = ``;
+
+    for (let i = 0; i < data.length; i++) {
+        const itm = data[i];
+        console.log("Deneme Content All Likes")
+        console.log(data)
+        html += `<tr>
+            <td>` + itm.productID + `</td>
+            <td>` + itm.totalScore + `</td>
+        
+          </tr>`;
+    }
+    $('#allLikeTbody').html(html);
+}
