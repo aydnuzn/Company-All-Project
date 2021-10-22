@@ -1,11 +1,13 @@
 package com.works.entities.images;
 
 import com.works.entities.Product;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class ProductImage {
     @Id
