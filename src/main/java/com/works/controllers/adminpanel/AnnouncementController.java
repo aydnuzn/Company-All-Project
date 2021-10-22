@@ -135,14 +135,14 @@ public class AnnouncementController {
                     announcementCategory.setId(optionalAnnouncementCategory.get().getId());
                     announcementCategory = annCategoryRepository.saveAndFlush(announcementCategory);
 
-                    /*----Add Redis Database---- */
+                    /*----Update Redis Database---- */
                     AnnCategorySession announcementCategorySession = new AnnCategorySession();
                     announcementCategorySession.setId(announcementCategory.getId().toString());
                     announcementCategorySession.setAnn_category_title(announcementCategory.getAnn_category_title());
                     announcementCategorySessionRepository.deleteById(stIndex);
                     announcementCategorySessionRepository.save(announcementCategorySession);
 
-                    /*----Add Elasticsearch Database---- */
+                    /*----Update Elasticsearch Database---- */
                     AnnCategoryElastic annCategoryElastic = new AnnCategoryElastic();
                     annCategoryElastic.setId(announcementCategory.getId().toString());
                     annCategoryElastic.setAnn_category_title(announcementCategory.getAnn_category_title());
