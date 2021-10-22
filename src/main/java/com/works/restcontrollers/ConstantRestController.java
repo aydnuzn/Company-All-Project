@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/rest")
 public class ConstantRestController {
     final DistrictRepository districtRepository;
 
