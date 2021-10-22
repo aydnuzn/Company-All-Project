@@ -22,7 +22,7 @@ public class ConstantRestController {
         this.districtRepository = districtRepository;
     }
 
-    @GetMapping("getXDistricts/{stIndex}")
+    @GetMapping("/getXDistricts/{stIndex}")
     public Map<REnum, Object> getXDistricts(@PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         List<District> districtList = new ArrayList<>();
