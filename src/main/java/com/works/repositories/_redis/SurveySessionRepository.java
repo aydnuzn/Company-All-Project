@@ -11,7 +11,10 @@ import java.util.List;
 @EnableRedisRepositories
 public interface SurveySessionRepository extends CrudRepository<SurveySession, String> {
 
-    @Query("select s from sessionsurvey s order by s.id")
-    List<SurveySession> findByOrderByIdAsc(Pageable pageable);
+    //@Query("select s from sessionsurvey s order by s.id")
+    //List<SurveySession> findByOrderByIdAsc(Pageable pageable);
+
+    List<SurveySession> findByCompanynameEquals(String companyname, Pageable pageable);
+    List<SurveySession> findByCompanynameEquals(String companyname);
 
 }
