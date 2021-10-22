@@ -16,6 +16,10 @@ public interface AnnouncementSessionRepository extends CrudRepository<Announceme
     @Query("select s from sessionannouncement s order by s.id")
     List<AnnouncementSession> findByOrderByIdAsc(Pageable pageable);
 
+    List<AnnouncementSession> findByCompanynameEquals(String companyname, Pageable pageable);
+
+
+
     //@Query("select s from sessionannouncement s where s.companyname = ?1")
     //List<AnnouncementSession> findByAnnouncementSession(String companyname, Pageable pageable);
 
