@@ -73,6 +73,20 @@ public class LikeRestController {
         return hm;
     }
 
+
+
+    //ALL LIKES
+    @GetMapping("/allLikeList/{stIndex}")
+    public Map<REnum, Object> allLikeList(@RequestBody @PathVariable String stIndex) {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.MESSAGE, "Başarılı");
+        hm.put(REnum.STATUS, true);
+        hm.put(REnum.RESULT, likeRepository.findAllLikes());
+        return hm;
+    }
+
+
+
     @DeleteMapping("/delete/{stIndex}")
     public Map<REnum, Object> surveyDelete(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
