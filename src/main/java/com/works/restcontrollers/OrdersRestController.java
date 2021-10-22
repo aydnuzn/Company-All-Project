@@ -149,6 +149,56 @@ public class OrdersRestController {
         return hm;
     }
 
+    //ORDER STATUS CHANGE
+    @GetMapping("/status/{stIndex}")
+    public Map<REnum,Object> orderStatus(@PathVariable String stIndex){
+        Map<REnum,Object> hm = new LinkedHashMap<>();
+        Optional<OrderSession> optionalOrderSession = orderSessionRepository.findById(stIndex);
+        if(optionalOrderSession.get().getOrder_status().equals("0")){
+            if(optionalOrderSession.isPresent()){
+                OrderSession orderSession =  optionalOrderSession.get();
+                orderSession.setOrder_status("1");
+                orderSessionRepository.deleteById(stIndex);
+                orderSessionRepository.save(orderSession);
+
+                Orders orders = orderRepository.findById(Integer.valueOf(stIndex)).get();
+                orders.setOrder_status(true);
+                orderRepository.saveAndFlush(orders);
+
+            }else{
+                System.err.println("Böyle bir sipariş yok!");
+            }
+        }else{
+            if(optionalOrderSession.isPresent()){
+                OrderSession orderSession =  optionalOrderSession.get();
+                orderSession.setOrder_status("0");
+                orderSessionRepository.deleteById(stIndex);
+                orderSessionRepository.save(orderSession);
+
+                Orders orders = orderRepository.findById(Integer.valueOf(stIndex)).get();
+                orders.setOrder_status(false);
+                orderRepository.saveAndFlush(orders);
+
+            }else{
+                System.err.println("Böyle bir sipariş yok!");
+            }
+        }
+
+        try {
+            int id = Integer.parseInt(stIndex);
+            hm.put(REnum.STATUS, true);
+            hm.put(REnum.MESSAGE, "Başarılı!");
+
+            return hm;
+        } catch (NumberFormatException e) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Sipariş durumu 0 ya da 1 olmalıdır!");
+            hm.put(REnum.ERROR, e);
+            return hm;
+        }
+
+    }
+
     //ORDERS DELETE
     @DeleteMapping("/delete/{stIndex}")
     public Map<REnum, Object> ordersDelete(@RequestBody @PathVariable String stIndex) {
