@@ -151,7 +151,7 @@ public class OrdersRestController {
 
 
 
-    //REDIS - ORDERS LIST
+    //REDIS - ORDERS DELIVERY LIST
     @GetMapping("/deliveryList/{stIndex}")
     public Map<REnum, Object> ordersDeliveryList(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
