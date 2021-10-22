@@ -73,11 +73,11 @@ function getRows(data) {
             <td>` + itm.product_id + `</td>
             <td>` + itm.order_amount + `</td>
             <td>` + itm.customer_address + `</td>
-            <td id="order_status_+` + itm.id + `">` + convertStatus(itm.order_status) + `</td>
+            <td>` + convertStatus(itm.orderstatus) + `</td>
          
             <td>
                 <div class="ui buttons" style="float: right">
-                    <button onclick="orderStatusChange(` + itm.id + `)" id="order_` + itm.id + `" class="ui button inverted primary">Durum</button>
+                    <button onclick="orderStatusChange(` + itm.id + `)" class="ui button inverted primary">Durum Değiştir</button>
                     <div>ya da</div>
                     <button onclick="deleteOrder(` + itm.id + `)" class="ui negative inverted button">Sil</button>
                 </div>                      
@@ -155,26 +155,9 @@ function orderStatusChange(index) {
         success: function (data) {
             if (data.STATUS) {
                 getOrdersList(pageableNumber);
-                if ($("#order_status_+`index`+").val() == "Teslimat Halinde") {
-                    var $button = $(`"#order_${index}"`);
-                    $button.on('click', handler.activate)
-                        .state({
-                            text: {
-                                inactive: 'Teslim Et',
-                                active: 'Teslim Edildi'
-                            }
-                        });
-                    /*
-                    if($("#order_status_+`index`+").val() == "Teslimat Halinde"){
-                        $(`"#order_${index}"`).prop('value', 'Teslim Et')
-                    }else{
-                        $(`"#order_${index} span"`).text('Teslim Edildi');
-                    $(`"#order_${index}"`).click(function(){
-                        $(this).toggleClass('active');
-                    });
-                     */
-
-                }
+            } else {
+                pageableNumber = 1;
+                getOrdersList(pageableNumber);
             }
         },
         error: function (err) {
@@ -185,7 +168,7 @@ function orderStatusChange(index) {
 
 
 function convertStatus(status) {
-    if (status == 1) {
+    if (status == "true") {
         return "Teslim Edildi";
     } else {
         return "Teslimat Halinde";
