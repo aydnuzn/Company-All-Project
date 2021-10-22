@@ -104,13 +104,13 @@ public class OrdersRestController {
 
             //ADRES
 
-            orderSession.setCustomer_address(ordersInterlayer.getCustomer_address());
+            orderSession.setCustomer_address(addressRepository.findById(Integer.valueOf(ordersInterlayer.getCustomer_address())).get().getAddress_detail());
             orders.setAddress(addressRepository.findById(Integer.valueOf(ordersInterlayer.getCustomer_address())).get());
             //orderSession.setCustomer_address(String.valueOf(.findById(customerId).get().getAddresses().get(Integer.parseInt(ordersInterlayer.getCustomer_address()))));
             //orders.setAddress(userRepository.findById(customerId).get().getAddresses().get(Integer.parseInt(ordersInterlayer.getCustomer_address())));
 
             orders.setOrder_status(false);
-            orderSession.setOrder_status(String.valueOf(false));
+            orderSession.setOrderstatus(String.valueOf(false));
 
             orders = orderRepository.save(orders); //normal databasee kaydetme
 
@@ -149,15 +149,36 @@ public class OrdersRestController {
         return hm;
     }
 
+
+
+    //REDIS - ORDERS LIST
+    @GetMapping("/deliveryList/{stIndex}")
+    public Map<REnum, Object> ordersDeliveryList(@RequestBody @PathVariable String stIndex) {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.MESSAGE, "Başarılı");
+        hm.put(REnum.STATUS, true);
+        if (stIndex.equals("0")) {
+            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false",Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+        } else {
+            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false", Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        }
+        int additional = 0;
+        if (orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false", Util.theCompany.getCompany_name()).size() % 10 != 0) {
+            additional = 1;
+        }
+        hm.put(REnum.COUNTOFPAGE, (orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false", Util.theCompany.getCompany_name()).size() / Util.pageSize) + additional);
+        return hm;
+    }
+
     //ORDER STATUS CHANGE
     @GetMapping("/status/{stIndex}")
     public Map<REnum,Object> orderStatus(@PathVariable String stIndex){
         Map<REnum,Object> hm = new LinkedHashMap<>();
         Optional<OrderSession> optionalOrderSession = orderSessionRepository.findById(stIndex);
-        if(optionalOrderSession.get().getOrder_status().equals("0")){
+        if(optionalOrderSession.get().getOrderstatus().equals("false")){
             if(optionalOrderSession.isPresent()){
                 OrderSession orderSession =  optionalOrderSession.get();
-                orderSession.setOrder_status("1");
+                orderSession.setOrderstatus("true");
                 orderSessionRepository.deleteById(stIndex);
                 orderSessionRepository.save(orderSession);
 
@@ -171,7 +192,7 @@ public class OrdersRestController {
         }else{
             if(optionalOrderSession.isPresent()){
                 OrderSession orderSession =  optionalOrderSession.get();
-                orderSession.setOrder_status("0");
+                orderSession.setOrderstatus("false");
                 orderSessionRepository.deleteById(stIndex);
                 orderSessionRepository.save(orderSession);
 
