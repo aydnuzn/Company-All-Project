@@ -15,11 +15,19 @@ public interface OrderSessionRepository extends CrudRepository<OrderSession,Stri
     @Query("select s from sessionorder s order by s.id")
     List<OrderSession> findByOrderByIdAsc(Pageable pageable);
 
+    List<OrderSession> findByOrderstatusEqualsAndCompanynameEquals(String orderstatus, String companyname, Pageable pageable);
+
+    List<OrderSession> findByOrderstatusEqualsAndCompanynameEquals(String orderstatus, String companyname);
+
     /*
     @Modifying
     @Query(value = "update sessionorder s set s.order_status = 1 where s.id=?1", nativeQuery = true)
     Object orderStatusChange(int id);
      */
+
+
+
+
 
 
 
