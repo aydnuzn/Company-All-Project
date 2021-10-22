@@ -17,15 +17,19 @@
     <div class="ui page grid">
 
       <div class="row">
-        <div class="twelve wide column">
+        <div class="five wide column">
+
+            <a th:href="@{/admin/orders/status2}" class="ui button inverted primary">Teslimat Halinde Siparişler</a>
 
         </div>
 
-        <div class="four wide column">
-          <div class="ui icon input">
-            <input type="text" placeholder="Arama...">
-            <i class="search icon"></i>
-          </div>
+        <div class="five wide column">
+
+          <a th:href="@{/admin/orders/status1}"class="ui button inverted secondary">Teslim Edilen Siparişler</a>
+        </div>
+
+        <div class="six wide column">
+
         </div>
 
       </div>
@@ -38,6 +42,7 @@
             <th>Ürün ID</th>
             <th>Ürün Adet</th>
             <th>Müşteri Adresi</th>
+            <th>Durum</th>
             <th>İşlem</th>
           </tr></thead>
           <tbody id="ordersTbody">
