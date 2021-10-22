@@ -1,20 +1,23 @@
 package com.works.controllers.adminpanel;
 
 import com.works.entities.Product;
-import com.works.entities.categories.AnnouncementCategory;
 import com.works.entities.categories.ProductCategory;
 import com.works.entities.images.ProductImage;
 import com.works.models._elastic.AnnCategoryElastic;
 import com.works.models._elastic.ProductCategoryElastic;
+import com.works.models._elastic.ProductElastic;
 import com.works.models._redis.AnnCategorySession;
 import com.works.models._redis.ProductCategorySession;
+import com.works.models._redis.ProductSession;
 import com.works.properties.ProductCategoryInterlayer;
 import com.works.properties.ProductInterlayer;
 import com.works.repositories._elastic.ProductCategoryElasticRepository;
+import com.works.repositories._elastic.ProductElasticRepository;
 import com.works.repositories._jpa.ProductCategoryRepository;
 import com.works.repositories._jpa.ProductImageRepository;
 import com.works.repositories._jpa.ProductRepository;
 import com.works.repositories._redis.ProductCategorySessionRepository;
+import com.works.repositories._redis.ProductSessionRepository;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -46,13 +49,17 @@ public class ProductController {
     final ProductRepository productRepository;
     final ProductImageRepository productImageRepository;
 
+    final ProductElasticRepository productElasticRepository;
+    final ProductSessionRepository productSessionRepository;
     final ProductCategoryElasticRepository productCategoryElasticRepository;
     final ProductCategorySessionRepository productCategorySessionRepository;
 
-    public ProductController(ProductCategoryRepository productCategoryRepository, ProductRepository productRepository, ProductImageRepository productImageRepository, ProductCategoryElasticRepository productCategoryElasticRepository, ProductCategorySessionRepository productCategorySessionRepository) {
+    public ProductController(ProductCategoryRepository productCategoryRepository, ProductRepository productRepository, ProductImageRepository productImageRepository, ProductElasticRepository productElasticRepository, ProductSessionRepository productSessionRepository, ProductCategoryElasticRepository productCategoryElasticRepository, ProductCategorySessionRepository productCategorySessionRepository) {
         this.productCategoryRepository = productCategoryRepository;
         this.productRepository = productRepository;
         this.productImageRepository = productImageRepository;
+        this.productElasticRepository = productElasticRepository;
+        this.productSessionRepository = productSessionRepository;
         this.productCategoryElasticRepository = productCategoryElasticRepository;
         this.productCategorySessionRepository = productCategorySessionRepository;
     }
@@ -71,7 +78,7 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/add")
-    public String productAdd(@Valid @ModelAttribute("productInterlayer") ProductInterlayer productInterlayer, BindingResult bindingResult, Model model, @RequestPart(value = "pr_image_file", required = false) MultipartFile pr_image_file) {
+    public String productAdd(@Valid @ModelAttribute("productInterlayer") ProductInterlayer productInterlayer, BindingResult bindingResult, Model model, @RequestPart(value = "pr_image_file", required = false) MultipartFile[] pr_image_file) {
         Product product = new Product();
         if(!bindingResult.hasErrors()){
             List<ProductCategory> productCategoryList = new ArrayList<>();
@@ -83,7 +90,6 @@ public class ProductController {
             }
             try{
                 product.setPr_categories(productCategoryList);
-                product.setCompany(null);
                 product.setImages(null);
 
                 product.setPr_name(productInterlayer.getPr_name());
@@ -104,25 +110,52 @@ public class ProductController {
                 if (!theDir.exists()) {
                     theDir.mkdirs();
                 }
+                String fileName = "";
+                for(MultipartFile image_file:pr_image_file){
+                    fileName = StringUtils.cleanPath(image_file.getOriginalFilename());
+                    String ext = "";
+                    try {//File kısmı validation'da kontrol edilmediği için resim yüklenmemesi durumu kontrolü
+                        int length = fileName.lastIndexOf(".");
+                        ext = fileName.substring(length, fileName.length());
+                        String uui = UUID.randomUUID().toString();
+                        fileName = uui + ext;
 
-                String fileName = StringUtils.cleanPath(pr_image_file.getOriginalFilename());
-                String ext = "";
-                try {//File kısmı validation'da kontrol edilmediği için resim yüklenmemesi durumu kontrolü
-                    int length = fileName.lastIndexOf(".");
-                    ext = fileName.substring(length, fileName.length());
-                    String uui = UUID.randomUUID().toString();
-                    fileName = uui + ext;
-
-                    Path path = Paths.get(Util.UPLOAD_DIR + "products/" + product.getId() + "/" + fileName);
-                    Files.copy(pr_image_file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                } catch (Exception e) {
-                    //File yuklenmediyse, onceden ayarlanmis bir resim bu klasöre yüklenebilir.
-                    //...
+                        Path path = Paths.get(Util.UPLOAD_DIR + "products/" + product.getId() + "/" + fileName);
+                        Files.copy(image_file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    } catch (Exception e) {
+                        //File yuklenmediyse, onceden ayarlanmis bir resim bu klasöre yüklenebilir.
+                        fileName = "emptyimage.png";
+                        ProductImage productImage = new ProductImage();
+                        productImage.setProduct(product);
+                        productImage.setImage_url(fileName);
+                        productImageRepository.save(productImage);
+                    }
+                    ProductImage productImage = new ProductImage();
+                    productImage.setProduct(product);
+                    productImage.setImage_url(fileName);
+                    productImageRepository.save(productImage);
                 }
-                ProductImage productImage = new ProductImage();
-                productImage.setProduct(product);
-                productImage.setImage_url(fileName);
-                productImageRepository.save(productImage);
+
+                /*----Add Redis Database---- */
+                ProductSession productSession = new ProductSession();
+                productSession.setId(product.getId().toString());
+                productSession.setPr_name(product.getPr_name());
+                productSession.setPr_brief_description(product.getPr_brief_description());
+                productSession.setPr_price(product.getPr_price().toString());
+                productSession.setPr_type(product.getPr_type() == 1 ? "Satılık":"Kiralık");
+                productSession.setPr_image(fileName);
+                productSessionRepository.save(productSession);
+
+                /*----Add Elasticsearch Database---- */
+                ProductElastic productElastic = new ProductElastic();
+                productElastic.setId(product.getId().toString());
+                productElastic.setPr_name(product.getPr_name());
+                productElastic.setPr_brief_description(product.getPr_brief_description());
+                productElastic.setPr_price(product.getPr_price());
+                productElastic.setPr_type(product.getPr_type() == 1 ? "Satılık":"Kiralık");
+                productElastic.setPr_image(fileName);
+                productElasticRepository.save(productElastic);
+
 
             }catch(Exception ex){
                 System.err.println("ProductAdd Error : " + ex);
@@ -135,6 +168,157 @@ public class ProductController {
         model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
         return rvalue + "productadd";
     }
+
+    Integer index = 0;
+    // Image show
+    @GetMapping("/images/{stIndex}")
+    public String productImages(@PathVariable String stIndex, Model model){
+        try{
+            index = Integer.parseInt(stIndex);
+            Optional<Product> optProduct = productRepository.findById(index);
+            if(optProduct.isPresent()){
+                List<ProductImage> productImageList = productImageRepository.findByProduct_IdEquals(index);
+                model.addAttribute("ls", productImageList);
+                model.addAttribute("index", index);
+            }else{
+                System.err.println("Mudahale edilmis. Aranilan id de bir ürün yok");
+                return "redirect:/admin/product/list";
+            }
+        }catch(Exception ex){
+            System.err.println("Mudahale edilmis. String ifade girilmis");
+            return "redirect:/admin/product/list";
+        }
+        if ( !errorMessage.equals("") ) {
+            model.addAttribute("errorMessage", errorMessage);
+            errorMessage = "";
+        }
+        return rvalue + "productimage";
+    }
+
+    String errorMessage = "";
+    //Image Upload
+    @PostMapping("/imageupload")
+    public String productImageUpload(@RequestPart(value = "pr_image_file") MultipartFile[] pr_image_file){
+        Optional<Product> optProduct = null;
+        if ( pr_image_file != null && pr_image_file.length > 0 ) {
+            String fileName = "";
+            optProduct = productRepository.findById(index);
+            if(optProduct.isPresent()){
+                for ( MultipartFile image_file : pr_image_file ) {
+                    fileName = StringUtils.cleanPath(image_file.getOriginalFilename());
+                    String ext = "";
+                    try {
+                        int length = fileName.lastIndexOf(".");
+                        ext = fileName.substring(length, fileName.length());
+                        String uui = UUID.randomUUID().toString();
+                        fileName = uui + ext;
+
+                        Path path = Paths.get(Util.UPLOAD_DIR + "products/" + optProduct.get().getId() + "/" + fileName);
+                        Files.copy(image_file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+                        ProductImage productImage = new ProductImage();
+                        productImage.setProduct(optProduct.get());
+                        productImage.setImage_url(fileName);
+                        productImageRepository.save(productImage);
+
+                    } catch (Exception e) {}
+                }
+                // Rediste kayıtlı olan deger, emptyimage ise o zaman redis ve elastic update edilecek
+                String imageFileName = productSessionRepository.findById(index.toString()).get().getPr_image();
+                if(imageFileName.equals("emptyimage.png")){
+                    File f = new File(Util.UPLOAD_DIR + "products/" + index); // klasör yolu
+                    File[] listOfFiles = f.listFiles(); // klasordeki tum dosyalar
+
+                    // Klasorde resim kalmadiysa default olarak belirtilen resim atanacak
+                    String newImageName = "emptyimage.png";
+                    if (listOfFiles.length > 0) {
+                        //klasordeki tum dosyaların isimleri alindi
+                        List<String> imageNames = new ArrayList<>();
+                        for (File f1 : listOfFiles) {
+                            if (f1.isFile()) {
+                                imageNames.add(f1.getName());
+                            }
+                        }
+                        newImageName = imageNames.get(0);
+
+                        /*----Update Redis Database---- */
+                        ProductSession productSession = productSessionRepository.findById(index.toString()).get();
+                        productSession.setPr_image(newImageName);
+                        productSessionRepository.deleteById(index.toString());
+                        productSessionRepository.save(productSession);
+
+                        /*----Update Elasticsearch Database---- */
+                        ProductElastic productElastic = productElasticRepository.findById(index.toString()).get();
+                        productElastic.setPr_image(newImageName);
+                        productElasticRepository.deleteById(index.toString());
+                        productElasticRepository.save(productElastic);
+                    }
+
+                }
+            }
+        }else{
+            errorMessage = "Lütfen resim seçiniz!";
+        }
+        return "redirect:/admin/product/images/" + index;
+    }
+
+    // delete image item
+    @GetMapping("/deleteimage/{stIndex}")
+    public String deleteImage( @PathVariable String stIndex ) {
+        try {
+            Integer prImageIndex = Integer.parseInt( stIndex );
+            Optional<ProductImage> optionalProductImage = productImageRepository.findById(prImageIndex);
+            if ( optionalProductImage.isPresent() ) {
+                productImageRepository.deleteById(prImageIndex);
+                // file delete
+                String deleteFilePath = optionalProductImage.get().getImage_url();
+                File file = new File(Util.UPLOAD_DIR + "products/" + index + "/" + deleteFilePath);
+                file.delete();
+
+                //************************************************************************************
+                // Redis te kayitli olan resmin url'i dosya içinde mevcut mu
+                String redisImagePath = productSessionRepository.findById(index.toString()).get().getPr_image();
+                file = new File(Util.UPLOAD_DIR + "products/" + index + "/" + redisImagePath);
+                boolean exists = file.exists();
+
+                // Silinen deger redis te kayitli olan veri ise veya hiç veri kalmadiysa update yapilacak degilse ellenmeyecek
+                if(!exists){
+                    // Redis ve Elasticsearch Update yapilacak
+                    File f = new File(Util.UPLOAD_DIR + "products/" + index); // klasör yolu
+                    File[] listOfFiles = f.listFiles(); // klasordeki tum dosyalar
+
+                    // Klasorde resim kalmadiysa default olarak belirtilen resim atanacak
+                    String newImageName = "emptyimage.png";
+                    if (listOfFiles.length > 0) {
+                        //klasordeki tum dosyaların isimleri alindi
+                        List<String> imageNames = new ArrayList<>();
+                        for (File f1 : listOfFiles) {
+                            if (f1.isFile()) {
+                                imageNames.add(f1.getName());
+                            }
+                        }
+                        newImageName = imageNames.get(0);
+                    }
+
+                    /*----Update Redis Database---- */
+                    ProductSession productSession = productSessionRepository.findById(index.toString()).get();
+                    productSession.setPr_image(newImageName);
+                    productSessionRepository.deleteById(index.toString());
+                    productSessionRepository.save(productSession);
+
+                    /*----Update Elasticsearch Database---- */
+                    ProductElastic productElastic = productElasticRepository.findById(index.toString()).get();
+                    productElastic.setPr_image(newImageName);
+                    productElasticRepository.deleteById(index.toString());
+                    productElasticRepository.save(productElastic);
+                }
+            }
+        }catch (Exception ex) {
+            errorMessage = "Silme işlemi sırasında bir hata oluştu!";
+        }
+        return "redirect:/admin/product/images/" + index;
+    }
+    //***************************************************************************************
 
     @GetMapping("/category")
     public String productCategory(Model model){
@@ -316,7 +500,5 @@ public class ProductController {
         model.addAttribute("isError", false);
         return rvalue + "prcategoryupdate";
     }
-
-
 
 }
