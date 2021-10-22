@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Product-Category List</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+
+        <form action="/admin/product/imageupload" method="post" enctype="multipart/form-data" class="col-sm-4">
+            <div class="sixteen wide field">
+                <div th:text="${errorMessage}" ></div>
+                <label>Ürün Görseli</label>
+                <input type="file" name="pr_image_file" accept="image/*" multiple="multiple">
+            </div>
+            <button style="margin-top: 10px;" class="ui green button">Yükle</button>
+        </form>
+        <hr>
+        <div class="ui three stackable cards">
+            <th:block th:each="item:${ls}">
+                <th:block th:if="${item.image_url} != 'emptyimage.png'">
+            <div class="card">
+                <div class="image">
+                    <img th:src="@{'/uploads/products/'+${index}+'/'+${item.image_url}}">
+                </div>
+                <div class="ui buttons">
+                    <a th:href="@{'/admin/product/deleteimage/'+${item.id}}" class="ui vertical animated negative button">
+                        <div class="hidden content">Sil</div>
+                        <div class="visible content">
+                            <i class="trash icon"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+                </th:block>
+            </th:block>
+        </div>
+
+    </div>
+
+
+</th:block>
+
+<th:block layout:fragment="customJs">
+</th:block>
+
+</body>
+</html>
+
+
+
+
