@@ -5,6 +5,7 @@ import com.works.repositories._jpa.DistrictRepository;
 import com.works.utils.REnum;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/rest")
 public class ConstantRestController {
     final DistrictRepository districtRepository;
 

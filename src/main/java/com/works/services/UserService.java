@@ -71,8 +71,6 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         System.out.println("onLogoutSuccess Call ");
-        // Cookie silinecek
-
         httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/homepanel/login/login");
     }
 

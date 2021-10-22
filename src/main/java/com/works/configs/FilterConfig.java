@@ -32,22 +32,29 @@ public class FilterConfig implements Filter {
 
         req.setCharacterEncoding("utf-8");
         res.setCharacterEncoding("utf-8");
-		getCompany();
+        getCompany();
         filterChain.doFilter(req, res);
     }
 
     // Proje kapanıp acıldıgı zaman Company null oluyor.
     public void getCompany() {
-        Optional<User> optUser = userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (optUser.isPresent()) {
-            Util.theCompany = optUser.get().getCompany();
+        try {
+            Optional<User> optUser = userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName());
+            if (optUser.isPresent()) {
+                System.out.println("The Company : " + optUser.get().getCompany());
+                Util.theCompany = optUser.get().getCompany();
+            }
+        } catch (Exception e) {
+            //swagger tarafında security nesnesi gözardı edildiği için patlıyor.
+            System.out.println("Swagger Run");
         }
+
     }
 
     // Proje ilk çalıştıgında 1 kez tetiklenir
     @PostConstruct
     private void postConstruct() {
-        
+
     }
 
     // Proje kapanırken tetikleniyor
@@ -55,9 +62,6 @@ public class FilterConfig implements Filter {
     public void destroy() {
         System.out.println("Callback triggered - @PreDestroy.");
     }
-
-
-
 
 
 }
