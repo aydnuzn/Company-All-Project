@@ -13,4 +13,9 @@ public class OrdersController {
     public String ordersList() {
         return "adminpanel/orders/orderslist";
     }
+
+    @GetMapping("/deliverylist")
+    public String ordersDelivery() {
+        return "adminpanel/orders/deliverylist";
+    }
 }
