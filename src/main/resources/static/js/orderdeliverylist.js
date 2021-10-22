@@ -3,7 +3,7 @@ $(document).on('keyup', 'input', function () {
     searchKey = this.value;
     if (this.value.trim() == "") {
         getOrdersList(pageableNumber);
-    } 
+    }
 });
 
 //Arama Var
