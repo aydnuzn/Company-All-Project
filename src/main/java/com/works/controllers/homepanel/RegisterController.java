@@ -174,8 +174,9 @@ public class RegisterController {
             return "http://localhost:8091/logout";
         }
         User user = optionalMailVerificationUser.get().getUser();
+        user.setEnabled(true);
         userRepository.saveAndFlush(user);
-        return "/login";
+        return "redirect:/login";
     }
 
 }
