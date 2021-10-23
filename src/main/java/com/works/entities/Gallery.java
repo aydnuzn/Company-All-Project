@@ -1,29 +1,38 @@
 package com.works.entities;
 
-import com.works.entities.categories.GalleryCategory;
 import com.works.entities.images.GalleryImage;
 import com.works.entities.listener.BaseEntity;
-import com.works.entities.listener.BaseEntityNotCompany;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
 @Entity
-public class Gallery extends BaseEntityNotCompany<String> {
+public class Gallery extends BaseEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
+    @NotEmpty
+    @Column(length = 16)
+    @Length(min = 3, max = 16)
     private String gallery_title;
-    private String gallery_detail;
-    private Integer gallery_status;
-    private String gallery_catalog_image_url;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "gallery_category_id")
-    private GalleryCategory galleryCategory;
+    @NotNull
+    @NotEmpty
+    @Column(length = 500)
+    @Length(max = 500)
+    private String gallery_detail;
+
+    @NotNull
+    @Min(value = 1,message = "Seçim Yapınız")
+    private Integer gallery_status;
 
     @OneToMany(mappedBy = "gallery", cascade = CascadeType.DETACH)
     private List<GalleryImage> galleryImages;
