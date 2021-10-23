@@ -6,16 +6,14 @@
 </head>
 <body>
 
-
 <th:block th:fragment="sidebar">
 
     <div class="ui sidebar vertical left menu overlay visible"
          style="-webkit-transition-duration: 0.1s; overflow: visible !important;">
         <div class="item logo">
-            <img src="https://image.flaticon.com/icons/svg/866/866218.svg"/>
-            <img src="https://image.flaticon.com/icons/svg/866/866218.svg" style="display: none"/>
+            <img class="logoImage" />
+            <img class="logoImage" style="display: none"/>
         </div>
-
 
 
         <div class="ui accordion">
@@ -24,24 +22,20 @@
                 Paneli</a>
 
 
-
             <a class="title item"> <i class="chart bar outline icon" style="float: left;"></i> Reklam Yönetimi <i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" th:href="@{/admin/advertisement/}">Reklam Ekle
-                </a>
-                <a class="item" th:href="@{/admin/advertisement/list}">Reklam Listeleme
-                </a>
+                <a class="item" th:href="@{/admin/advertisement/}">Reklam Ekle</a>
+                <a class="item" th:href="@{/admin/advertisement/list}">Reklam Listeleme</a>
             </div>
 
             <a class="title item"><i class="chart pie icon" style="float: left;"></i>İçerik Yönetimi <i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" th:href="@{/admin/content}">İçerik Ekle
-                </a>
-                <a class="item" th:href="@{/admin/content/list}">İçerik Listeleme
-                </a>
+                <a class="item" th:href="@{/admin/content}">İçerik Ekle</a>
+                <a class="item" th:href="@{/admin/content/list}">İçerik Listeleme</a>
             </div>
 
-            <a class="title item"><i class="users icon" style="float: left;"></i>Müşteri Yönetimi <i class="dropdown icon"></i></a>
+            <a class="title item"><i class="users icon" style="float: left;"></i>Müşteri Yönetimi <i
+                    class="dropdown icon"></i></a>
             <div class="content">
                 <a class="item" th:href="@{/admin/customer}">Müşteri Ekle
                 </a>
@@ -50,15 +44,14 @@
             </div>
 
 
-            <a class="title item"> <i class="bullhorn icon" style="float: left;"></i> Duyurular<i class="dropdown icon"></i></a>
+            <a class="title item"> <i class="bullhorn icon" style="float: left;"></i> Duyurular<i
+                    class="dropdown icon"></i></a>
             <div class="content">
                 <a class="item" th:href="@{/admin/announcement}">Duyuru Ekle</a>
                 <a class="item" th:href="@{/admin/announcement/list}">Duyuru Listele</a>
                 <a class="item" th:href="@{/admin/announcement/category}">Kategori Ekle</a>
                 <a class="item" th:href="@{/admin/announcement/category/list}">Kategori Listele</a>
             </div>
-
-
 
             <a class="title item"><i class="shopping bag icon" style="float: left;"></i>Ürünler<i class="dropdown icon"></i></a>
             <div class="content">
@@ -68,33 +61,24 @@
                 <a class="item" th:href="@{/admin/product/category/list}">Kategori Listesi</a>
             </div>
 
-            <a class="title item"><i class="tag icon" style="float: left;"></i>Kategori Yönetimi<i class="dropdown icon"></i></a>
-            <div class="content">
-                <a class="item" href="commercial.html">Kategori Ekle
-                </a>
-                <a class="item" href="reklamliste.html">Kategori Listeleme
-                </a>
-            </div>
-
-            <a class="title item"><i class="address book icon" style="float: left;"></i>Adres Yönetimi<i class="dropdown icon"></i></a>
-            <div class="content">
-                <a class="item" href="commercial.html">Adres Ekle
-                </a>
-                <a class="item" href="reklamliste.html">Adres Listeleme
-                </a>
-            </div>
-
-            <a class="title item"  th:href="@{/admin/like/list}"><i class="thumbs up icon" style="float: left;"></i>Beğeni Yönetimi</a>
+            <a class="title item" th:href="@{/admin/like/list}"><i class="thumbs up icon" style="float: left;"></i>Beğeni Yönetimi</a>
 
             <a class="title item"><i class="file icon" style="float: left;"></i>Anket Yönetimi<i class="dropdown icon"></i></a>
             <div class="content">
-                <a class="item" th:href="@{/admin/survey}">Anket Ekle
-                </a>
-                <a class="item" th:href="@{/admin/survey/list}">Anket Listeleme
-                </a>
+                <a class="item" th:href="@{/admin/survey}">Anket Ekle</a>
+                <a class="item" th:href="@{/admin/survey/list}">Anket Listeleme</a>
             </div>
 
-            <a class="title item" th:href="@{/admin/orders/list}"><i class="shopping cart icon" style="float: left;"></i>Sipariş Yönetimi</a>
+            <a class="title item" th:href="@{/admin/orders/list}">
+                <i class="shopping cart icon"style="float: left;"></i>Sipariş Yönetimi
+            </a>
+
+            <a class="title item"><i class="image icon" style="float: left;"></i>Galeri<i class="dropdown icon"></i></a>
+            <div class="content">
+                <a class="item" th:href="@{/admin/gallery}">Galeri Ekle</a>
+                <a class="item" th:href="@{/admin/gallery/list}">Galeri Listesi</a>
+                <a class="item" th:href="@{/admin/gallery/image}">Resim Ekle</a>
+            </div>
 
 
         </div>
@@ -184,5 +168,7 @@
     </div>
 </th:block>
 
+<th:block layout:fragment="customJs">
+</th:block>
 </body>
 </html>
