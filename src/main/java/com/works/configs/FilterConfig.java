@@ -36,12 +36,11 @@ public class FilterConfig implements Filter {
         filterChain.doFilter(req, res);
     }
 
-    // Proje kapanıp acıldıgı zaman Company null oluyor.
     public void getCompany() {
         try {
             Optional<User> optUser = userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName());
             if (optUser.isPresent()) {
-                System.out.println("The Company : " + optUser.get().getCompany());
+                //System.out.println("The Company : " + optUser.get().getCompany());
                 Util.theCompany = optUser.get().getCompany();
             }
         } catch (Exception e) {
