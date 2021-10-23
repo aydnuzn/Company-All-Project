@@ -150,9 +150,9 @@ public class SurveyRestController {
         Optional<Survey> optionalSurvey = surveyRepository.findById(surveyId);
         Optional<SurveySelection> optionalSurveySelection = surveySelectionRepository.findById(selectionId);
 
-        if (!optionalUser.isPresent() || optionalUser.get().getRoles().get(0).getRo_id() != 3 || !optionalSurvey.isPresent() || optionalUser.get().getCompany().getId() != optionalSurvey.get().getCompany().getId() || !optionalSurveySelection.isPresent()) {
+        if (!optionalUser.isPresent() || optionalUser.get().getRoles().get(0).getRo_id() != 3 || !optionalSurvey.isPresent() || optionalUser.get().getCompany().getId() != optionalSurvey.get().getCompany().getId() || !optionalSurveySelection.isPresent() || surveyVoteRepository.findSorveyVoteOld(customerId).get() > 0) {
             hm.put(REnum.STATUS, false);
-            hm.put(REnum.MESSAGE, "Hatalı Bilgi Girildi.");
+            hm.put(REnum.MESSAGE, "Hatalı Bilgi Girildi. Oy kullanılamadı.");
             return hm;
         }
 
