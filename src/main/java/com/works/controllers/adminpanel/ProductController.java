@@ -1,12 +1,15 @@
 package com.works.controllers.adminpanel;
 
+
+import com.works.entities.Announcement;
 import com.works.entities.Product;
+import com.works.entities.categories.AnnouncementCategory;
 import com.works.entities.categories.ProductCategory;
 import com.works.entities.images.ProductImage;
-import com.works.models._elastic.AnnCategoryElastic;
+import com.works.models._elastic.AnnouncementElastic;
 import com.works.models._elastic.ProductCategoryElastic;
 import com.works.models._elastic.ProductElastic;
-import com.works.models._redis.AnnCategorySession;
+import com.works.models._redis.AnnouncementSession;
 import com.works.models._redis.ProductCategorySession;
 import com.works.models._redis.ProductSession;
 import com.works.properties.ProductCategoryInterlayer;
@@ -20,6 +23,7 @@ import com.works.repositories._redis.ProductCategorySessionRepository;
 import com.works.repositories._redis.ProductSessionRepository;
 import com.works.utils.Util;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -169,6 +173,121 @@ public class ProductController {
         return rvalue + "productadd";
     }
 
+    List<String> updateCategoryList;
+    @GetMapping("/{stIndex}")
+    public String productItem(@PathVariable String stIndex, Model model){
+        try{
+            Integer index = Integer.parseInt(stIndex);
+            Optional<Product> optionalProduct = productRepository.findById(index);
+            updateCategoryList = new ArrayList<>();
+            for (ProductCategory prCategory: optionalProduct.get().getPr_categories()) {
+                updateCategoryList.add(prCategory.getId().toString());
+            }
+
+            ProductInterlayer productInterlayer = new ProductInterlayer();
+            productInterlayer.setPr_name(optionalProduct.get().getPr_name());
+            productInterlayer.setPr_brief_description(optionalProduct.get().getPr_brief_description());
+            productInterlayer.setPr_description(optionalProduct.get().getPr_description());
+            productInterlayer.setPr_price(optionalProduct.get().getPr_price());
+            productInterlayer.setPr_type(optionalProduct.get().getPr_type());
+            productInterlayer.setPr_campaign(optionalProduct.get().getPr_campaign());
+            productInterlayer.setPr_campaign_name(optionalProduct.get().getPr_campaign_name());
+            productInterlayer.setPr_campaign_description(optionalProduct.get().getPr_campaign_description());
+            productInterlayer.setPr_address(optionalProduct.get().getPr_address());
+            productInterlayer.setPr_latitude(optionalProduct.get().getPr_latitude());
+            productInterlayer.setPr_longitude(optionalProduct.get().getPr_longitude());
+            productInterlayer.setPr_categories(null);
+
+            if(optionalProduct.isPresent()){
+                model.addAttribute("index", index );
+                model.addAttribute("productInterlayer", productInterlayer);
+                model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+                return "adminpanel/product/productupdate";
+            }else{
+                // ulasilmak istenen duyuru mevcut değil
+                return "error/404";
+            }
+        }catch(Exception ex){
+            // url kısmında rakam girilecek yere string girilmis
+            return "error/404";
+        }
+    }
+
+    @GetMapping("/categorylist")
+    @ResponseBody
+    public List<String> getPaySearchList(){
+        return updateCategoryList;
+    }
+
+    @Transactional
+    @PostMapping("/update/{stIndex}")
+    public String productUpdate(@Valid @ModelAttribute("productInterlayer") ProductInterlayer productInterlayer, BindingResult bindingResult, @PathVariable String stIndex, Model model) {
+        // Kulanıcı formdaki id yi String yaparsa diye kontrol
+        Integer index = 0;
+        try {
+            index = Integer.parseInt(stIndex);
+        } catch (Exception ex) {
+            return "error/404";
+        }
+        Optional<Product> optionalProduct = productRepository.findById(index);
+        if(!bindingResult.hasErrors()){
+            // Kullanıcı formdaki id yi değiştirirse, o ürün var mı diye kontrol
+            if(optionalProduct.isPresent()){
+                List<ProductCategory> productCategoryList = new ArrayList<>();
+                for (int i = 0; i < productInterlayer.getPr_categories().size(); i++){
+                    Optional<ProductCategory> optProductCategory = productCategoryRepository.findById(productInterlayer.getPr_categories().get(i));
+                    if(optProductCategory.isPresent()){
+                        productCategoryList.add(optProductCategory.get());
+                    }
+                }
+
+                Product product = optionalProduct.get();
+                product.setPr_categories(productCategoryList);
+                // resmi burada degil, resimler kısmında düzenliyoruz.
+                product.setPr_name(productInterlayer.getPr_name());
+                product.setPr_brief_description(productInterlayer.getPr_brief_description());
+                product.setPr_description(productInterlayer.getPr_description());
+                product.setPr_price(productInterlayer.getPr_price());
+                product.setPr_type(productInterlayer.getPr_type());
+                product.setPr_campaign(productInterlayer.getPr_campaign());
+                product.setPr_campaign_name(productInterlayer.getPr_campaign_name());
+                product.setPr_campaign_description(productInterlayer.getPr_campaign_description());
+                product.setPr_address(productInterlayer.getPr_address());
+                product.setPr_latitude(productInterlayer.getPr_latitude());
+                product.setPr_longitude(productInterlayer.getPr_longitude());
+                product = productRepository.saveAndFlush(product);
+
+                /*----Add Redis Database---- */
+                ProductSession productSession = productSessionRepository.findById(index.toString()).get();
+                productSession.setPr_name(product.getPr_name());
+                productSession.setPr_brief_description(product.getPr_brief_description());
+                productSession.setPr_price(product.getPr_price().toString());
+                productSession.setPr_type(product.getPr_type() == 1 ? "Satılık":"Kiralık");
+                productSessionRepository.deleteById(index.toString());
+                productSessionRepository.save(productSession);
+
+                /*----Add Elasticsearch Database---- */
+                ProductElastic productElastic = productElasticRepository.findById(index.toString()).get();
+                productElastic.setPr_name(product.getPr_name());
+                productElastic.setPr_brief_description(product.getPr_brief_description());
+                productElastic.setPr_price(product.getPr_price());
+                productElastic.setPr_type(product.getPr_type() == 1 ? "Satılık":"Kiralık");
+                productElasticRepository.deleteById(index.toString());
+                productElasticRepository.save(productElastic);
+
+                return "redirect:/admin/product/list";
+            }else{
+                return rvalue + "productupdate";
+            }
+        }else{
+            System.err.println(Util.errors(bindingResult));
+            model.addAttribute("index", index);
+        }
+        model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+        return rvalue + "productupdate";
+    }
+
+    //******************************************************************************
     Integer index = 0;
     // Image show
     @GetMapping("/images/{stIndex}")
