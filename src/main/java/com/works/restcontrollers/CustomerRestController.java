@@ -1,6 +1,8 @@
 package com.works.restcontrollers;
 
 import com.works.entities.security.User;
+import com.works.models._elastic.CustomerElastic;
+import com.works.models._redis.CustomerSession;
 import com.works.repositories._elastic.CustomerElasticRepository;
 import com.works.repositories._jpa.UserRepository;
 import com.works.repositories._redis.CustomerSessionRepository;
@@ -121,12 +123,26 @@ public class CustomerRestController {
             Optional<User> optCustomer = userRepository.findById(Integer.valueOf(stIndex));
             if (optCustomer.isPresent()) {
                 if (optCustomer.get().getRoles().get(0).getRo_id() == 3) {
+                    Optional<CustomerSession> optionalCustomerSession = customerSessionRepository.findById(stIndex);
+                    Optional<CustomerElastic> optionalCustomerElastic = customerElasticRepository.findById(stIndex);
                     if (optCustomer.get().getCu_status() == 1) {
                         optCustomer.get().setCu_status(2);
+                        optionalCustomerSession.get().setCu_status(2);
+                        optionalCustomerElastic.get().setCu_status(2);
                     } else if (optCustomer.get().getCu_status() == 2) {
                         optCustomer.get().setCu_status(1);
+                        optionalCustomerSession.get().setCu_status(1);
+                        optionalCustomerElastic.get().setCu_status(1);
                     }
                     userRepository.saveAndFlush(optCustomer.get());
+
+                    //redis
+                    customerSessionRepository.deleteById(stIndex);
+                    customerSessionRepository.save(optionalCustomerSession.get());
+
+                    //elastic
+                    customerElasticRepository.deleteById(stIndex);
+                    customerElasticRepository.save(optionalCustomerElastic.get());
                     hm.put(REnum.MESSAGE, "Başarılı");
                     hm.put(REnum.STATUS, true);
                     return hm;
