@@ -3,6 +3,7 @@ package com.works.restcontrollers;
 import com.works.entities.constant.address.District;
 import com.works.repositories._jpa.DistrictRepository;
 import com.works.utils.REnum;
+import com.works.utils.Util;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,13 @@ public class ConstantRestController {
         }
         hm.put(REnum.COUNT, districtList.size());
         hm.put(REnum.RESULT, districtList);
+        return hm;
+    }
+
+    @GetMapping("/getLogo")
+    public Map<String, Object> getLogo() {
+        Map<String, Object> hm = new LinkedHashMap<>();
+        hm.put("company", Util.theCompany);
         return hm;
     }
 }
