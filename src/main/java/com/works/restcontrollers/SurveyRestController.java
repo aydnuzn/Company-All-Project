@@ -68,15 +68,16 @@ public class SurveyRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
         if (stIndex.equals("0")) {
-            hm.put(REnum.RESULT, surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+            hm.put(REnum.RESULT, surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
         } else {
-            hm.put(REnum.RESULT, surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+            hm.put(REnum.RESULT, surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
         int additional = 0;
-        if (surveySessionRepository.count() % 10 != 0) {
+        Integer totalSize = surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        if (totalSize % 10 != 0) {
             additional = 1;
         }
-        hm.put(REnum.COUNTOFPAGE, (surveySessionRepository.count() / Util.pageSize) + additional);
+        hm.put(REnum.COUNTOFPAGE, (totalSize / Util.pageSize) + additional);
         return hm;
     }
 
@@ -120,7 +121,7 @@ public class SurveyRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         int validPage = Integer.parseInt(allMap.get("start")[0]) == 0 ? 0 : (Integer.parseInt(allMap.get("start")[0])) / Integer.parseInt(allMap.get("length")[0]);
 
-        hm.put(REnum.RESULT, surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
+        hm.put(REnum.RESULT, surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
         int filterCount = surveySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
         hm.put(REnum.COUNT, filterCount);
         hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]));

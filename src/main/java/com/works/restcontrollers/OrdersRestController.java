@@ -40,11 +40,11 @@ public class OrdersRestController {
     }
 
     @PostMapping("/add")
-    public Map<REnum, Object> orderAdd(@Valid @RequestBody OrdersInterlayer ordersInterlayer, Orders orders, BindingResult bindingResult){
+    public Map<REnum, Object> orderAdd(@Valid @RequestBody OrdersInterlayer ordersInterlayer, Orders orders, BindingResult bindingResult) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         OrderSession orderSession = new OrderSession();
-        System.out.println(" ORderrrrrrr: " + ordersInterlayer) ;
-        if(!bindingResult.hasErrors()){
+        System.out.println(" ORderrrrrrr: " + ordersInterlayer);
+        if (!bindingResult.hasErrors()) {
 
             //PRODUCT
             Integer productId = 0;
@@ -95,7 +95,6 @@ public class OrdersRestController {
             }
 
 
-
             //ADET
             ordersInterlayer.setOrder_amount(String.valueOf(orders_amount));
             orderSession.setOrder_amount(String.valueOf(orders_amount));
@@ -120,7 +119,7 @@ public class OrdersRestController {
             hm.put(REnum.STATUS, true);
             hm.put(REnum.MESSAGE, "Başarılı");
             hm.put(REnum.RESULT, orderSessionRepository.save(orderSession)); //redis kaydetme
-           return hm;
+            return hm;
 
         } else {
             hm.put(REnum.STATUS, false);
@@ -137,18 +136,18 @@ public class OrdersRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
         if (stIndex.equals("0")) {
-            hm.put(REnum.RESULT, orderSessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+            hm.put(REnum.RESULT, orderSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
         } else {
-            hm.put(REnum.RESULT, orderSessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+            hm.put(REnum.RESULT, orderSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
         int additional = 0;
-        if (orderSessionRepository.count() % 10 != 0) {
+        Integer totalSize = orderSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        if (totalSize % 10 != 0) {
             additional = 1;
         }
-        hm.put(REnum.COUNTOFPAGE, (orderSessionRepository.count() / Util.pageSize) + additional);
+        hm.put(REnum.COUNTOFPAGE, (totalSize / Util.pageSize) + additional);
         return hm;
     }
-
 
 
     //REDIS - ORDERS DELIVERY LIST
@@ -158,9 +157,9 @@ public class OrdersRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
         if (stIndex.equals("0")) {
-            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false",Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false", Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
         } else {
-            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false", Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false", Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
         int additional = 0;
         if (orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("false", Util.theCompany.getCompany_name()).size() % 10 != 0) {
@@ -177,9 +176,9 @@ public class OrdersRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
         if (stIndex.equals("0")) {
-            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("true",Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("true", Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
         } else {
-            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("true", Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+            hm.put(REnum.RESULT, orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("true", Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
         int additional = 0;
         if (orderSessionRepository.findByOrderstatusEqualsAndCompanynameEquals("true", Util.theCompany.getCompany_name()).size() % 10 != 0) {
@@ -192,12 +191,12 @@ public class OrdersRestController {
 
     //ORDER STATUS CHANGE
     @GetMapping("/status/{stIndex}")
-    public Map<REnum,Object> orderStatus(@PathVariable String stIndex){
-        Map<REnum,Object> hm = new LinkedHashMap<>();
+    public Map<REnum, Object> orderStatus(@PathVariable String stIndex) {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
         Optional<OrderSession> optionalOrderSession = orderSessionRepository.findById(stIndex);
-        if(optionalOrderSession.get().getOrderstatus().equals("false")){
-            if(optionalOrderSession.isPresent()){
-                OrderSession orderSession =  optionalOrderSession.get();
+        if (optionalOrderSession.get().getOrderstatus().equals("false")) {
+            if (optionalOrderSession.isPresent()) {
+                OrderSession orderSession = optionalOrderSession.get();
                 orderSession.setOrderstatus("true");
                 orderSessionRepository.deleteById(stIndex);
                 orderSessionRepository.save(orderSession);
@@ -206,12 +205,12 @@ public class OrdersRestController {
                 orders.setOrder_status(true);
                 orderRepository.saveAndFlush(orders);
 
-            }else{
+            } else {
                 System.err.println("Böyle bir sipariş yok!");
             }
-        }else{
-            if(optionalOrderSession.isPresent()){
-                OrderSession orderSession =  optionalOrderSession.get();
+        } else {
+            if (optionalOrderSession.isPresent()) {
+                OrderSession orderSession = optionalOrderSession.get();
                 orderSession.setOrderstatus("false");
                 orderSessionRepository.deleteById(stIndex);
                 orderSessionRepository.save(orderSession);
@@ -220,7 +219,7 @@ public class OrdersRestController {
                 orders.setOrder_status(false);
                 orderRepository.saveAndFlush(orders);
 
-            }else{
+            } else {
                 System.err.println("Böyle bir sipariş yok!");
             }
         }
@@ -250,7 +249,6 @@ public class OrdersRestController {
         hm.put(REnum.STATUS, true);
         return hm;
     }
-
 
 
 }

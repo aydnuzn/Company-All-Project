@@ -9,6 +9,4 @@ import java.util.List;
 @EnableRedisRepositories
 public interface SurveySelectionSessionRepository extends CrudRepository<SurveySelectionSession, String> {
 
-    List<SurveySelectionSession> findBySurveyid(String survey_id);
-
 }

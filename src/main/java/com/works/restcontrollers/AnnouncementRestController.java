@@ -58,10 +58,11 @@ public class AnnouncementRestController {
             hm.put(REnum.RESULT, announcementSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
         int additional = 0;
-        if (announcementSessionRepository.count() % 10 != 0) {
+        Integer totalSize = announcementSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        if (totalSize % 10 != 0) {
             additional = 1;
         }
-        hm.put(REnum.COUNTOFPAGE, (announcementSessionRepository.count() / Util.pageSize) + additional);
+        hm.put(REnum.COUNTOFPAGE, (totalSize / Util.pageSize) + additional);
         return hm;
     }
 
@@ -103,12 +104,12 @@ public class AnnouncementRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.STATUS, true);
         hm.put(REnum.MESSAGE, "Başarılı");
-        int validPage = Integer.parseInt(allMap.get("start")[0]) == 0 ? 0:(Integer.parseInt(allMap.get("start")[0]))/Integer.parseInt(allMap.get("length")[0]);
+        int validPage = Integer.parseInt(allMap.get("start")[0]) == 0 ? 0 : (Integer.parseInt(allMap.get("start")[0])) / Integer.parseInt(allMap.get("length")[0]);
 
-        hm.put(REnum.RESULT, announcementSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
+        hm.put(REnum.RESULT, announcementSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
         int filterCount = announcementSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
         hm.put(REnum.COUNT, filterCount);
-        hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]) );
+        hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]));
         return hm;
     }
 

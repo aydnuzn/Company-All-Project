@@ -54,15 +54,16 @@ public class CustomerRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
         if (stIndex.equals("0")) {
-            hm.put(REnum.RESULT, customerSessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+            hm.put(REnum.RESULT, customerSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
         } else {
-            hm.put(REnum.RESULT, customerSessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+            hm.put(REnum.RESULT, customerSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
         int additional = 0;
-        if (customerSessionRepository.count() % 10 != 0) {
+        Integer totalSize = customerSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        if (totalSize % 10 != 0) {
             additional = 1;
         }
-        hm.put(REnum.COUNTOFPAGE, (customerSessionRepository.count() / Util.pageSize) + additional);
+        hm.put(REnum.COUNTOFPAGE, (totalSize / Util.pageSize) + additional);
         return hm;
     }
 
@@ -106,10 +107,9 @@ public class CustomerRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         int validPage = Integer.parseInt(allMap.get("start")[0]) == 0 ? 0 : (Integer.parseInt(allMap.get("start")[0])) / Integer.parseInt(allMap.get("length")[0]);
 
-        hm.put(REnum.RESULT, customerSessionRepository.findByOrderByIdAsc(PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
-        //int filterCount = announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))).size();
-        //hm.put(REnum.RESULT, announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
-        hm.put(REnum.COUNT, customerSessionRepository.count());
+        hm.put(REnum.RESULT, customerSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
+        int filterCount = customerSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        hm.put(REnum.COUNT, filterCount);
         hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]));
         return hm;
     }
