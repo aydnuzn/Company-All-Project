@@ -10,14 +10,18 @@
 <th:block layout:fragment="customCss">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/settings.css}"/>
-
+    <style>
+        #deneme{
+            margin-bottom:60px !important;
+        }
+    </style>
 </th:block>
 
 <th:block layout:fragment="content">
     <!-- ADV LIST -->
     <div class="ui grid asd" style="margin: 30px 30px 0px 290px">
-        <div class="two doubling column row">
-            <div class="eight doubling wide column">
+        <div id="deneme" class="ui two column doubling row">
+            <div class="doubling column">
                 <form class="ui form" action="/admin/settings/update" method="post" th:object="${registerInterlayer}">
                     <h4 class="ui dividing header">Şirket Bilgileri</h4>
                     <div class="field">
@@ -272,7 +276,7 @@
                     <button type="submit" class="ui button green" tabindex="0">Güncelle</button>
                 </form>
             </div>
-            <div class="eight doubling wide column">
+            <div class="doubling column">
                 <div id="map">
                 </div>
                 <div class="ui field">
