@@ -13,7 +13,7 @@ public class GalleryImage extends BaseEntityNotCompany<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    private String gallery_image_title;
     private String gallery_image_url;
 
     @ManyToOne(cascade = CascadeType.DETACH)
