@@ -1,3 +1,7 @@
+/*jshint esversion: 6 */
+/*jslint latedef:false*/
+/*jshint -W087 */
+
 let liveLocation;
 var marker;
 
@@ -171,6 +175,6 @@ $('#company_city').change(function () {
 
 setTimeout(() => {
     $('.dismissButton').click();
-}, 2000);
+}, 4000);
 
 //------------------------------------------------------------------------------------------------------------------
