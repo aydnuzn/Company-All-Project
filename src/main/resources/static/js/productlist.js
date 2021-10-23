@@ -93,9 +93,9 @@ $(document).ready(function() {
     });
 });
 
-function deleteAnnouncement(index) {
+function deleteProduct(index) {
     $.ajax({
-        url: 'http://localhost:8091/rest/admin/announcement/delete/' + index,
+        url: 'http://localhost:8091/rest/admin/product/delete/' + index,
         type: 'DELETE',
         contentType: "application/json",
         dataType: 'json',
