@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+            <div class="three column row">
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form action="/admin/gallery/image/add"  method="post" th:object="${galleryImageInterlayer}"
+                          enctype="multipart/form-data" class="ui form ">
+                        <h4 class="ui dividing header">Resim Ekle</h4>
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Galeri Seçiniz</label>
+                                <select class="ui fluid search selection dropdown" name="gallery_title"
+                                       style="width: auto;height: auto">
+                                    <option value="0">Galeri Seçiniz</option>
+                                     <th:block th:if="${ls != null}">
+                                         <th:block th:each="item : ${ls}">
+                                             <option th:value="${item.id}" th:text="${item.gallery_title}"></option>
+                                         </th:block>
+                                     </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('gallery_title') }"
+                                     th:errors="*{gallery_title}">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <label>Galeri Görseli</label>
+                                <input type="file" name="gallery_image_files" accept="image/*">
+                            </div>
+                        </div>
+                        <th:block th:if="${isError == 1}">
+                            <div class="ui red message" style="display: block">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Hata
+                                </div>
+                                <strong>
+                                    Resim seçilmedi.
+                                </strong>
+                            </div>
+                        </th:block>
+                        <!--<div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('gallery_image_files') }"
+                                     th:errors="*{gallery_image_files}">
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Resim Yazısı</label>
+                                <input type="text" name="gallery_image_title" maxlength="30" placeholder="Resim Yazısı">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('gallery_image_title') }"
+                                     th:errors="*{gallery_image_title}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="ui button green" tabindex="0">Resim Ekle</button>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</th:block>
+
+
+<th:block layout:fragment="customJs">
+</th:block>
+</body>
+</html>
