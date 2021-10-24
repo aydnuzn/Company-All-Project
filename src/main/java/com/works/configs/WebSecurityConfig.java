@@ -36,7 +36,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().and().headers().frameOptions().disable().and()
                 .authorizeRequests()
                 //----------------HTML-PAGES----------------------------------------------------------------------------
-                .antMatchers("/admin/**").hasRole("MVC")
+                .antMatchers("/admin/address/**").hasRole("MVC")
+                .antMatchers("/admin").hasRole("MVC")
+                .antMatchers("/admin/dashboard").hasRole("MVC")
+                .antMatchers("/admin/address/**").hasRole("MVC")
+                .antMatchers("/admin/announcement/**").hasRole("MVC")
+                .antMatchers("/admin/content/**").hasRole("MVC")
+                .antMatchers("/admin/customer/**").hasRole("MVC")
+                .antMatchers("/admin/gallery/**").hasRole("MVC")
+                .antMatchers("/admin/like/**").hasRole("MVC")
+                .antMatchers("/admin/orders/**").hasRole("MVC")
+                .antMatchers("/admin/product/**").hasRole("MVC")
+                .antMatchers("/admin/settings/**").hasAnyRole("MVC", "REST")
+                .antMatchers("/admin/survey/**").hasRole("MVC")
+
                 .antMatchers("/rest/**").hasAnyRole("MVC", "REST", "CUSTOMER")
                 //------------------------------------------------------------------------------------------------------
                 .antMatchers("/home").permitAll()
