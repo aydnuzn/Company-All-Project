@@ -34,7 +34,7 @@ $('#mail_send_message').submit((event) => {
     console.log(us_email);
 
     $.ajax({
-        url: 'http://localhost:8091/forgotpassword/' + us_email,
+        url: 'http://localhost:8091/rest/forgotpassword/' + us_email,
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',
