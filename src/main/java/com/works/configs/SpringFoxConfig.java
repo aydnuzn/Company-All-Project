@@ -38,7 +38,8 @@ public class SpringFoxConfig {
                 .securitySchemes(auth)
                 .securityContexts(securityContexts)
                 .select()
-                .paths(PathSelectors.regex("(/rest/admin)|(/rest/forgotpassword/.*)"))
+                .paths(PathSelectors.regex("(/rest/admin)|" +
+                        "(/rest/forgotpassword/sendtoken)|(/rest/forgotpassword/change)"))
                 .build()
                 .apiInfo(apiInfo());
     }
