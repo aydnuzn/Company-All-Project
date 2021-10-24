@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+
+            <div class="three column row">
+                <div class="two wide column">
+                </div>
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form th:action="@{'/admin/gallery/update/'+${index}}" method="post" th:object="${gallery}" class="ui form ">
+                        <h4 class="ui dividing header">Galeri Güncelle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Galeri Başlığı</label>
+                                <input th:value="${gallery.gallery_title}" type="text" name="gallery_title" minlength="3" maxlength="16" placeholder="Galeri Başlığı">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('gallery_title') }"
+                                     th:errors="*{gallery_title}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Açıklama</label>
+                                <textarea th:text="${gallery.gallery_detail}" style="resize: none; overflow-y: scroll" name="gallery_detail" maxlength="500"
+                                          placeholder="Açıklama" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('gallery_detail') }"
+                                     th:errors="*{gallery_detail}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Aktif/Pasif</label>
+                                <div class="field">
+                                    <select class="ui fluid search selection dropdown" name="gallery_status"
+                                            style="width: auto;height: auto">
+                                        <th:block th:if="${gallery.gallery_status == 1}">
+                                            <option selected value="1">Aktif</option>
+                                            <option value="2">Pasif</option>
+                                        </th:block>
+                                        <th:block th:unless="${gallery.gallery_status == 1}">
+                                            <option value="1">Aktif</option>
+                                            <option selected value="2">Pasif</option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('gallery_status') }"
+                                     th:errors="*{gallery_status}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="ui button primary" tabindex="0">Güncelle</button>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+</body>
+</html>
