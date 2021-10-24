@@ -3,6 +3,8 @@ package com.works.entities;
 import com.works.entities.images.GalleryImage;
 import com.works.entities.listener.BaseEntity;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -11,7 +13,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Gallery extends BaseEntity<String> {
     @Id
