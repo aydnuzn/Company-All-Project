@@ -38,7 +38,7 @@
                                 <div class="ui dimmer">
                                     <div class="content">
                                         <div class="center">
-                                            <a href="#ahkd" class="ui inverted button">Görüntüle</a>
+                                            <a th:href="@{'/admin/gallery/images/'+${item.gallery_id}}" class="ui inverted button">Görüntüle</a>
                                         </div>
                                     </div>
                                 </div>
@@ -54,12 +54,12 @@
                                 <span class="header" th:text="${item.gallery_title}"></span>
                             </div>
                             <div class="extra content" style="height: 35px">
-                                <span style="font-size: 20px; position: absolute;">
+                                <a th:href="@{'/admin/gallery/'+${item.gallery_id}}" style="font-size: 20px; position: absolute;">
                                     <i class="edit icon"></i>
-                                </span>
-                                <span style="font-size: 20px; position: absolute; right: 0px;">
+                                </a>
+                                <a style="font-size: 20px; position: absolute; right: 0px;" th:onclick="fncDelete([[${item.gallery_id}]])">
                                     <i class="trash icon"></i>
-                                </span>
+                                </a>
                             </div>
                         </div>
 
@@ -72,11 +72,7 @@
 </th:block>
 
 <th:block layout:fragment="customJs">
-    <script>
-        $('.special.cards .image').dimmer({
-            on: 'hover'
-        });
-    </script>
+    <script th:src="@{/js/gallerylist.js}"></script>
 </th:block>
 </body>
 </html>
