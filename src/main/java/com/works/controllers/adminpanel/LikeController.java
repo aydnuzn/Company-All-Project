@@ -1,5 +1,6 @@
 package com.works.controllers.adminpanel;
 
+import com.works.business._controllers.adminpanel.LikeControllerBusiness;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,11 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/like")
 public class LikeController {
 
-    final String rvalue = "adminpanel/like/";
+    final LikeControllerBusiness business;
+
+
+    public LikeController(LikeControllerBusiness business) {
+        this.business = business;
+    }
 
     @GetMapping("/list")
     public String likeList() {
-        return "adminpanel/like/likelist";
+        return business.likeList();
     }
-
 }

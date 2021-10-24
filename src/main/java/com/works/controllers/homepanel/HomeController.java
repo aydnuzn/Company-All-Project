@@ -1,7 +1,7 @@
 package com.works.controllers.homepanel;
 
+import com.works.business._controllers.homepanel.HomeControllerBusiness;
 import com.works.entities.Contact;
-import com.works.repositories._jpa.ContactRepository;
 import com.works.utils.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,59 +16,41 @@ import java.util.Date;
 @Controller
 public class HomeController {
 
-    final String rvalue = "homepanel/";
+    final HomeControllerBusiness business;
 
-    final ContactRepository contactRepository;
-
-    public HomeController(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
+    public HomeController(HomeControllerBusiness business) {
+        this.business = business;
     }
+
 
     @GetMapping("")
     public String home() {
-        return rvalue + "home/home";
+        return business.home();
     }
 
     @GetMapping("/home")
     public String home2() {
-        return rvalue + "home/home";
+        return business.home();
     }
 
     @GetMapping("/gallery")
     public String gallery() {
-        return rvalue + "gallery/gallery";
+        return business.gallery();
     }
 
     @GetMapping("/contact")
     public String contact(Model model) {
-        model.addAttribute("contact", new Contact());
-        model.addAttribute("isError", 0);
-        return "homepanel/contact/contact";
+        return business.contact(model);
     }
 
     @PostMapping("/contact/add")
     public String contactAdd(@Valid @ModelAttribute("contact") Contact contact, BindingResult bindingResult, Model model) {
-        if (!bindingResult.hasErrors()) {
-            if (Util.isEmail(contact.getContact_mail())) {
-                //Validasyon ile de kontrol eklenebilir ileride.
-                contact.setDate(new Date());
-                contactRepository.save(contact);
-            } else {
-                model.addAttribute("isError", 1);
-                System.out.println("Email format hatası");
-                return rvalue + "contact/contact";
-            }
-            return "redirect:/contact";
-        } else {
-            System.out.println(Util.errors(bindingResult));
-            model.addAttribute("isError", 0);
-            return rvalue + "contact/contact";
-        }
+        return business.contactAdd(contact, bindingResult, model);
     }
 
     @GetMapping("/about")
     public String about() {
-        return rvalue + "about/about";
+        return business.about();
     }
 
 }

@@ -1,19 +1,24 @@
 package com.works.restcontrollers;
-import com.works.repositories._jpa.ForgotPasswordUserRepository;
-import com.works.repositories._jpa.UserRepository;
+
+import com.works.business._restcontrollers.homepanel.ForgotPasswordRestControllerBusiness;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/restcont/forgotpassword")
+@RequestMapping("/rest/forgotpassword")
 public class ForgotPasswordRestController {
 
-    final UserRepository userRepository;
-    final ForgotPasswordUserRepository forgotPasswordUserRepository;
+    final ForgotPasswordRestControllerBusiness business;
 
-    public ForgotPasswordRestController(UserRepository userRepository, ForgotPasswordUserRepository forgotPasswordUserRepository) {
-        this.userRepository = userRepository;
-        this.forgotPasswordUserRepository = forgotPasswordUserRepository;
+    public ForgotPasswordRestController(ForgotPasswordRestControllerBusiness business) {
+        this.business = business;
     }
 
 
+    @GetMapping("/{us_mail}")
+    @ResponseBody
+    public Map<Object, Object> forgotpassword(@RequestBody @PathVariable String us_mail) {
+        return business.forgotpassword(us_mail);
+    }
 }
