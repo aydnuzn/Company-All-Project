@@ -31,6 +31,12 @@ public class ForgotPasswordRestControllerBusiness {
     public Map<Object, Object> forgotpassword(String us_mail) {
         Map<Object, Object> hm = new LinkedHashMap<>();
         Optional<User> optUser = userRepository.findByEmailEquals(us_mail);
+        if (optUser.get().getRoles().get(0).getRo_id() != 3) {
+            //Müşterilerin her zaman tek rolü var ve o rolId = 3
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "İşlem Başarısız. Bu servis sadece müşterilere yöneliktir.");
+            return hm;
+        }
         if (optUser.isPresent()) {
             Optional<ForgotPasswordUser> optForgotPasswordUser = forgotPasswordUserRepository.findByForgotMail(optUser.get().getEmail());
             ForgotPasswordUser forgotPasswordUser = null;
