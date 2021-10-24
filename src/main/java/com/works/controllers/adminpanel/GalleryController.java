@@ -1,7 +1,9 @@
 package com.works.controllers.adminpanel;
 
 import com.works.entities.Gallery;
+import com.works.entities.Product;
 import com.works.entities.images.GalleryImage;
+import com.works.entities.images.ProductImage;
 import com.works.properties.GalleryImageInterlayer;
 import com.works.repositories._jpa.GalleryImageRepository;
 import com.works.repositories._jpa.GalleryRepository;
@@ -10,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -22,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,6 +60,76 @@ public class GalleryController {
         return rvalue + "galleryadd";
     }
 
+    @GetMapping("/{stIndex}")
+    public String galleryUpdateShow(@PathVariable String stIndex, Model model){
+       try {
+           Integer index = Integer.parseInt(stIndex);
+           Optional<Gallery> optionalGallery = galleryRepository.findById(index);
+           if(optionalGallery.isPresent()){
+               Gallery gallery = optionalGallery.get();
+               model.addAttribute("gallery", gallery);
+               model.addAttribute("index", index);
+               return "adminpanel/gallery/galleryupdate";
+           }else{
+               System.err.println("Goruntulenmek istenen galeri mevcut değil");
+               return "error/404";
+           }
+       }catch (Exception ex){
+           System.err.println("Url kismina String deger girilmis");
+           return "error/404";
+       }
+    }
+
+    @PostMapping("/update/{stIndex}")
+    public String galleryUpdate(@Valid @ModelAttribute("gallery") Gallery gallery, BindingResult bindingResult, @PathVariable String stIndex, Model model){
+        Integer index = 0;
+        try {
+            index = Integer.parseInt(stIndex);
+        } catch (Exception ex) {
+            return "error/404";
+        }
+        Optional<Gallery> optionalGallery = galleryRepository.findById(index);
+        if(!bindingResult.hasErrors()){
+            if(optionalGallery.isPresent()){
+                Gallery tempGallery = optionalGallery.get();
+                tempGallery.setGallery_title(gallery.getGallery_title());
+                tempGallery.setGallery_detail(gallery.getGallery_detail());
+                tempGallery.setGallery_status(gallery.getGallery_status());
+                galleryRepository.saveAndFlush(tempGallery);
+                return "redirect:/admin/gallery/list";
+            }else{
+                System.err.println("Kullanıcı formdaki id yi değiştirmiştir. \n" +
+                        "Bu id ye sahip galeri mevcut değildir.");
+                return "error/404";
+            }
+        }else{
+            System.err.println(Util.errors(bindingResult));
+            model.addAttribute("index",index);
+        }
+        return rvalue + "galleryupdate";
+    }
+    Integer gallery_index = 0;
+    //ImagesShow
+    @GetMapping("/images/{stIndex}")
+    public String galleryImagesShow(@PathVariable String stIndex, Model model){
+        try{
+            gallery_index = Integer.parseInt(stIndex);
+            Optional<Gallery> optGallery = galleryRepository.findById(gallery_index);
+            if(optGallery.isPresent()){
+            //    List<GalleryImage> galleryImageList = galleryImageRepository.findByGallery_IdEquals(index);
+                model.addAttribute("ls", optGallery.get().getGalleryImages());
+                model.addAttribute("index", gallery_index);
+                return "adminpanel/gallery/galleryimagelist";
+            }else{
+                System.err.println("Mudahale edilmis. Girilen id de bir galeri yok");
+                return "redirect:/admin/gallery/list";
+            }
+        }catch(Exception ex){
+            System.err.println("Mudahale edilmis. String ifade girilmis");
+            return "redirect:/admin/gallery/list";
+        }
+    }
+
     @GetMapping("/image")
     public String galleryImageAddShow(Model model){
         model.addAttribute("ls", galleryRepository.findByCompany_IdEquals(Util.theCompany.getId()));
@@ -67,6 +137,55 @@ public class GalleryController {
         model.addAttribute("isError",0);
         return "adminpanel/gallery/galleryimageadd";
     }
+
+    @GetMapping("/imageupdate/{stIndex}")
+    public String galleryImageUpdateShow(@PathVariable String stIndex, Model model){
+        try {
+            Integer index = Integer.parseInt(stIndex);
+            Optional<GalleryImage> optionalGalleryImage = galleryImageRepository.findById(index);
+            if(optionalGalleryImage.isPresent()){
+                GalleryImage galleryImage = optionalGalleryImage.get();
+                model.addAttribute("galleryImage", galleryImage);
+                model.addAttribute("index", index);
+                return "adminpanel/gallery/galleryimageupdate";
+            }else{
+                System.err.println("Düzenlenmek istenen resim mevcut değil");
+                return "error/404";
+            }
+        }catch (Exception ex){
+            System.err.println("Url kismina String deger girilmis");
+            return "error/404";
+        }
+    }
+
+    @PostMapping("/imageupdates/{stIndex}")
+    public String galleryImageUpdate(@Valid @ModelAttribute("galleryImage") GalleryImage galleryImage, BindingResult bindingResult, @PathVariable String stIndex, Model model){
+        Integer index = 0;
+        try {
+            index = Integer.parseInt(stIndex);
+        } catch (Exception ex) {
+            return "error/404";
+        }
+        Optional<GalleryImage> optionalGalleryImage = galleryImageRepository.findById(index);
+        if(!bindingResult.hasErrors()){
+            if(optionalGalleryImage.isPresent()){
+                GalleryImage tempGalleryImage = optionalGalleryImage.get();
+                tempGalleryImage.setGallery_image_title(galleryImage.getGallery_image_title());
+                galleryImageRepository.saveAndFlush(tempGalleryImage);
+                return "redirect:/admin/gallery/images/"+gallery_index;
+            }else{
+                System.err.println("Kullanıcı formdaki id yi değiştirmiştir. \n" +
+                        "Bu id ye sahip galeri mevcut değildir.");
+                return "error/404";
+            }
+        }else{
+            System.err.println(Util.errors(bindingResult));
+            model.addAttribute("index",index);
+        }
+        return rvalue + "galleryimageupdate";
+    }
+
+    //*************************************************************************
 
     @PostMapping("/image/add")
     public String galleryImageAdd(@Valid @ModelAttribute("galleryImageInterlayer") GalleryImageInterlayer galleryImageInterlayer, BindingResult bindingResult, Model model){
