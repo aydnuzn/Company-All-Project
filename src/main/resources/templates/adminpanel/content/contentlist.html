@@ -4,54 +4,40 @@
       layout:decorate="adminpanel/incadminpanel/layout">
 <head>
     <meta charset="UTF-8">
-    <title>Content List</title>
+    <title>Announcement</title>
 </head>
 <body>
 <th:block layout:fragment="customCss">
-    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+    <style>
+        .paginate_button:hover {
+            background-color: black !important;
+        }
+    </style>
 </th:block>
 
+
 <th:block layout:fragment="content">
-    <!-- ADV LIST -->
+
     <div class="asd" style="margin: 30px 30px 0px 290px">
-        <div class="ui page grid">
-            <div class="row">
-                <div class="twelve wide column">
-                </div>
-                <div class="four wide column">
+        <div class="ui page" style="margin-bottom: 40px;">
+            <div class="row" style="padding-bottom: 50px;">
+                <table id="exampleTable" class="ui celled table sixteen wide " style="width:100%;">
                     <div class="ui icon input">
-                        <input id="contentSearch" type="text" placeholder="Arama...">
+                        <input type="text" placeholder="Arama...">
                         <i class="search icon"></i>
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <table class="ui celled padded table">
                     <thead>
                     <tr>
-                        <th class="single line">İçerik Başlık</th>
-                        <th class="single line">Kısa Açıklama</th>
-                        <th class="single line">Detaylı Açıklama</th>
-                        <th class="single line">Durum</th>
+                        <th>#</th>
+                        <th>İçerik Başlık</th>
+                        <th>Kısa Açıklama</th>
+                        <th>Detaylı Açıklama</th>
+                        <th>Durum</th>
                         <th>İşlem</th>
                     </tr>
                     </thead>
-                    <tbody id="contentTbody">
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th colspan="10">
-                            <div class="ui right floated pagination menu" id="contentPNumber">
-
-                            </div>
-                        </th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
-
-
         </div>
     </div>
 
@@ -59,12 +45,7 @@
 </th:block>
 
 <th:block layout:fragment="customJs">
-    <script th:src="@{/js/contentlist.js}"></script>
+    <script th:src="@{/js/content.js}"></script>
 </th:block>
-
 </body>
 </html>
-
-
-
-

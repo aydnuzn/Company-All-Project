@@ -12,6 +12,10 @@ import java.util.List;
 @EnableRedisRepositories
 public interface ContentSessionRepository extends CrudRepository<ContentSession, String> {
 
-    @Query("select s from sessioncontent s order by s.id")
-    List<ContentSession> findByOrderByIdAsc(Pageable pageable);
+
+    List<ContentSession> findByCompanynameEquals(String companyname, Pageable pageable);
+
+    List<ContentSession> findByCompanynameEquals(String companyname);
+
+
 }
