@@ -40,8 +40,6 @@ public class SettingsRestController {
                 hm.put(REnum.MESSAGE, "Müşterilerin lokasyon bilgisi kayıt altına alınmamaktadır.");
             }
             return hm;
-            //Ya bir rolü olabilir => Customer
-            //Ya da en fazla iki rolü olabilir  MVC - REST
         }
         return hm;
     }

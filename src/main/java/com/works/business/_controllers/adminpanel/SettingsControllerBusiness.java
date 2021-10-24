@@ -254,7 +254,6 @@ public class SettingsControllerBusiness {
 
     public String logoChange(LogoChangeInterlayer logoChangeInterlayer, BindingResult bindingResult, Model model) {
         if (!bindingResult.hasErrors()) {
-            System.out.println(logoChangeInterlayer.getChange_logo_file().getName());
             String fileName = StringUtils.cleanPath(logoChangeInterlayer.getChange_logo_file().getOriginalFilename());
             String ext = "";
             try {//File kısmı validation'da eksik kontrol edildiği için resim yüklenmemesi durumu kontrolü
