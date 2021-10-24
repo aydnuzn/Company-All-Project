@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/forgotpassword")
 public class ForgotPasswordController {
@@ -28,6 +30,12 @@ public class ForgotPasswordController {
     @PostMapping("/changepass")
     public String forgotPasswordChanged(@RequestParam(defaultValue = "") String newpass, @RequestParam(defaultValue = "") String newpassagain, Model model) {
         return business.forgotPasswordChanged(newpass, newpassagain, model);
+    }
+
+    @GetMapping("/{us_mail}")
+    @ResponseBody
+    public Map<Object, Object> forgotpasswordEmailSend(@RequestBody @PathVariable String us_mail) {
+        return business.forgotpasswordEmailSend(us_mail);
     }
 
 

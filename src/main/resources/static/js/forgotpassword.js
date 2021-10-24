@@ -34,14 +34,14 @@ $('#mail_send_message').submit((event) => {
     console.log(us_email);
 
     $.ajax({
-        url: 'http://localhost:8091/rest/forgotpassword/' + us_email,
+        url: 'http://localhost:8091/forgotpassword/' + us_email,
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',
         success: function (data){
             if(data.STATUS == true){
                 debugger;
-                alert("Mail yollandı");
+            //    alert("Mail yollandı");
                 $('#send_fail').html('');
                 $('#pass_email').val("");
                 mailSendSuccess();
@@ -53,7 +53,7 @@ $('#mail_send_message').submit((event) => {
                     mailSendError();
                 }else{
                     // Mail Bulunamadı
-                    alert("Mail sisteme kayıtlı değil");
+                //    alert("Mail sisteme kayıtlı değil");
                     invalidMail();
                 }
 

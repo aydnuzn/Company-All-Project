@@ -19,13 +19,6 @@ public class ForgotPasswordRestController {
         this.business = business;
     }
 
-
-    @GetMapping("/{us_mail}")
-    @ResponseBody
-    public Map<Object, Object> forgotpasswordEmailSend(@RequestBody @PathVariable String us_mail) {
-        return business.forgotpasswordEmailSend(us_mail);
-    }
-
     @ApiOperation(value = "Şifre Değiştirme -> Token Gönderme")
     @GetMapping("/sendtoken")
     public Map<Object, Object> forgotpassword(@RequestParam("us_mail") String us_mail) {
