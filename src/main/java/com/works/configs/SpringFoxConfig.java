@@ -9,6 +9,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -37,7 +38,7 @@ public class SpringFoxConfig {
                 .securitySchemes(auth)
                 .securityContexts(securityContexts)
                 .select()
-                .paths(PathSelectors.regex("/rest/.*"))
+                .paths(PathSelectors.regex("(/rest/admin)|(/rest/forgotpassword/.*)"))
                 .build()
                 .apiInfo(apiInfo());
     }
