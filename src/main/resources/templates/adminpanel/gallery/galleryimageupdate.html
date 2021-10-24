@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="adminpanel/incadminpanel/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>GalleryImage-Update</title>
+
+</head>
+<body>
+<th:block layout:fragment="customCss">
+    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+</th:block>
+
+<th:block layout:fragment="content">
+
+    <div class="asd" style="margin: 30px 30px 0px 290px">
+        <div class="ui page grid">
+
+
+            <div class="three column row">
+                <div class="two wide column">
+                </div>
+                <div class="twelve wide column" style="border:1px solid darkgreen;padding: 30px">
+                    <form th:action="@{'/admin/gallery/imageupdates/'+${index}}" method="post" th:object="${galleryImage}" class="ui form ">
+                        <h4 class="ui dividing header">Galeri Güncelle</h4>
+
+                        <div class="fields">
+                            <div class="sixteen wide field">
+                                <label>Resim Başlığı</label>
+                                <input th:value="${galleryImage.gallery_image_title}" type="text" name="gallery_image_title" minlength="3" maxlength="20" placeholder="Galeri Başlığı">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="sixteen wide field">
+                                <div class="ui red message" style="display: block"
+                                     th:if="${ #fields.hasErrors('gallery_image_title') }"
+                                     th:errors="*{gallery_image_title}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="ui button primary" tabindex="0">Güncelle</button>
+                    </form>
+                </div>
+                <div class="two wide column">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+</body>
+</html>
