@@ -4,58 +4,44 @@
       layout:decorate="adminpanel/incadminpanel/layout">
 <head>
     <meta charset="UTF-8">
-    <title>Advertisement List</title>
+    <title>Announcement</title>
 </head>
 <body>
 <th:block layout:fragment="customCss">
-    <link th:rel="stylesheet" th:href="@{/css/admin.css}">
+    <style>
+        .paginate_button:hover {
+            background-color: black !important;
+        }
+    </style>
 </th:block>
 
+
 <th:block layout:fragment="content">
-    <!-- ADV LIST -->
+
     <div class="asd" style="margin: 30px 30px 0px 290px">
-        <div class="ui page grid">
-            <div class="row">
-                <div class="twelve wide column">
-                </div>
-                <div class="four wide column">
+        <div class="ui page" style="margin-bottom: 40px;">
+            <div class="row" style="padding-bottom: 50px;">
+                <table id="exampleTable" class="ui celled table sixteen wide " style="width:100%;">
                     <div class="ui icon input">
-                        <input id="contentSearch" type="text" placeholder="Arama...">
+                        <input type="text" placeholder="Arama...">
                         <i class="search icon"></i>
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <table class="ui celled padded table">
                     <thead>
                     <tr>
-                        <th class="single line">Reklam Başlık</th>
-                        <th class="single line">Gösterim Sayısı</th>
-                        <th class="single line">Başlangıç Tarihi</th>
-                        <th class="single line">Bitiş Tarihi</th>
-                        <th class="single line">Reklam Görseli</th>
-                        <th class="single line">Genişlik</th>
-                        <th class="single line">Yükseklik</th>
-                        <th class="single line">Link</th>
+                        <th>#</th>
+                        <th>Reklam Başlık</th>
+                        <th>Gösterim Sayısı</th>
+                        <th>Başlangıç Tarihi</th>
+                        <th>Bitiş Tarihi</th>
+                        <th>Reklam Görseli</th>
+                        <th>Genişlik</th>
+                        <th>Yükseklik</th>
+                        <th>Link</th>
                         <th>İşlem</th>
                     </tr>
                     </thead>
-                    <tbody id="advTbody">
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th colspan="10">
-                            <div class="ui right floated pagination menu" id="advPNumber">
-
-                            </div>
-                        </th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
-
-
         </div>
     </div>
 
@@ -65,10 +51,5 @@
 <th:block layout:fragment="customJs">
     <script th:src="@{/js/advertisementlist.js}"></script>
 </th:block>
-
 </body>
 </html>
-
-
-
-
