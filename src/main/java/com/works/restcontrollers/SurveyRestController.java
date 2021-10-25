@@ -44,7 +44,7 @@ public class SurveyRestController {
     //******************************* REST API *********************************
     //ELASTIC
     @GetMapping("/list/{stSearchKey}/{stIndex}")
-    public Map<REnum, Object> announcementListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
+    public Map<REnum, Object> surveyListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
@@ -63,7 +63,7 @@ public class SurveyRestController {
 
     //REDIS
     @GetMapping("/list/{stIndex}")
-    public Map<REnum, Object> announcementList(@RequestBody @PathVariable String stIndex) {
+    public Map<REnum, Object> surveyList(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
@@ -82,7 +82,7 @@ public class SurveyRestController {
     }
 
     @DeleteMapping("/delete/{stIndex}")
-    public Map<REnum, Object> announcementDelete(@RequestBody @PathVariable String stIndex) {
+    public Map<REnum, Object> surveyDelete(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         surveyRepository.deleteById(Integer.valueOf(stIndex));
@@ -95,7 +95,7 @@ public class SurveyRestController {
     // *************************** Mvc-Pageable ***********************************
     //ELASTIC-DataTable
     @GetMapping("/datatable/list/{stSearchKey}")
-    public Map<REnum, Object> announcementPageListSearch(HttpServletRequest request, @PathVariable String stSearchKey) {
+    public Map<REnum, Object> surveyPageListSearch(HttpServletRequest request, @PathVariable String stSearchKey) {
         Map<String, String[]> allMap = request.getParameterMap();
 
         Map<REnum, Object> hm = new LinkedHashMap<>();
@@ -114,7 +114,7 @@ public class SurveyRestController {
 
     //REDIS-DataTable
     @GetMapping("/datatable/list")
-    public Map<REnum, Object> announcementPageList(HttpServletRequest request) {
+    public Map<REnum, Object> surveyPageList(HttpServletRequest request) {
         Map<String, String[]> allMap = request.getParameterMap();
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.STATUS, true);
@@ -150,7 +150,7 @@ public class SurveyRestController {
         Optional<Survey> optionalSurvey = surveyRepository.findById(surveyId);
         Optional<SurveySelection> optionalSurveySelection = surveySelectionRepository.findById(selectionId);
 
-        if (!optionalUser.isPresent() || optionalUser.get().getRoles().get(0).getRo_id() != 3 || !optionalSurvey.isPresent() || optionalUser.get().getCompany().getId() != optionalSurvey.get().getCompany().getId() || !optionalSurveySelection.isPresent() || surveyVoteRepository.findSorveyVoteOld(customerId).get() > 0) {
+        if (!optionalUser.isPresent() || optionalUser.get().getRoles().get(0).getRo_id() != 3 || !optionalSurvey.isPresent() || optionalUser.get().getCompany().getId() != optionalSurvey.get().getCompany().getId() || !optionalSurveySelection.isPresent()) {
             hm.put(REnum.STATUS, false);
             hm.put(REnum.MESSAGE, "Hatalı Bilgi Girildi. Oy kullanılamadı.");
             return hm;
