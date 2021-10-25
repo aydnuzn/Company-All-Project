@@ -29,7 +29,7 @@ public class ContentRestController {
     //******************************* REST API *********************************
     //ELASTIC
     @GetMapping("/list/{stSearchKey}/{stIndex}")
-    public Map<REnum, Object> announcementListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
+    public Map<REnum, Object> contentListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
@@ -48,7 +48,7 @@ public class ContentRestController {
 
     //REDIS
     @GetMapping("/list/{stIndex}")
-    public Map<REnum, Object> announcementList(@RequestBody @PathVariable String stIndex) {
+    public Map<REnum, Object> contentList(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
@@ -67,7 +67,7 @@ public class ContentRestController {
     }
 
     @DeleteMapping("/delete/{stIndex}")
-    public Map<REnum, Object> announcementDelete(@RequestBody @PathVariable String stIndex) {
+    public Map<REnum, Object> contentDelete(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         contentRepository.deleteById(Integer.valueOf(stIndex));
@@ -80,7 +80,7 @@ public class ContentRestController {
     // *************************** Mvc-Pageable ***********************************
     //ELASTIC-DataTable
     @GetMapping("/datatable/list/{stSearchKey}")
-    public Map<REnum, Object> announcementPageListSearch(HttpServletRequest request, @PathVariable String stSearchKey) {
+    public Map<REnum, Object> contentPageListSearch(HttpServletRequest request, @PathVariable String stSearchKey) {
         Map<String, String[]> allMap = request.getParameterMap();
 
         Map<REnum, Object> hm = new LinkedHashMap<>();
@@ -99,7 +99,7 @@ public class ContentRestController {
 
     //REDIS-DataTable
     @GetMapping("/datatable/list")
-    public Map<REnum, Object> announcementPageList(HttpServletRequest request) {
+    public Map<REnum, Object> contentPageList(HttpServletRequest request) {
         Map<String, String[]> allMap = request.getParameterMap();
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.STATUS, true);
