@@ -150,9 +150,35 @@ public class SurveyRestController {
         Optional<Survey> optionalSurvey = surveyRepository.findById(surveyId);
         Optional<SurveySelection> optionalSurveySelection = surveySelectionRepository.findById(selectionId);
 
-        if (!optionalUser.isPresent() || optionalUser.get().getRoles().get(0).getRo_id() != 3 || !optionalSurvey.isPresent() || optionalUser.get().getCompany().getId() != optionalSurvey.get().getCompany().getId() || !optionalSurveySelection.isPresent()) {
+
+        if (!optionalUser.isPresent()) {
             hm.put(REnum.STATUS, false);
-            hm.put(REnum.MESSAGE, "Hatalı Bilgi Girildi. Oy kullanılamadı.");
+            hm.put(REnum.MESSAGE, "Kullanıcı Bulunamadı.");
+            return hm;
+        }
+        if (optionalUser.get().getRoles().get(0).getRo_id() != 3) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Sadece müşteriler oy kullanabilir.");
+            return hm;
+        }
+        if (!optionalSurvey.isPresent()) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Anket mevcut değil.");
+            return hm;
+        }
+        if (optionalUser.get().getCompany().getId() != optionalSurvey.get().getCompany().getId()) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Oy verilmek istenen anket ile mmüşteri farklı firmalara ait. Aynı firmaya kayıtlı müşteri, ankete oy verebilir.");
+            return hm;
+        }
+        if (!optionalSurveySelection.isPresent()) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Seçenek Bulunamadı.");
+            return hm;
+        }
+        if (surveyVoteRepository.findSorveyVoteOld(customerId).get() > 0) {
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Daha önce aynı kullanıcı aynı ankete oy vermiş. Tekrar veremez.");
             return hm;
         }
 
