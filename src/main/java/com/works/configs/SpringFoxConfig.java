@@ -66,6 +66,13 @@ public class SpringFoxConfig {
                 "(/rest/admin/like/productLike/.*)|"+
                 "(/rest/admin/like/allLikeList/tocustomer)|"+
                 "(/rest/admin/address/.*)|"+
-                "(/rest/admin/survey/list/.*)";
+                "(/rest/admin/survey/list/.*)|"+
+                "(/rest/admin/survey/vote/.*)|"+
+                "(/rest/admin/content/list/.*)|"+
+                "(/rest/admin/customer/list/.*)|"+
+                "(/rest/admin/customer/add)|"+
+                "(/rest/admin/customer/update/.*)|"+
+                "(/rest/admin/gallery/.*)|"+
+                "(/rest/admin/gallery/update/.*)";
     }
 }
