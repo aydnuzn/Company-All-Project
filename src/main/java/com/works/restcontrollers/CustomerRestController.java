@@ -1,20 +1,27 @@
 package com.works.restcontrollers;
 
+import com.sun.org.apache.regexp.internal.RE;
+import com.works.entities.security.Role;
 import com.works.entities.security.User;
 import com.works.models._elastic.CustomerElastic;
 import com.works.models._redis.CustomerSession;
+import com.works.properties.CustomerInterlayer;
 import com.works.repositories._elastic.CustomerElasticRepository;
+import com.works.repositories._jpa.RoleRepository;
 import com.works.repositories._jpa.UserRepository;
 import com.works.repositories._redis.CustomerSessionRepository;
+import com.works.services.UserService;
 import com.works.utils.REnum;
 import com.works.utils.Util;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.validation.Valid;
+import java.util.*;
 
 @RestController
 @RequestMapping("/rest/admin/customer")
@@ -22,11 +29,15 @@ public class CustomerRestController {
     final CustomerElasticRepository customerElasticRepository;
     final CustomerSessionRepository customerSessionRepository;
     final UserRepository userRepository;
+    final UserService userService;
+    final RoleRepository roleRepository;
 
-    public CustomerRestController(CustomerElasticRepository customerElasticRepository, CustomerSessionRepository customerSessionRepository, UserRepository userRepository) {
+    public CustomerRestController(CustomerElasticRepository customerElasticRepository, CustomerSessionRepository customerSessionRepository, UserRepository userRepository, UserService userService, RoleRepository roleRepository) {
         this.customerElasticRepository = customerElasticRepository;
         this.customerSessionRepository = customerSessionRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.roleRepository = roleRepository;
     }
 
     //******************************* REST API *********************************
@@ -154,4 +165,142 @@ public class CustomerRestController {
         hm.put(REnum.STATUS, false);
         return hm;
     }
+
+    @PostMapping("/add")
+    public Map<REnum, Object> customerAdd(@Valid @ModelAttribute("customerInterlayer") CustomerInterlayer customerInterlayer, BindingResult bindingResult) {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        if (!bindingResult.hasErrors()) {
+            User customer = new User();
+            customer.setName(customerInterlayer.getCu_name());
+            customer.setSurname(customerInterlayer.getCu_surname());
+            customer.setEmail(customerInterlayer.getCu_email());
+            customer.setPassword(userService.encoder().encode(customerInterlayer.getCu_password()));
+
+            customer.setTel(customerInterlayer.getCu_tel());
+            customer.setCu_status(customerInterlayer.getCu_status());
+            customer.setEnabled(true);
+            customer.setTokenExpired(true);
+            customer.setAddresses(null);
+            Optional<Role> optRole = roleRepository.findById(3);
+            List<Role> roleList = new ArrayList<>();
+            if (optRole.isPresent()) {
+                roleList.add(optRole.get());
+                customer.setRoles(roleList);
+            } else {
+                //Veritabanında Müşteri Rolü Eksik.
+                customer.setRoles(null);
+            }
+            try {
+                customer = userRepository.save(customer);
+            } catch (DataIntegrityViolationException e) {
+                if (userRepository.findByEmailEquals(customer.getEmail()).isPresent()) {
+                    hm.put(REnum.STATUS, false);
+                    hm.put(REnum.MESSAGE,"E-Mail Mevcut! (Unique olmalı)");
+                    return hm;
+                } else {
+                    hm.put(REnum.STATUS, false);
+                    hm.put(REnum.MESSAGE,"Telefon Mevcut! (Unique olmalı)");
+                    return hm;
+                }
+            }
+
+            CustomerSession customerSession = new CustomerSession();
+            customerSession.setId(String.valueOf(customer.getId()));
+            customerSession.setName(customer.getName());
+            customerSession.setSurname(customer.getSurname());
+            customerSession.setEmail(customer.getEmail());
+            customerSession.setTel(customer.getTel());
+            customerSession.setCu_status(customer.getCu_status());
+            customerSessionRepository.save(customerSession);
+
+            CustomerElastic customerElastic = new CustomerElastic();
+            customerElastic.setId(String.valueOf(customer.getId()));
+            customerElastic.setName(customer.getName());
+            customerElastic.setSurname(customer.getSurname());
+            customerElastic.setEmail(customer.getEmail());
+            customerElastic.setTel(customer.getTel());
+            customerElastic.setCu_status(customer.getCu_status());
+            customerElasticRepository.save(customerElastic);
+            hm.put(REnum.STATUS ,true);
+            hm.put(REnum.MESSAGE,"İşlem başarılı");
+            return hm;
+        } else {
+            System.out.println(Util.errors(bindingResult));
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Validasyona takıldı");
+            hm.put(REnum.ERROR, "Valid hatası: " + bindingResult);
+            return hm;
+        }
+    }
+
+    @PutMapping("/update/{stIndex}")
+    public Map<REnum, Object> customerUpdate(@Valid @ModelAttribute("customerInterlayer") CustomerInterlayer customerInterlayer, BindingResult bindingResult, @PathVariable String stIndex){
+        Map<REnum, Object> hm =new LinkedHashMap<>();
+        if(!bindingResult.hasErrors()){
+            User customer = new User();
+            customer.setName(customerInterlayer.getCu_name());
+            customer.setSurname(customerInterlayer.getCu_surname());
+            customer.setEmail(customerInterlayer.getCu_email());
+            customer.setPassword(userService.encoder().encode(customerInterlayer.getCu_password()));
+
+            customer.setTel(customerInterlayer.getCu_tel());
+            customer.setCu_status(customerInterlayer.getCu_status());
+            customer.setEnabled(true);
+            customer.setTokenExpired(true);
+            customer.setAddresses(null);
+            Optional<Role> optRole = roleRepository.findById(3);
+            List<Role> roleList = new ArrayList<>();
+            if (optRole.isPresent()) {
+                roleList.add(optRole.get());
+                customer.setRoles(roleList);
+            } else {
+                //Veritabanında Müşteri Rolü Eksik.
+                customer.setRoles(null);
+            }
+            try {
+                customer.setId(Integer.valueOf(stIndex));
+                customer = userRepository.saveAndFlush(customer);
+            } catch (DataIntegrityViolationException e) {
+                if (userRepository.findByEmailEquals(customer.getEmail()).isPresent()) {
+                    hm.put(REnum.STATUS, false);
+                    hm.put(REnum.MESSAGE,"E-Mail Mevcut! (Unique olmalı)");
+                    return hm;
+                } else {
+                    hm.put(REnum.STATUS, false);
+                    hm.put(REnum.MESSAGE,"Telefon Mevcut! (Unique olmalı)");
+                    return hm;
+                }
+            }
+
+            CustomerSession customerSession = new CustomerSession();
+            customerSession.setId(String.valueOf(customer.getId()));
+            customerSession.setName(customer.getName());
+            customerSession.setSurname(customer.getSurname());
+            customerSession.setEmail(customer.getEmail());
+            customerSession.setTel(customer.getTel());
+            customerSession.setCu_status(customer.getCu_status());
+            customerSessionRepository.deleteById(stIndex);
+            customerSessionRepository.save(customerSession);
+
+            CustomerElastic customerElastic = new CustomerElastic();
+            customerElastic.setId(String.valueOf(customer.getId()));
+            customerElastic.setName(customer.getName());
+            customerElastic.setSurname(customer.getSurname());
+            customerElastic.setEmail(customer.getEmail());
+            customerElastic.setTel(customer.getTel());
+            customerElastic.setCu_status(customer.getCu_status());
+            customerElasticRepository.deleteById(stIndex);
+            customerElasticRepository.save(customerElastic);
+            hm.put(REnum.STATUS ,true);
+            hm.put(REnum.MESSAGE,"İşlem başarılı");
+            return hm;
+        } else {
+            System.out.println(Util.errors(bindingResult));
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Validasyona takıldı");
+            hm.put(REnum.ERROR, "Valid hatası: " + bindingResult);
+            return hm;
+
+    }
+}
 }
