@@ -182,6 +182,7 @@ public class SurveyControllerBusiness {
                 return "error/404";
             }
             try {
+                surveySelection.setSurvey_selection_score(0);
                 Integer surveyId = surveySelectionRepository.save(surveySelection).getId();
                 SurveySelectionSession surveySelectionSession = new SurveySelectionSession();
                 surveySelectionSession.setId(String.valueOf(surveyId));//Seçenek numarası
@@ -194,6 +195,7 @@ public class SurveyControllerBusiness {
                 model.addAttribute("isError", 1);
                 return rvalue + "surveyselectionadd";
             }
+
         } else {
             System.err.println(Util.errors(bindingResult));
             model.addAttribute("isError", 0);
