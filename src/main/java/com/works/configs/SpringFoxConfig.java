@@ -38,9 +38,7 @@ public class SpringFoxConfig {
                 .securitySchemes(auth)
                 .securityContexts(securityContexts)
                 .select()
-                .paths(PathSelectors.regex("(/rest/admin)|" +
-                        "(/rest/forgotpassword/sendtoken)|(/rest/forgotpassword/change)|" +
-                        "(/rest/admin/announcement/category/list/.*)"))
+                .paths(PathSelectors.regex(pathAll()))
                 .build()
                 .apiInfo(apiInfo());
     }
@@ -49,7 +47,7 @@ public class SpringFoxConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Company All Project - Rest Api",
-                "Admin-Account -> selen@mail.com / 123456\n" +
+		"Admin-Account -> selen@mail.com / 123456\n" +
                         "mertdumanli_cse@gmail.com / 123456\n" +
                         "uzun.aydinn@gmail.com / 1234567"
                         ,
@@ -57,5 +55,17 @@ public class SpringFoxConfig {
                 "https://github.com/selenkosoglu/Company-All-Project",
                 new Contact("Project GitHub", "https://github.com/selenkosoglu/Company-All-Project", "mertdumanli.cse@gmail.com"),
                 "License of API", "https://github.com/selenkosoglu/Company-All-Project", Collections.emptyList());
+    }
+
+    private String pathAll() {
+        return "(/rest/admin)|" +
+                "(/rest/forgotpassword/sendtoken)|" +
+                "(/rest/forgotpassword/change)|" +
+                "(/rest/admin/announcement/list/.*)|" +
+                "(/rest/admin/advertisement/list/.*)|" +
+                "(/rest/admin/like/productLike/.*)|"+
+                "(/rest/admin/like/allLikeList/tocustomer)|"+
+                "(/rest/admin/address/.*)|"+
+                "(/rest/admin/survey/list/.*)";
     }
 }

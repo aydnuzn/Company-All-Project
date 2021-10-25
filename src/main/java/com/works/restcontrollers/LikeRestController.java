@@ -74,7 +74,6 @@ public class LikeRestController {
     }
 
 
-
     //ALL LIKES
     @GetMapping("/allLikeList/{stIndex}")
     public Map<REnum, Object> allLikeList(@RequestBody @PathVariable String stIndex) {
@@ -85,6 +84,15 @@ public class LikeRestController {
         return hm;
     }
 
+    //ALL LIKES ACCORDING TO CUSTOMER
+    @GetMapping("/allLikeList/tocustomer")
+    public Map<REnum, Object> allLikeList() {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.MESSAGE, "Başarılı");
+        hm.put(REnum.STATUS, true);
+        hm.put(REnum.RESULT, likeRepository.findAllLikesAccordingToCustomer());
+        return hm;
+    }
 
 
     @DeleteMapping("/delete/{stIndex}")
@@ -104,6 +112,7 @@ public class LikeRestController {
         LikeManagement likeManagement = new LikeManagement();
         LikeSession likeSession = new LikeSession();
         LikeElasticsearch likeElasticsearch = new LikeElasticsearch();
+
         //Product IDsi çekme
         Integer productId = 0;
         try {
@@ -119,15 +128,11 @@ public class LikeRestController {
             likeManagement.setProduct(optionalProduct.get());
             likeSession.setProduct(optionalProduct.get().getPr_name());
             likeElasticsearch.setProduct(optionalProduct.get().getPr_name());
-
-
         } else {
             hm.put(REnum.STATUS, false);
             hm.put(REnum.MESSAGE, "Bu numaraya sahip bir ürün veritabanında bulunamadı!");
             return hm;
         }
-
-
         Integer score = 0;
         try {
             score = Integer.valueOf(stScore);
@@ -142,11 +147,7 @@ public class LikeRestController {
         likeManagement.setScore(score);
         likeSession.setScore(stScore);
         likeElasticsearch.setScore(stScore);
-
-
         boolean isValid = false;
-
-
         //CUSTOMER
         likeManagement.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get());
         likeSession.setCustomer(userRepository.findByEmailEquals(SecurityContextHolder.getContext().getAuthentication().getName()).get().getName());
@@ -155,7 +156,15 @@ public class LikeRestController {
             if (likeManagement.getCustomer().getRoles().get(i).getRo_name().equals("ROLE_CUSTOMER")) {
                 isValid = true;
             }
+        }
 
+        //Oy Vermiş mi?
+        Optional<LikeManagement> optional = likeRepository.findByCustomer_IdEqualsAndProduct_IdEquals(likeManagement.getCustomer().getId(), productId);
+        if (optional.isPresent()) {
+            System.out.println("Daha önce oy vermiş.");
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Daha önce oy verdiğiniz bir ürüne tekrar oy veremezsiniz.");
+            return hm;
         }
 
         likeManagement = likeRepository.save(likeManagement); //normal veritabanına save ediyor
