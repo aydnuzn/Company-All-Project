@@ -39,7 +39,8 @@ public class SpringFoxConfig {
                 .securityContexts(securityContexts)
                 .select()
                 .paths(PathSelectors.regex("(/rest/admin)|" +
-                        "(/rest/forgotpassword/sendtoken)|(/rest/forgotpassword/change)"))
+                        "(/rest/forgotpassword/sendtoken)|(/rest/forgotpassword/change)|" +
+                        "(/rest/admin/announcement/category/list/.*)"))
                 .build()
                 .apiInfo(apiInfo());
     }
@@ -48,7 +49,10 @@ public class SpringFoxConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Company All Project - Rest Api",
-                "Admin-Account -> selen@mail.com, 123456",
+                "Admin-Account -> selen@mail.com / 123456\n" +
+                        "mertdumanli_cse@gmail.com / 123456\n" +
+                        "uzun.aydinn@gmail.com / 1234567"
+                        ,
                 "API 1.0",
                 "https://github.com/selenkosoglu/Company-All-Project",
                 new Contact("Project GitHub", "https://github.com/selenkosoglu/Company-All-Project", "mertdumanli.cse@gmail.com"),

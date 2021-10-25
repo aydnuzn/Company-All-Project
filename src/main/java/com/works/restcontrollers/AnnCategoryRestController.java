@@ -30,18 +30,13 @@ public class AnnCategoryRestController {
     @GetMapping("/list/{stSearchKey}/{stIndex}")
     public Map<REnum, Object> annCategoryListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
-        hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        hm.put(REnum.RESULT, annCategoryElasticRepository.findByAnn_category_title(stSearchKey +" "+ Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
-        int additional = 0;
+        hm.put(REnum.MESSAGE, "Başarılı");
         Integer size = annCategoryElasticRepository.findByAnn_category_title(stSearchKey +" "+ Util.theCompany.getCompany_name()).size();
-        // dogrulama icin
-        System.out.println("*********"+size + "-->" + stSearchKey +" "+ Util.theCompany.getCompany_name());
-        if (size % Util.pageSize != 0) {
-            additional = 1;
-        }
+        hm.put(REnum.COUNT, size);
+        hm.put(REnum.COUNTOFPAGE, ((int)Math.ceil((double)size/Util.pageSize)));
+        hm.put(REnum.RESULT, annCategoryElasticRepository.findByAnn_category_title(stSearchKey +" "+ Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         hm.put(REnum.ERROR, null);
-        hm.put(REnum.COUNTOFPAGE, size / Util.pageSize + additional);
         return hm;
     }
 
@@ -49,19 +44,13 @@ public class AnnCategoryRestController {
     @GetMapping("/list/{stIndex}")
     public Map<REnum, Object> annCategoryList(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
-        hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        if(stIndex.equals("0")){
-            hm.put(REnum.RESULT, annCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
-        }else{
-            hm.put(REnum.RESULT, annCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
-        }
+        hm.put(REnum.MESSAGE, "Başarılı");
+        int size = annCategorySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        hm.put(REnum.COUNT, size);
+        hm.put(REnum.COUNTOFPAGE, ((int)Math.ceil((double)size/Util.pageSize)));
+        hm.put(REnum.RESULT, annCategorySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
 
-        int additional = 0;
-        if (annCategorySessionRepository.count() % 10 != 0) {
-            additional = 1;
-        }
-        hm.put(REnum.COUNTOFPAGE, (annCategorySessionRepository.count() / Util.pageSize) + additional);
         return hm;
     }
 
@@ -105,10 +94,9 @@ public class AnnCategoryRestController {
         hm.put(REnum.MESSAGE, "Başarılı");
         int validPage = Integer.parseInt(allMap.get("start")[0]) == 0 ? 0:(Integer.parseInt(allMap.get("start")[0]))/Integer.parseInt(allMap.get("length")[0]);
 
-        hm.put(REnum.RESULT, annCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
-        //int filterCount = announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))).size();
-        //hm.put(REnum.RESULT, announcementSessionRepository.findByOrderByIdAsc(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
-        hm.put(REnum.COUNT, annCategorySessionRepository.count() );
+        hm.put(REnum.RESULT, annCategorySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(validPage, Integer.parseInt(allMap.get("length")[0]))));
+        int filterCount = annCategorySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        hm.put(REnum.COUNT, filterCount);
         hm.put(REnum.DRAW, Integer.parseInt(allMap.get("draw")[0]) );
         return hm;
     }
