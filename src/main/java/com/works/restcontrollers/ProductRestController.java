@@ -26,6 +26,41 @@ public class ProductRestController {
         this.productElasticRepository = productElasticRepository;
     }
 
+    //Elasticsearch
+    @GetMapping("/list/{stSearchKey}/{stIndex}")
+    public Map<REnum, Object> productCategoryListSearch(@RequestBody @PathVariable String stSearchKey, @PathVariable String stIndex){
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.MESSAGE, "Basarili");
+        hm.put(REnum.STATUS, true);
+        hm.put(REnum.RESULT, productElasticRepository.findByPr_name(stSearchKey + " " + Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex)-1, Util.pageSize)));
+        Integer size = productElasticRepository.findByPr_name(stSearchKey + " " + Util.theCompany.getCompany_name()).size();
+        // dogrulama
+        System.out.println("******" + size + "-->" + stSearchKey + " " + Util.theCompany.getCompany_name());
+        int additional = size % Util.pageSize == 0 ? 0 : 1;
+        hm.put(REnum.ERROR, null);
+        hm.put(REnum.COUNTOFPAGE, size/Util.pageSize + additional);
+        return hm;
+    }
+
+    //Redis
+    @GetMapping("/list/{stIndex}")
+    public Map<REnum, Object> productCategoryList(@RequestBody @PathVariable String stIndex){
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.MESSAGE, "Basarili");
+        hm.put(REnum.STATUS, true);
+        Integer size = 0;
+        if(stIndex.equals("0")){
+            hm.put(REnum.RESULT, productSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+            size = productSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        }else{
+            hm.put(REnum.RESULT, productSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex)-1, Util.pageSize)));
+            size = productSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        }
+        int additional = (size % 10) == 0 ? 0 : 1;
+        hm.put(REnum.COUNTOFPAGE, (size / Util.pageSize) + additional);
+        return hm;
+    }
+
     @DeleteMapping("/delete/{stIndex}")
     public Map<REnum, Object> productDelete(@RequestBody @PathVariable String stIndex) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
