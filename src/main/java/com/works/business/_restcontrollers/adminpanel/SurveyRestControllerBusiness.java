@@ -13,12 +13,14 @@ import com.works.repositories._redis.SurveySessionRepository;
 import com.works.utils.REnum;
 import com.works.utils.Util;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
 public class SurveyRestControllerBusiness {
 
     final SurveyRepository surveyRepository;
