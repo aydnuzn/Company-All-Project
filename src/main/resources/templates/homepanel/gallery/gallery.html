@@ -19,10 +19,10 @@
 			<div class="sixteen wide column" align="center">
 				<div class="ui horizontal divider"><h2>Galeri</h2></div>
 				<br>
-				<div class="ui four column stackable doubling grid" id="sortable-list">
-					<div class="column">
-						<img class="ui rounded image" src="" th:src="@{/dist/index/assets/img/400x400.png}" th:alt="resim">
-						<div class="ui header">Portofolio #1</div>
+				<div class="ui three column stackable doubling grid" id="sortable-list">
+					<div th:each="i : ${#numbers.sequence(1, 38)}" class="column">
+						<img class="ui rounded image" th:src="@{'/images/homegallery/'+${i}+'.png'}" th:alt="resim+${i}">
+						<div class="ui header" th:text="'#'+${i}"></div>
 					</div>
 
 				</div>
