@@ -161,9 +161,22 @@ public class SurveyRestControllerBusiness {
             hm.put(REnum.MESSAGE, "Seçenek Bulunamadı.");
             return hm;
         }
-        if (surveyVoteRepository.findSorveyVoteOld(customerId).get() > 0) {
+        if (surveyVoteRepository.findSorveyVoteOld(customerId, surveyId).get() > 0) {
             hm.put(REnum.STATUS, false);
             hm.put(REnum.MESSAGE, "Daha önce aynı kullanıcı aynı ankete oy vermiş. Tekrar veremez.");
+            return hm;
+        }
+
+        Boolean control = false;
+        for (int i = 0; i < optionalSurvey.get().getSurveySelections().size(); i++){
+            if(optionalSurvey.get().getSurveySelections().get(i).getId() == optionalSurveySelection.get().getId()){
+                control = true;
+                break;
+            }
+        }
+        if(!control){
+            hm.put(REnum.STATUS, false);
+            hm.put(REnum.MESSAGE, "Bu seçenek bu ankete ait değildir.");
             return hm;
         }
 
