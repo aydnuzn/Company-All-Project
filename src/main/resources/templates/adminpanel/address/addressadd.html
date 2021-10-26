@@ -28,7 +28,7 @@
                             <div class="sixteen wide field">
                                 <label>Şehir Seçiniz</label>
                                 <div class="field">
-                                    <select name="city_id" class="ui fluid search selection dropdown"
+                                    <select name="city_id" id="city_id" class="ui fluid search selection dropdown"
                                             style="width: auto;height: auto">
                                         <th:block th:if="${cityList != null}">
                                             <th:block th:each="item : ${cityList}">
@@ -50,7 +50,7 @@
                             <div class="sixteen wide field">
                                 <label>İlçe Seçiniz</label>
                                 <div class="field">
-                                    <select name="district_id" class="ui fluid search selection dropdown"
+                                    <select id="district_id" name="district_id" class="ui fluid search selection dropdown"
                                             style="width: auto;height: auto">
                                         <th:block th:if="${districtList != null}">
                                             <th:block th:each="item : ${districtList}">
