@@ -64,14 +64,14 @@ $(document).ready(function() {
                 "data": "id", "name": "id", "autoWidth": true,
                 "render": function (data) {
                     var a = `<div class="ui buttons" style="float: left">
-                    <a href="http://localhost:8091/admin/adversitement/`+data+`" class="ui vertical animated primary button">
+                    <a href="http://localhost:8091/admin/advertisement/`+data+`" class="ui vertical animated primary button">
                     <div class="hidden content">Düzenle</div>
                     <div class="visible content">
                         <i class="edit icon"></i>
                     </div>
                     </a>
                     <div class="ya da"></div>
-                    <button onclick="deleteAdversitement(`+data+`)" class="ui vertical animated negative button">
+                    <button onclick="deleteAdvertisement(`+data+`)" class="ui vertical animated negative button">
                     <div class="hidden content">Sil</div>
                     <div class="visible content">
                         <i class="trash icon"></i>
@@ -90,9 +90,9 @@ $(document).ready(function() {
     });
 });
 
-function deleteAdversitement(index) {
+function deleteAdvertisement(index) {
     $.ajax({
-        url: 'http://localhost:8091/rest/admin/adversitement/delete/' + index,
+        url: 'http://localhost:8091/rest/admin/advertisement/delete/' + index,
         type: 'DELETE',
         contentType: "application/json",
         dataType: 'json',
