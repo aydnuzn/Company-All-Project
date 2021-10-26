@@ -80,6 +80,7 @@ public class SpringFoxConfig {
                 "(/rest/admin/customer/add)|"+
                 "(/rest/admin/customer/update/.*)|"+
                 "(/rest/admin/orders/list/.*)|"+
+                "(/rest/admin/orders/add)|"+
                 "(/rest/admin/orders/deliveryList/.*)|"+
                 "(/rest/admin/orders/deliveredList/.*)|"+
                 "(/rest/admin/gallery/.*)|";
