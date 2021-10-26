@@ -1,5 +1,6 @@
 package com.works.entities.survey;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.works.entities.listener.BaseEntity;
 import lombok.Data;
 
@@ -20,6 +21,7 @@ public class Survey extends BaseEntity<String> {
     @Column(unique = true)
     private String survey_title;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "survey", cascade = CascadeType.DETACH)
     private List<SurveySelection> surveySelections;
     
