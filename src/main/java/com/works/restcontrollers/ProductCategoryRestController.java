@@ -100,15 +100,19 @@ public class ProductCategoryRestController {
     @GetMapping("/list/{stIndex}")
     public Map<REnum, Object> productCategoryList(@RequestBody @PathVariable String stIndex){
         Map<REnum, Object> hm = new LinkedHashMap<>();
-        hm.put(REnum.MESSAGE, "Basarili");
         hm.put(REnum.STATUS, true);
-        if(stIndex.equals("0")){
-            hm.put(REnum.RESULT, productCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
-        }else{
-            hm.put(REnum.RESULT, productCategorySessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex)-1, Util.pageSize)));
+        hm.put(REnum.MESSAGE, "Başarılı");
+        if (stIndex.equals("0")) {
+            hm.put(REnum.RESULT, productCategorySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex), Util.pageSize)));
+        } else {
+            hm.put(REnum.RESULT, productCategorySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(), PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         }
-        int additional = (productCategorySessionRepository.count() % 10) == 0 ? 0 : 1;
-        hm.put(REnum.COUNTOFPAGE, (productCategorySessionRepository.count() / Util.pageSize) + additional);
+        int additional = 0;
+        Integer totalSize = productCategorySessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name()).size();
+        if (totalSize % 10 != 0) {
+            additional = 1;
+        }
+        hm.put(REnum.COUNTOFPAGE, (totalSize / Util.pageSize) + additional);
         return hm;
     }
 

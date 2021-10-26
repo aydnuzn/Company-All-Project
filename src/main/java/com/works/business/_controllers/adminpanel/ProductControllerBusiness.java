@@ -59,7 +59,7 @@ public class ProductControllerBusiness {
 
     public String product(Model model) {
         model.addAttribute("productInterlayer", new ProductInterlayer());
-        model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+        model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
         return rvalue + "productadd";
     }
 
@@ -154,7 +154,7 @@ public class ProductControllerBusiness {
         } else {
             System.err.println(Util.errors(bindingResult));
         }
-        model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+        model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
         return rvalue + "productadd";
     }
 
@@ -186,7 +186,7 @@ public class ProductControllerBusiness {
             if (optionalProduct.isPresent()) {
                 model.addAttribute("index", index);
                 model.addAttribute("productInterlayer", productInterlayer);
-                model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+                model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
                 return rvalue + "productupdate";
             } else {
                 // ulasilmak istenen duyuru mevcut değil
@@ -264,7 +264,7 @@ public class ProductControllerBusiness {
             System.err.println(Util.errors(bindingResult));
             model.addAttribute("index", index);
         }
-        model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+        model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
         return rvalue + "productupdate";
     }
 
@@ -419,7 +419,7 @@ public class ProductControllerBusiness {
     //***************************************************************************************
     public String productCategory(Model model) {
         model.addAttribute("productCategoryInterlayer", new ProductCategoryInterlayer());
-        model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+        model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
         model.addAttribute("isError", false);
         model.addAttribute("isError2", false);
         return rvalue + "prcategoryadd";
@@ -460,7 +460,7 @@ public class ProductControllerBusiness {
                     System.err.println("Aynı isimde kategori mevcut");
                     model.addAttribute("isError", true);
                     model.addAttribute("isError2", false);
-                    model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+                    model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
                     return rvalue + "prcategoryadd";
                 }
                 return "redirect:/admin/product/category";
@@ -498,7 +498,7 @@ public class ProductControllerBusiness {
                             System.err.println("Aynı isimde kategori mevcut");
                             model.addAttribute("isError", true);
                             model.addAttribute("isError2", false);
-                            model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+                            model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
                             return rvalue + "prcategoryadd";
                         }
                         return "redirect:/admin/product/category";
@@ -507,7 +507,7 @@ public class ProductControllerBusiness {
                         System.err.println("Alt kategoriye ekleme yapilamaz");
                         model.addAttribute("isError2", true);
                         model.addAttribute("isError", false);
-                        model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+                        model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
                         return rvalue + "prcategoryadd";
                     }
                 } else {
@@ -517,7 +517,7 @@ public class ProductControllerBusiness {
         } else {
             System.err.println(Util.errors(bindingResult));
         }
-        model.addAttribute("ls", productCategoryRepository.getAllMainCategory());
+        model.addAttribute("ls", productCategoryRepository.getAllMainCategory(Util.theCompany.getId()));
         model.addAttribute("isError", false);
         model.addAttribute("isError2", false);
         return rvalue + "prcategoryadd";

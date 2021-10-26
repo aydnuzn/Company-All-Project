@@ -44,7 +44,7 @@ public class AnnouncementControllerBusiness {
 
     public String announcement(Model model) {
         model.addAttribute("announcementInterlayer", new AnnouncementInterlayer());
-        model.addAttribute("ls", annCategoryRepository.findAll());
+        model.addAttribute("ls", annCategoryRepository.findByCompany_IdEquals(Util.theCompany.getId()));
         model.addAttribute("isError", 1);
         return rvalue + "announcementadd";
     }
@@ -197,7 +197,7 @@ public class AnnouncementControllerBusiness {
             System.err.println(Util.errors(bindingResult));
         }
         model.addAttribute("isError", 1);
-        model.addAttribute("ls", annCategoryRepository.findAll());
+        model.addAttribute("ls", annCategoryRepository.findByCompany_IdEquals(Util.theCompany.getId()));
         return rvalue + "announcementadd";
     }
 
@@ -216,7 +216,7 @@ public class AnnouncementControllerBusiness {
             if (optionalAnnouncement.isPresent()) {
                 model.addAttribute("index", index);
                 model.addAttribute("announcementInterlayer", announcementInterlayer);
-                model.addAttribute("ls", annCategoryRepository.findAll());
+                model.addAttribute("ls", annCategoryRepository.findByCompany_IdEquals(Util.theCompany.getId()));
                 return rvalue + "announcementupdate";
             } else {
                 // ulasilmak istenen duyuru mevcut değil
@@ -276,7 +276,7 @@ public class AnnouncementControllerBusiness {
             System.err.println(Util.errors(bindingResult));
             model.addAttribute("index", index);
         }
-        model.addAttribute("ls", annCategoryRepository.findAll());
+        model.addAttribute("ls", annCategoryRepository.findByCompany_IdEquals(Util.theCompany.getId()));
         return rvalue + "announcementupdate";
     }
 

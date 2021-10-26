@@ -36,7 +36,6 @@ public class ContentControllerBusiness {
     }
 
     public String contentList() {
-        contentSessionRepository.findAll();
         return rvalue + "contentlist";
     }
 

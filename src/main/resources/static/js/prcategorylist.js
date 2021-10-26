@@ -22,6 +22,7 @@ function getProductCategoryList(index){
        contentType: 'application/json',
        dataType: 'json',
        success: function (data){
+           debugger;
            if(data){
                debugger;
                console.log(data);

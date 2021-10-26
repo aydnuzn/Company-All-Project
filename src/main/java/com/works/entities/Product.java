@@ -44,7 +44,7 @@ public class Product extends BaseEntity<String> {
     private String pr_price;
     private Integer pr_type;
     private Integer pr_campaign;
-    private Integer pr_campaign_name;
+    private String pr_campaign_name;
 
     @Column(length = 500)
     private String pr_campaign_description;

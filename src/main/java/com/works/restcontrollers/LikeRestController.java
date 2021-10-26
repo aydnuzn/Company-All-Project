@@ -64,7 +64,7 @@ public class LikeRestController {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         hm.put(REnum.MESSAGE, "Başarılı");
         hm.put(REnum.STATUS, true);
-        hm.put(REnum.RESULT, likeSessionRepository.findByOrderByIdAsc(PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
+        hm.put(REnum.RESULT, likeSessionRepository.findByCompanynameEquals(Util.theCompany.getCompany_name(),PageRequest.of(Integer.parseInt(stIndex) - 1, Util.pageSize)));
         int additional = 0;
         if (likeSessionRepository.count() % 10 != 0) {
             additional = 1;

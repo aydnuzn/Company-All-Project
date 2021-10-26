@@ -14,7 +14,6 @@ public interface ContentSessionRepository extends CrudRepository<ContentSession,
 
 
     List<ContentSession> findByCompanynameEquals(String companyname, Pageable pageable);
-
     List<ContentSession> findByCompanynameEquals(String companyname);
 
 

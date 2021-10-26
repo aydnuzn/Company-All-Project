@@ -37,7 +37,7 @@ public class ProductInterlayer {
     @Min(value=1, message = "En az 1 olabilir")
     private Integer pr_campaign;
 
-    private Integer pr_campaign_name;
+    private String pr_campaign_name;
     private String pr_campaign_description;
 
     @NotNull
