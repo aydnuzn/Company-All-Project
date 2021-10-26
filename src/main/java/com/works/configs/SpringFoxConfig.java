@@ -82,7 +82,6 @@ public class SpringFoxConfig {
                 "(/rest/admin/orders/list/.*)|"+
                 "(/rest/admin/orders/deliveryList/.*)|"+
                 "(/rest/admin/orders/deliveredList/.*)|"+
-                "(/rest/admin/gallery/.*)|"+
-                "(/rest/admin/gallery/update/.*)";
+                "(/rest/admin/gallery/.*)|";
     }
 }

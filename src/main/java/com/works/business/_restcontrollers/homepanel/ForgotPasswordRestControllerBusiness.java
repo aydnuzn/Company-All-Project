@@ -7,7 +7,6 @@ import com.works.repositories._jpa.UserRepository;
 import com.works.services.MailService;
 import com.works.services.UserService;
 import com.works.utils.REnum;
-import com.works.utils.Util;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -42,9 +41,9 @@ public class ForgotPasswordRestControllerBusiness {
         if (optUser.isPresent()) {
             Optional<ForgotPasswordUser> optForgotPasswordUser = forgotPasswordUserRepository.findByForgotMail(optUser.get().getEmail());
             ForgotPasswordUser forgotPasswordUser = null;
-            if(!optForgotPasswordUser.isPresent()){
+            if (!optForgotPasswordUser.isPresent()) {
                 forgotPasswordUser = new ForgotPasswordUser();
-            }else{
+            } else {
                 forgotPasswordUser = optForgotPasswordUser.get();
                 forgotPasswordUserRepository.deleteById(forgotPasswordUser.getForgot_id());
             }
@@ -85,16 +84,15 @@ public class ForgotPasswordRestControllerBusiness {
                     hm.put(REnum.STATUS, false);
                     hm.put(REnum.MESSAGE, "İşlem Başarısız.");
                 }
-            }else {
+            } else {
                 hm.put(REnum.STATUS, false);
-                hm.put(REnum.MESSAGE,"Şifre 6 haneden küçük olamaz");
+                hm.put(REnum.MESSAGE, "Şifre 6 haneden küçük olamaz");
             }
-        }else {
-            hm.put(REnum.STATUS,false);
+        } else {
+            hm.put(REnum.STATUS, false);
             hm.put(REnum.MESSAGE, "Şifreler birbirinden farklı");
         }
         return hm;
     }
-
 
 }
