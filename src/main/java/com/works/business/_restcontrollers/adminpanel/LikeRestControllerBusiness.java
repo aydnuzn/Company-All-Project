@@ -140,7 +140,6 @@ public class LikeRestControllerBusiness {
                 isValid = true;
             }
         }
-
         //Oy Vermiş mi?
         Optional<LikeManagement> optional = likeRepository.findByCustomer_IdEqualsAndProduct_IdEquals(likeManagement.getCustomer().getId(), productId);
         if (optional.isPresent()) {
@@ -149,15 +148,13 @@ public class LikeRestControllerBusiness {
             hm.put(REnum.MESSAGE, "Daha önce oy verdiğiniz bir ürüne tekrar oy veremezsiniz.");
             return hm;
         }
-
-        likeManagement = likeRepository.save(likeManagement); //normal veritabanına save ediyor
-        likeSession.setId(String.valueOf(likeManagement.getId())); //sessionin idsini set ediyoruz
-        likeElasticsearch.setId(String.valueOf(likeManagement.getId()));
-        likeSession.setDate(new Date().toString());
-
         if (isValid) {
             hm.put(REnum.STATUS, true);
             hm.put(REnum.MESSAGE, "Başarılı");
+            likeManagement = likeRepository.save(likeManagement); //normal veritabanına save ediyor
+            likeSession.setId(String.valueOf(likeManagement.getId())); //sessionin idsini set ediyoruz
+            likeElasticsearch.setId(String.valueOf(likeManagement.getId()));
+            likeSession.setDate(new Date().toString());
             hm.put(REnum.RESULT, likeSessionRepository.save(likeSession));
             return hm;
         } else {
@@ -165,6 +162,12 @@ public class LikeRestControllerBusiness {
             hm.put(REnum.MESSAGE, "Oy kullanabilmek için Müşteri olmanız gerekir!");
             return hm;
         }
+
+
+
+
+
+
 
 
     }
