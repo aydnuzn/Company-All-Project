@@ -1,5 +1,6 @@
 package com.works.entities.survey;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.works.entities.listener.BaseEntityNotCompany;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -23,6 +24,7 @@ public class SurveySelection extends BaseEntityNotCompany<String> {
     private String survey_selection_title;
     private Integer survey_selection_score;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "survey_id")
     private Survey survey;
