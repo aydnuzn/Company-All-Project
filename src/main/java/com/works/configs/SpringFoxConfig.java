@@ -62,6 +62,8 @@ public class SpringFoxConfig {
                 "(/rest/forgotpassword/sendtoken)|" +
                 "(/rest/forgotpassword/change)|" +
                 "(/rest/admin/announcement/list/.*)|" +
+                "(/rest/admin/announcement/category/list/.*)|" +
+                "(/rest/admin/product/category/list)|" +
                 "(/rest/admin/advertisement/list/.*)|" +
                 "(/rest/admin/like/productLike/.*)|"+
                 "(/rest/admin/like/allLikeList/tocustomer)|"+

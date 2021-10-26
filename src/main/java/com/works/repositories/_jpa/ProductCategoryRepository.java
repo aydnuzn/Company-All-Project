@@ -11,5 +11,6 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
     @Query(value = "SELECT id, pr_title, parent_id FROM product_category Order By parent_id", nativeQuery = true)
     List<AllMainProductCategoryInfo> getAllMainCategory();
 
+    List<ProductCategory> findByCompany_IdEquals(Integer id);
 
 }
