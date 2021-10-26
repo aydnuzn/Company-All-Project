@@ -2,23 +2,27 @@ package com.works.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.works.entities.categories.ProductCategory;
 import com.works.entities.images.ProductImage;
 import com.works.entities.listener.BaseEntity;
 import com.works.entities.security.Role;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Product extends BaseEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
             name = "products_categories",
@@ -51,6 +55,7 @@ public class Product extends BaseEntity<String> {
     private Integer pr_latitude;
     private Integer pr_longitude;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "product", cascade = CascadeType.DETACH)
     private List<ProductImage> images;
 

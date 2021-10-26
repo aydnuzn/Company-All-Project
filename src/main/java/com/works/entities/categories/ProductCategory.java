@@ -1,5 +1,6 @@
 package com.works.entities.categories;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.works.entities.Product;
 import com.works.entities.listener.BaseEntity;
@@ -31,9 +32,8 @@ public class ProductCategory extends BaseEntity<String> {
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private ProductCategory productCategories;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "pr_categories")
     private List<Product> products;
-
-
 
 }

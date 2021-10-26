@@ -33,7 +33,7 @@ public class ProductCategoryRestController {
         this.productCategoryRepository = productCategoryRepository;
     }
 
-    @ApiOperation(value = "Ürün Kategori Listesi, Ana kategori ve Alt kategori şeklinde")
+    @ApiOperation(value = "Ürün Kategori Getirme Servisi, Ana kategori ve Alt kategorisi şeklinde")
     @GetMapping("/list")
     public Map<REnum, Object> productTopSubCategoryList(){
         Map<REnum, Object> hm = new LinkedHashMap<>();

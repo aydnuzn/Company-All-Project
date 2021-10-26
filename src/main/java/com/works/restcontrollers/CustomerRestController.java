@@ -167,7 +167,7 @@ public class CustomerRestController {
     }
 
     @PostMapping("/add")
-    public Map<REnum, Object> customerAdd(@Valid @ModelAttribute("customerInterlayer") CustomerInterlayer customerInterlayer, BindingResult bindingResult) {
+    public Map<REnum, Object> customerAdd(@Valid @RequestBody CustomerInterlayer customerInterlayer, BindingResult bindingResult) {
         Map<REnum, Object> hm = new LinkedHashMap<>();
         if (!bindingResult.hasErrors()) {
             User customer = new User();
@@ -234,7 +234,7 @@ public class CustomerRestController {
     }
 
     @PutMapping("/update/{stIndex}")
-    public Map<REnum, Object> customerUpdate(@Valid @ModelAttribute("customerInterlayer") CustomerInterlayer customerInterlayer, BindingResult bindingResult, @PathVariable String stIndex){
+    public Map<REnum, Object> customerUpdate(@Valid @RequestBody CustomerInterlayer customerInterlayer, BindingResult bindingResult, @PathVariable String stIndex){
         Map<REnum, Object> hm =new LinkedHashMap<>();
         if(!bindingResult.hasErrors()){
             User customer = new User();

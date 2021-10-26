@@ -11,8 +11,6 @@ import java.util.List;
 
 @EnableRedisRepositories
 public interface ProductSessionRepository extends CrudRepository<ProductSession,String> {
-    @Query("select s from sessionproduct s order by s.id")
-    List<ProductSession> findByOrderByIdAsc(Pageable pageable);
 
     List<ProductSession> findByCompanynameEquals(String companyname, Pageable pageable);
     List<ProductSession> findByCompanynameEquals(String companyname);

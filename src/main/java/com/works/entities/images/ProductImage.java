@@ -1,5 +1,6 @@
 package com.works.entities.images;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.works.entities.Product;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class ProductImage {
 
     private String image_url;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "product_id")
     private Product product;

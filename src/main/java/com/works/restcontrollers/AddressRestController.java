@@ -30,7 +30,7 @@ public class AddressRestController {
     }
 
     @PostMapping("/add/{stIndex}")
-    public Map<REnum, Object> add(@Valid @ModelAttribute("addressInterlayer") AddressInterlayer addressInterlayer, BindingResult bindingResult, @PathVariable String stIndex) {
+    public Map<REnum, Object> add(@Valid @RequestBody AddressInterlayer addressInterlayer, BindingResult bindingResult, @PathVariable String stIndex) {
         return business.add(addressInterlayer, bindingResult, stIndex);
     }
 }
