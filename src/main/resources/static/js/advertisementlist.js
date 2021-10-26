@@ -2,8 +2,8 @@
 /*jslint latedef:false*/
 /*jshint -W087 */
 
-let url = "http://localhost:8091/rest/admin/adversitement/datatable/list";
-let tempUrl = "http://localhost:8091/rest/admin/adversitement/datatable/list";
+let url = "http://localhost:8091/rest/admin/advertisement/datatable/list";
+let tempUrl = "http://localhost:8091/rest/admin/advertisement/datatable/list";
 let searchKey = "";
 $(document).on('keyup', 'input', function () {
     searchKey = this.value;
@@ -46,7 +46,17 @@ $(document).ready(function() {
             { "data": "adv_shown_number", "name": "adv_shown_number", "autoWidth": true },
             { "data": "adv_date_begin", "name": "adv_date_begin", "autoWidth": true },
             { "data": "adv_date_end", "name": "adv_date_end", "autoWidth": true },
-            { "data": "adv_image", "name": "adv_image", "autoWidth": true },
+            {
+                data: {id:"id", adv_image:"adv_image"},
+                "render": function (data) {
+                    debugger;
+                    if(data.adv_image == "emptyimage.png"){
+                        return `<img style="width: auto; height: 100px" src="/uploads/advertisement/`+data.adv_image+`">`;
+                    }else{
+                        return `<img style="width: auto; height: 100px" src="/uploads/advertisement/`+data.adv_image+`">`;
+                    }
+                }
+            },
             { "data": "adv_width", "name": "adv_width", "autoWidth": true },
             { "data": "adv_height", "name": "adv_height", "autoWidth": true },
             { "data": "adv_link", "name": "adv_link", "autoWidth": true },
