@@ -12,27 +12,50 @@
 </th:block>
 
 <th:block layout:fragment="content">
+
 	<!-- Content area -->
 	<div class="ui container content">
 		<div class="ui stackable doubling grid">
+
 			<!-- Middle Content -->
 			<div class="sixteen wide column" align="center">
 				<div class="ui horizontal divider"><h2>Galeri</h2></div>
 				<br>
 				<div class="ui three column stackable doubling grid" id="sortable-list">
-					<div th:each="i : ${#numbers.sequence(1, 38)}" class="column">
-						<img class="ui rounded image" th:src="@{'/images/homegallery/'+${i}+'.png'}" th:alt="resim+${i}">
-						<div class="ui header" th:text="'#'+${i}"></div>
-					</div>
-
+					<section id="photos" class="ui basic segment show">
+						<section class="ui four stackable cards">
+							<article th:each="i : ${#numbers.sequence(1, 38)}" class="PhotoCard ui card">
+								<img th:src="@{'/images/homegallery/'+${i}+'.png'}" th:alt="resim+${i}" class="ui fluid image" />
+								<div class="content" th:text="'#'+${i}">
+								</div>
+							</article>
+						</section>
+					</section>
 				</div>
 			</div>
+
 		</div>
 	</div>
 
 </th:block>
 
 <th:block layout:fragment="customJs">
+	<script th:src="@{/js/homegallery.js}"></script>
+	<style>
+		.dimmed.dimmable > .ui.animating.dimmer, .dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.ui.modal,
+		.ui.active.modal {
+			margin: 0 auto!important;
+			top: auto !important;
+			left: auto !important;
+			transform-origin: center !important;
+			transition: all ease .5s;
+		}
+	</style>
 </th:block>
 
 </body>

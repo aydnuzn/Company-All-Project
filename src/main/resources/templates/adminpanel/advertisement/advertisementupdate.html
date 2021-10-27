@@ -4,7 +4,7 @@
       layout:decorate="adminpanel/incadminpanel/layout">
 <head>
   <meta charset="UTF-8">
-  <title>Advertisement Add</title>
+  <title>Advertisement Update</title>
 </head>
 <body>
 <th:block layout:fragment="customCss">
@@ -20,7 +20,7 @@
         </div>
         <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
             <form class="ui form "  th:object="${advertisement}"  th:action="@{'/admin/advertisement/update/'+${stIndex}}" method="post" enctype="multipart/form-data">
-            <h4 class="ui dividing header">Reklam Ekle</h4>
+            <h4 class="ui dividing header">Reklam Güncelle</h4>
             <div class="fields">
               <div class="eight wide field">
                 <label>Reklam Başlığı</label>
@@ -125,7 +125,7 @@
               </div>
             </div>
 
-            <button class="ui button green" type="submit" tabindex="0">Reklam Ekle</button>
+            <button class="ui button green" type="submit" tabindex="0">Reklam Güncelle</button>
           </form>
         </div>
         <div class="four wide column">

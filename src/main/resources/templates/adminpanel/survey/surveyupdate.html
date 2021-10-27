@@ -12,7 +12,7 @@
 </th:block>
 
 <th:block layout:fragment="content">
-    <!-- ADV ADD -->
+
     <div class="asd" style="margin: 30px 30px 0px 290px">
         <div class="ui page grid">
             <div class="three column row">
@@ -21,7 +21,7 @@
                 <div class="eight wide column" style="border:1px solid darkgreen;padding: 30px">
                     <form class="ui form " th:action="@{'/admin/survey/update/'+${stIndex}}" method="post"
                           th:object="${survey}">
-                        <h4 class="ui dividing header">Anket Ekleme</h4>
+                        <h4 class="ui dividing header">Anket Güncelle</h4>
                         <div class="fields">
                             <div class="sixteen wide field">
                                 <label>Anket Başlığı</label>
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="ui button green" tabindex="0">Ekle</button>
+                        <button type="submit" class="ui button green" tabindex="0">Güncelle</button>
                     </form>
                 </div>
                 <div class="four wide column">
