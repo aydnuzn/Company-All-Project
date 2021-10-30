@@ -1,7 +1,7 @@
 # Java Spring MVC Rest Company All Project
 Selen KÖSOĞLU, Aydın UZUN, Mert DUMANLI
 
-In this project the goal is to create a platfrom to write and publish their own blogs for authors by using Java, MySQL and Servlet. Authors must be sign in to the website in order to add, update or delete blogs. Every author can see, update or delete their own blogs. Blogs will be shown as their titles in the first page, when a visitor clicks the title the detailed version of the blog will appear. The website also contains "Contact Us" and "About Us" pages.
+Company All Project aims to provide services to top-level companies. This project was designed using the Spring-Boot framework, following the MVC design pattern. RESTful is used as the service. RESTful API service is provided through Swagger. MySql was used as the database during the design phase. JPA, one of the ORM tools, was used to manage the database. While developing the interface, HTML, CSS, Semantic UI, Bootstrap5 and JavaScript were used. In the back-end part, Java, JavaScript languages are used. JQuery is used on the JavaScript side.
 
 ## Languages and Technologies Used in this Project
 
