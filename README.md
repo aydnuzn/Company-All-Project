@@ -27,5 +27,5 @@ Company All Project aims to provide services to top-level companies. This projec
 ## Demo Account
 | :closed_lock_with_key: E-Mail | :old_key: Password |
 |----------|----------|
-| **``skosoglu3@mail.com``**| **123456**|
+| **``skosoglu3@gmail.com``**| **123456**|
 
