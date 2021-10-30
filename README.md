@@ -33,7 +33,6 @@ Company All Project aims to provide services to top-level companies. This projec
 <p>
 
   
-  https://github.com/selenkosoglu/Java-Spring-MVC-Rest-Company-All-Project/tree/main/images
-  
+https://github.com/selenkosoglu/Java-Spring-MVC-Rest-Company-All-Project/blob/main/images/1.png  
 <p>
   
