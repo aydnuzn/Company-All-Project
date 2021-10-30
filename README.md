@@ -29,10 +29,3 @@ Company All Project aims to provide services to top-level companies. This projec
 |----------|----------|
 | **``skosoglu3@mail.com``**| **123456**|
 
-## Application Images
-<p>
-
-  
-https://github.com/selenkosoglu/Java-Spring-MVC-Rest-Company-All-Project/blob/main/images/1.png  
-<p>
-  
