@@ -8,11 +8,21 @@ Company All Project aims to provide services to top-level companies. This projec
 | Language / Technology | :arrow_right:  |  % | 
 | ------------- |:-------------:|:-------------:|
 | Java | :arrow_right:  |  90 |
-| Servlet | :arrow_right:  |  80 |
-| HTML | :arrow_right:  |  90 |
-| Bootstrap5 | :arrow_right:  |  60 |
-| JavaScript | :arrow_right:  |  20 |
+| Spring MVC | :arrow_right:  |  90 |
+| Spring-Boot Security | :arrow_right:  |  90 |
+| Spring Rest API | :arrow_right:  |  90 |
+| Spring JPA | :arrow_right:  |  70 |
+| Spring Validation | :arrow_right:  |  70 |
+| Regex | :arrow_right:  |  30 |
+| JavaScript | :arrow_right:  |  50 |
+| HTML | :arrow_right:  |  80 |
+| CSS | :arrow_right:  |  60 |
+| Thymeleaf | :arrow_right:  |  70 |
+| Semantic UI | :arrow_right:  |  70 |
 | MySQL | :arrow_right:  |  70 |
+| Elasticsearch | :arrow_right:  |  80 |
+| Redis | :arrow_right:  |  80 |
+| Swagger | :arrow_right:  |  90 |
 
 ## Demo Account
 | :closed_lock_with_key: E-Mail | :old_key: Password |
@@ -22,8 +32,7 @@ Company All Project aims to provide services to top-level companies. This projec
 ## Application Images
 <p>
   
-<a href="https://github.com/selenkosoglu/Java-Servlet-MySql-Application-Blog-Project/blob/main/görseller/blog0.png" target="_blank">
-<img src="https://github.com/selenkosoglu/Java-Servlet-MySql-Application-Blog-Project/blob/main/görseller/blog0.png" width="200" style="max-width:100%;"></a>
+
   
 <p>
   
